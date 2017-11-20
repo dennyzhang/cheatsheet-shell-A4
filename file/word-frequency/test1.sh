@@ -5,12 +5,12 @@
 ##   https://www.dennyzhang.com/wp-content/mit_license.txt
 ##
 ## File: hello
-## Author : Denny <contact@dennyzhang.com>
+## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
 ##   https://leetcode.com/problems/word-frequency/description/
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2017-10-22 11:47:49>
+## Updated: Time-stamp: <2017-11-13 11:01:16>
 ##-------------------------------------------------------------------
 set -e
 

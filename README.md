@@ -1,7 +1,7 @@
 # Basic Intro
 <a href="https://github.com/DennyZhang?tab=followers"><img align="right" width="200" height="183" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/fork_github.png" /></a>
 
-[![Build Status](https://travis-ci.org/DennyZhang/script-quiz.svg?branch=master)](https://travis-ci.org/DennyZhang/script-quiz) [![LinkedIn](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/linkedin.png)](https://www.linkedin.com/in/dennyzhang001) [![Twitter](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/twitter.png)](https://twitter.com/dennyzhang001) [![Slack](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/slack.png)](https://goo.gl/ozDDyL) [![Github](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/github.png)](https://github.com/DennyZhang)
+[![Build Status](https://travis-ci.org/DennyZhang/script-quiz.svg?branch=master)](https://travis-ci.org/DennyZhang/script-quiz) [![LinkedIn](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/linkedin.png)](https://www.linkedin.com/in/dennyzhang001) [![Slack](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/slack.png)](https://www.dennyzhang.com/slack) [![Github](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/github.png)](https://github.com/DennyZhang)
 
 File me [tickets](https://github.com/DennyZhang/script-quiz/issues) or star [the repo](https://github.com/DennyZhang/script-quiz).
 
@@ -26,7 +26,7 @@ File me [tickets](https://github.com/DennyZhang/script-quiz/issues) or star [the
 
 e.g: [Sample Quiz: tenth-line](./file/tenth-line/readme.md)
 
-![](misc/quiz_sample.png)
+<a href="https://www.dennyzhang.com"><img src="https://raw.githubusercontent.com/DennyZhang/script-challenge/master/misc/quiz_sample.png"/> </a>
 
 # FAQ?
 
@@ -41,4 +41,4 @@ Below are folks who have contributed via GitHub!
 # License
 - Code is licensed under [MIT License](https://www.dennyzhang.com/wp-content/mit_license.txt).
 
-<img align="right" width="200" height="183" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/magic.gif">
+<a href="https://www.dennyzhang.com"><img align="right" width="200" height="183" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/magic.gif"></a>

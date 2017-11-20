@@ -5,12 +5,12 @@
 ##   https://www.dennyzhang.com/wp-content/mit_license.txt
 ##
 ## File: test.sh
-## Author : Denny <contact@dennyzhang.com>
+## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
 ##   https://leetcode.com/problems/transpose-file/description/
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2017-10-17 22:13:31>
+## Updated: Time-stamp: <2017-11-13 11:01:16>
 ##-------------------------------------------------------------------
 set -e
 
