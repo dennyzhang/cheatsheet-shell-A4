@@ -26,7 +26,7 @@ File me [tickets](https://github.com/DennyZhang/script-quiz/issues) or star [the
 
 e.g: [Sample Quiz: tenth-line](./file/tenth-line/readme.md)
 
-<a href="https://www.dennyzhang.com"><img src="https://raw.githubusercontent.com/DennyZhang/challenge-script/master/misc/quiz_sample.png"/> </a>
+<a href="https://www.dennyzhang.com"><img src="https://raw.githubusercontent.com/DennyZhang/challenges-script/master/misc/quiz_sample.png"/> </a>
 
 # FAQ?
 
