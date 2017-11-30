@@ -5,14 +5,14 @@
 
 File me [tickets](https://github.com/DennyZhang/challenges-script/issues) or star [the repo](https://github.com/DennyZhang/challenges-script).
 
+See more challenges from Denny: [here](https://www.dennyzhang.com/battle)
+
 # What For?
 
 **Quiz for scripting. Target for DevOps/Ops/SRE**
 1. For new DevOps/SRE: identity the common requirements. Practice more to do a better daily work.
 2. For experienced veteran: see more of common requirements from others. Sharpen your hands-on scripting.
 3. For Hiring: More acurate assements for your candidates.
-
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 # Quiz Link
 - [file](./file): file manipulation
@@ -41,4 +41,5 @@ Below are folks who have contributed via GitHub!
 # License
 - Code is licensed under [MIT License](https://www.dennyzhang.com/wp-content/mit_license.txt).
 
-<a href="https://www.dennyzhang.com"><img align="right" width="200" height="183" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/magic.gif"></a>
+<a href="https://www.dennyzhang.com"><img align="right" width="201" height="268" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/denny_201706.png"></a>
+
