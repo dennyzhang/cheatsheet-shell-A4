@@ -7,7 +7,7 @@
 
 File me [tickets](https://github.com/DennyZhang/challenges-script/issues) or star [the repo](https://github.com/DennyZhang/challenges-script).
 
-See more challenges from Denny: [here](https://www.dennyzhang.com/battle)
+**Similar Challenges**: https://www.dennyzhang.com/battle
 
 # What For?
 
@@ -30,6 +30,9 @@ e.g: [Sample Quiz: tenth-line](./file/tenth-line/readme.md)
 
 <a href="https://www.dennyzhang.com"><img src="https://raw.githubusercontent.com/DennyZhang/challenges-script/master/misc/quiz_sample.png"/> </a>
 
+
+<a href="https://www.dennyzhang.com"><img align="right" width="201" height="268" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/denny_201706.png"></a>
+
 # FAQ?
 
 - How to check questions by tags?
@@ -42,7 +45,5 @@ Below are folks who have contributed via GitHub!
 
 # License
 - Code is licensed under [MIT License](https://www.dennyzhang.com/wp-content/mit_license.txt).
-
-<a href="https://www.dennyzhang.com"><img align="right" width="201" height="268" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/denny_201706.png"></a>
 
 <a href="https://www.dennyzhang.com"><img align="right" width="185" height="37" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/dns_small.png"></a>
