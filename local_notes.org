@@ -7,7 +7,7 @@
 #+PRIORITIES: A D C
 #+ARCHIVE: %s_done::** Finished Tasks
 #+OPTIONS: H:nil num:nil
-#+AUTHOR: dennyzhang.com (contact@dennyzhang.com)
+#+AUTHOR: dennyzhang.com (https://www.dennyzhang.com/contact)
 #+OPTIONS: toc:nil \n:t ^:nil creator:nil d:nil
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://www.dennyzhang.com/wp-content/uploads/org.css">
 * Similar GitHub Repo

@@ -5,11 +5,11 @@
 ##   https://www.dennyzhang.com/wp-content/mit_license.txt
 ##
 ## File: hello
-## Author : Denny <contact@dennyzhang.com>
+## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2017-10-22 11:47:30>
+## Updated: Time-stamp: <2017-11-13 11:01:16>
 ##-------------------------------------------------------------------
 set -e
 eth0_ip=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
