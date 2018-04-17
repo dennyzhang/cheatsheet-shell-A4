@@ -3,7 +3,11 @@
 
 [![Build Status](https://travis-ci.org/DennyZhang/script-quiz.svg?branch=master)](https://travis-ci.org/DennyZhang/script-quiz) [![LinkedIn](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/linkedin_icon.png)](https://www.linkedin.com/in/dennyzhang001) [![Slack](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/slack.png)](https://www.dennyzhang.com/slack) [![Github](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/github.png)](https://github.com/DennyZhang)
 
-File me [tickets](https://github.com/DennyZhang/script-quiz/issues) or star [the repo](https://github.com/DennyZhang/script-quiz).
+[![LinkedIn](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/linkedin.png)](https://www.linkedin.com/in/dennyzhang001) <a href="https://www.dennyzhang.com/slack" target="_blank" rel="nofollow"><img src="http://slack.dennyzhang.com/badge.svg" alt="slack"/></a> [![Github](https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/github.png)](https://github.com/DennyZhang)
+
+File me [tickets](https://github.com/DennyZhang/challenges-script/issues) or star [the repo](https://github.com/DennyZhang/challenges-script).
+
+**Similar Challenges**: https://www.dennyzhang.com/battle
 
 # What For?
 
@@ -11,8 +15,6 @@ File me [tickets](https://github.com/DennyZhang/script-quiz/issues) or star [the
 1. For new DevOps/SRE: identity the common requirements. Practice more to do a better daily work.
 2. For experienced veteran: see more of common requirements from others. Sharpen your hands-on scripting.
 3. For Hiring: More acurate assements for your candidates.
-
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 # Quiz Link
 - [file](./file): file manipulation
@@ -26,7 +28,10 @@ File me [tickets](https://github.com/DennyZhang/script-quiz/issues) or star [the
 
 e.g: [Sample Quiz: tenth-line](./file/tenth-line/readme.md)
 
-![](misc/quiz_sample.png)
+<a href="https://www.dennyzhang.com"><img src="https://raw.githubusercontent.com/DennyZhang/challenges-script/master/misc/quiz_sample.png"/> </a>
+
+
+<a href="https://www.dennyzhang.com"><img align="right" width="201" height="268" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/denny_201706.png"></a>
 
 # FAQ?
 
@@ -41,4 +46,8 @@ Below are folks who have contributed via GitHub!
 # License
 - Code is licensed under [MIT License](https://www.dennyzhang.com/wp-content/mit_license.txt).
 
+<<<<<<< HEAD
 <a href="https://www.dennyzhang.com"><img align="right" width="200" height="183" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/magic.gif"></a>
+=======
+<a href="https://www.dennyzhang.com"><img align="right" width="185" height="37" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/dns_small.png"></a>
+>>>>>>> ea2df4398165fbbd018f2416c0d82dd68c6b854e
