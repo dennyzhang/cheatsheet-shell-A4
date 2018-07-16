@@ -10,12 +10,12 @@
 ##   https://leetcode.com/problems/tenth-line/description/
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2017-11-13 11:01:16>
+## Updated: Time-stamp: <2018-07-15 18:56:18>
 ##-------------------------------------------------------------------
 set -e
 
 line_count=$(wc -l ./file.txt | awk -F' ' '{print $1}')
-if [ $line_count -lt 10 ]; then
+if [ "$line_count" -lt 10 ]; then
     echo ""
     exit 1
 else

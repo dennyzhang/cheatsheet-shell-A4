@@ -10,7 +10,7 @@
 ##   https://leetcode.com/problems/transpose-file/description/
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2017-11-13 11:01:16>
+## Updated: Time-stamp: <2018-07-15 18:57:14>
 ##-------------------------------------------------------------------
 set -e
 
@@ -23,9 +23,9 @@ output=($(cat ./file.txt))
 # echo "output: $output"
 
 for((i=0; i<$column_count; i++)); do
-    for((j=0; j<$line_count; j++)); do
+    for((j=0; j< ${line_count}; j++)); do
         index=$((i+j*column_count))
-        if [ $((j+1)) -eq $line_count ]; then
+        if [ $((j+1)) -eq "$line_count" ]; then
             echo -n "${output[$index]}"
         else
             echo -n "${output[$index]} "

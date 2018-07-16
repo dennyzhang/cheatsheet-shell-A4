@@ -9,8 +9,9 @@
 ## Description :
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2017-11-13 11:01:16>
+## Updated: Time-stamp: <2018-07-15 18:57:58>
 ##-------------------------------------------------------------------
 set -e
 eth0_ip=$(/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')
+export eth0_ip
 ## File: test.sh ends
