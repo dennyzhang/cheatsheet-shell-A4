@@ -25,12 +25,10 @@
 |----------------------------------------------------------------+-------------------------------------------------------------|
 | type                                                           | 查看命令的类型(内置命令,别名,函数,可执行文件等)             |
 | (sh /tmp/1.sh ; echo "error code $?") >/tmp/1.log              | 追加sh运行后的$?于log文件                                   |
-| ls /tmp 1>/dev/null 2>&1                                       | 将stdout/stderr都重定向                                     |
 | read -e variablename                                           | 读取用户输入                                                |
 | eval __value="\$$env"                                          | eval命令在处理命令行时,先执行所有的shell替换,然后执行命令行 |
 | [ $? -eq 0 ] && /sbin/modprobe fuse                            | 保证顺序执行, 出错就中止                                    |
 | /bin/sh -xe /tmp/hudson366585559507073478.sh                   | echo shell                                                  |
-| [ 0 -eq $(find ./data -name "*.txt" -type f -print ｜ wc -l) ] | 判断返回值                                                  |
 | declare -a PRE_ROLLING_SCRIPT=`cat $output_file`               | 申明变量                                                    |
 ** 测试操作 -- test                                                :noexport:
 - test命令会修改$?的值
@@ -1522,8 +1520,6 @@ function die_if_not_set() {
 
 die_if_not_set $LINENO AMI "Failure registering"
 #+end_src
-** DONE [#B] shell timeout: timeout 10 sh -c "ls -lt"
-   CLOSED: [2013-10-22 Tue 14:29]
 ** DONE shell script to update ini/cfg configuration file
   CLOSED: [2013-10-22 Tue 14:35]
 /Users/mac/backup/tech/large_sourcecode/openstack/openstack-dev/devstack/openstack-dev/functions
@@ -1841,9 +1837,6 @@ fi
   CLOSED: [2014-07-10 Thu 10:11]
 http://stackoverflow.com/questions/11541568/how-to-do-float-comparison-in-bash
 echo "10.2>10.1" | bc
-** DONE shell get ip from eth0
-  CLOSED: [2014-07-17 Thu 15:25]
-/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
 ** common shell script
 #+begin_src sh
 #!/bin/bash -e
@@ -2262,7 +2255,6 @@ function ip_list_ping_reachable() {
 ** DONE bash remove empty lines: sed '/^$/d'
   CLOSED: [2016-06-10 Fri 13:13]
 http://stackoverflow.com/questions/16414410/delete-empty-lines-using-sed
-
 ** DONE bash get file acl mode: stat -c "%a %n" /etc/hosts
   CLOSED: [2016-06-14 Tue 16:29]
 http://askubuntu.com/questions/152001/how-can-i-get-octal-file-permissions-from-command-line
@@ -2454,35 +2446,6 @@ done
 ** DONE shell replace string: get master-index-023ea45 from master-index-023ea45: echo "${var//-index/}"
    CLOSED: [2018-01-29 Mon 16:27]
 
-** DONE bash get parameter of --skip-loggregator
-   CLOSED: [2018-07-02 Mon 14:48]
- #+BEGIN_SRC bash
- skip_loggregator="no"
-
- for arg in "$@"
- do
-     case "$arg" in
-         -s|--skip-loggregator)
-             shift
-             skip_loggregator="yes"
-             ;;
-         -h|--help)
-             help
-             shift
-             exit 0
-             ;;
-         --)
-             echo "break"
-             shift
-             break
-             ;;
-     esac
- done
- #+END_SRC
-
-** DONE linux short filename: basename "$f"
-   CLOSED: [2018-07-05 Thu 17:36]
-
 * TODO shell: create normal users with root priveledge
   :PROPERTIES:
   :ID:       1B974171-7A28-419E-8113-36D6B5627B4D
@@ -2521,3 +2484,4 @@ function is_service_enabled() {
     return 1
 }
 #+end_src
+
