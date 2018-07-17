@@ -1,0 +1,2523 @@
+-*- mode:org; fill-column:70; coding:utf-8; -*-
+* org-mode configuration
+#+STARTUP: overview customtime noalign logdone hidestars
+#+TAGS: ARCHIVE(a) WORK(w) LIFE(l) EMACS(e) IMPORTANT(i) Debug(d) Communication(c) RECOMMENDATE(r) Tool(t) Habit(h) noexport(n) Share (s) BLOG(b)
+#+SEQ_TODO: TODO HALF ASSIGN | DONE BYPASS DELEGATE CANCELED DEFERRED
+#+DRAWERS: HIDDEN CODE CONF EMAIL WEBPAGE SNIP
+#+PRIORITIES: A D C
+#+ARCHIVE: %s_done::** Finished Tasks
+#+OPTIONS: H:nil num:nil
+#+AUTHOR: dennyzhang.com (https://www.dennyzhang.com/contact)
+#+OPTIONS: toc:nil \n:t ^:nil creator:nil d:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://www.dennyzhang.com/wp-content/uploads/org.css">
+* [#A] Difficulties in shell/bash                           :Coding:Personal:
+:PROPERTIES:
+:type:   Linux_Language
+:END:
+
+[[https://www.dennyzhang.com/wp-content/uploads/2014/04//blog_bash.png]]
+
+| Item                                                           | Summary                                                     |
+|----------------------------------------------------------------+-------------------------------------------------------------|
+| ${cmds}/$(cmd)                                                 | 在当前shell中执行命令/在子shell中执行命令                   |
+| ${x}y/$xy                                                      | 将变量x连上字符y/变量xy                                     |
+| $*/$@                                                          | 当某个输入变量含空格时， 两者是不同的                       |
+|----------------------------------------------------------------+-------------------------------------------------------------|
+| type                                                           | 查看命令的类型(内置命令,别名,函数,可执行文件等)             |
+| (sh /tmp/1.sh ; echo "error code $?") >/tmp/1.log              | 追加sh运行后的$?于log文件                                   |
+| ls /tmp 1>/dev/null 2>&1                                       | 将stdout/stderr都重定向                                     |
+| read -e variablename                                           | 读取用户输入                                                |
+| eval __value="\$$env"                                          | eval命令在处理命令行时,先执行所有的shell替换,然后执行命令行 |
+| [ $? -eq 0 ] && /sbin/modprobe fuse                            | 保证顺序执行, 出错就中止                                    |
+| /bin/sh -xe /tmp/hudson366585559507073478.sh                   | echo shell                                                  |
+| [ 0 -eq $(find ./data -name "*.txt" -type f -print ｜ wc -l) ] | 判断返回值                                                  |
+| declare -a PRE_ROLLING_SCRIPT=`cat $output_file`               | 申明变量                                                    |
+** 测试操作 -- test                                                :noexport:
+- test命令会修改$?的值
+
+| Item                      | Summary               |
+|---------------------------+-----------------------|
+| test -z str               | 判断字符串str是否为空 |
+| str1 = str2               | str1是否与str2相同    |
+| -d                        | 是否一个目录          |
+| -e                        | 文件是否存在          |
+| [ "" == "$diff_content" ] |                       |
+
+ [ 75 == `svn info ./manifests/localnet/setting.pp.sample | grep Revision | awk -F': ' '{print $2}'` ]
+*** 示例代码
+#+BEGIN_EXAMPLE
+myPath="/var/log/httpd/"
+myFile="/var /log/httpd/access.log"
+
+#这里的-x 参数判断$myPath是否存在并且是否具有可执行权限
+if [ ! -x "$myPath"]; then
+mkdir "$myPath"
+fi
+
+#这里的-d 参数判断$myPath是否存在
+if [ ! -d "$myPath"]; then
+mkdir "$myPath"
+fi
+
+#这里的-f参数判断$myFile是否存在
+if [ ! -f "$myFile" ]; then
+touch "$myFile"
+fi
+
+#其他参数还有-n,-n是判断一个变量是否是否有值
+if [ ! -n "$myVar" ]; then
+echo "$myVar is empty"
+exit 0
+fi
+
+#两个变量判断是否相等
+if [ "$var1" = "$var2" ]; then
+echo '$var1 eq $var2'
+else
+echo '$var1 not eq $var2'
+fi
+#+END_EXAMPLE
+*** shell中常用系统变量和条件判断
+http://blog.chinaunix.net/u/28814/showart_1422464.html\\
+#+begin_example
+ shell中常用系统变量和条件判断
+ 常用系统变量
+ $0 当前程序的名称
+ $n 当前程序的第n个参数,n=1,2,…9
+ $* 当前程序的所有参数(不包括程序本身)
+ $# 当前程序的参数个数(不包括程序本身)
+ $$ 当前程序的PID
+ $! 执行上一个子进程的PID
+ $? 执行上一个指令的返回值
+ 条件判断:expression为字符串操作
+ -n str 字符串str是否不为空
+ -z str 字符串str是否为空
+ str1 =str2 str1是否与str2相同
+ str1!=str2 str1是否与str2不同
+ 条件判断:expression为整数操作
+ expr1 -a expr2 如果 expr1 和 expr2 评估为真,则为真
+ expr1 -o expr2 如果 expr1 或 expr2 评估为真,则为真
+ 条件判断:expression为bool操作
+ int1 -eq int2 如果int1等于int2,则为真
+ int1 -ge int2 如果int1大于或等于int2,则为真
+ int1 -gt int2 如果int1大于int2 ,则为真
+ int1 -le int2 如果int1小于或等于int2 ,则为真
+ int1 -lt int2 如果int1小于int2 ,则为真
+ int1 -ne int2 如果int1不等于int2 ,则为真
+ 条件判断:expression为文件操作
+ -b 是否块文件 -p 文件是否为一个命名管道
+ -c 是否字符文件 -r 文件是否可读
+ -d 是否一个目录 -s 文件的长度是否不为零
+ -e 文件是否存在 -S 是否为套接字文件
+ -f 是否普通文件 -x 文件是否可执行,则为真
+ -g 是否设置了文件的 SGID 位 -u 是否设置了文件的 SUID 位
+ -G 文件是否存在且归该组所有 -w 文件是否可写,则为真
+ -k 文件是否设置了的粘贴位 -t fd fd 是否是一个与终端相连的打开的文件描述符(fd 默认为 1)
+ -O 文件是否存在且归该用户所有
+#+end_example
+** 任务操作 -- Job                                                 :noexport:
+| 命令        | 含义                                                         |
+|-------------+--------------------------------------------------------------|
+| bg          | 启动被终止的后台作业                                         |
+| fg          | 将后台作业调到前台                                           |
+| jobs        | 列出所有正在运行的作业                                       |
+| kill        | 向指定作业发送kill信号                                       |
+| ^Z(Ctrl-Z)  | 终止(挂起)作业。屏幕上将出现提示符                         |
+|-------------+--------------------------------------------------------------|
+| stop        | 挂起一个后台作业                                             |
+| stty tostop | 当一个后台作业向终端发送输出时就挂起它                       |
+| wait[n]     | 等待一个指定的作业并返回它的退出状态,这里n是一个PID或作业号 |
+
+- jobs命令的参数
+| jobs命令的参数 | 含义                 |
+|----------------+----------------------|
+| %n             | 作业号n              |
+| %string        | 以string开头的作业名 |
+| %?string       | 作业名包含string     |
+| %%             | 当前作业             |
+| %+             | 当前作业             |
+| %-             | 当前作业前的一个作业 |
+| -r             | 列出所有运行的作业   |
+| -s             | 列出所有挂起的作业   |
+*** basic use
+#+begin_example
+- shell的作业控制: C-z, bg, fg
+sleep 1000 #起一个前端作业
+^Z # 将前端作业转到后台
+jobs -l #查看作业列表
+bg #启动被终止的后台作业
+jobs -l #查看作业列表
+fg #将后台作业调到前台
+
+jobs -r:列出所有运行的作业
+jobs -s:列出所有暂停的作业
+bg %2:启动后台运行中的第二个作业
+#+end_example
+*** DONE 特殊变量:$!最后一个后台作业ID, $?上一条命令的退出值, $$当前shell的PID
+ CLOSED: [2010-03-04 星期四 13:02]
+| 变量 | 含义                        |
+| '$'  | 当前shell的PID              |
+| '-'  | 当前的sh选项设置            |
+| '?'  | 已执行的上一条命令的退出值  |
+| '!'  | 最后一个进入后台的作业的PID |
+#+begin_src sh
+echo The pid of this shell is $$
+echo The options for this shell are $-
+grep ls /etc/passwd
+echo $?
+sleep 25 &
+echo $!
+#+end_src
+** # --8<-------------------------- separator ------------------------>8--
+** [question] Difference between the two shell commands: load_builtin_options VS $(load_builtin_options)
+** [question] shell中all-servers不是合法变量名?
+*** console shot:                                                  :noexport:
+#+begin_example
+,----------- /sshx:root@192.168.51.128:/home/zhangwei/hudsonecae/health_check/parse_conf.sh
+| all-servers="127.0.0.1"
+| ecae-servers="127.0.0.1"
+| embeded-ecae-services="ecae router webapp mongo memcache scm"
+| mysql-server="127.0.0.1" # TODO: what if multiple zookeeper servers
+`-----------
+
+///c0f958ce1a270dc022d431edf2eff580#$./ecae-health-check.sh
+[2012-03-28 06:50:41] Parse configuration
+./parse_conf.sh: line 14: all-servers=127.0.0.1: command not found
+./parse_conf.sh: line 15: ecae-servers=127.0.0.1: command not found
+./parse_conf.sh: line 16: embeded-ecae-services=ecae router webapp mongo memcache scm: command not found
+./parse_conf.sh: line 17: mysql-server=127.0.0.1: command not found
+./parse_conf.sh: line 19: zk-servers=127.0.0.1: command not found
+#+end_example
+** [question] [ test=ab ]; echo $? 输出为什么为0
+** [question] 如何在shell文件内部，将stdout重定向
+** [question] 解释下面umask的行为
+#+begin_example
+///c98c8cb7008ad33b849ed394ba96520d#$umask 0; mkdir /tmp/usr/local/ecae-health-check/report/t7
+///c98c8cb7008ad33b849ed394ba96520d#$ls -lt /tmp/usr/local/ecae-health-check/report/
+total 36
+drwxrwxrwx 2 root root 4096 Jul 12 11:32 t7
+-rw-rw-rw- 1 root root    0 Jul 12 11:32 t5
+----rw-rw- 1 root root    0 Jul 12 11:32 t4
+---------- 1 root root    0 Jul 12 11:31 t3
+d--------- 2 root root 4096 Jul 12 11:31 t2
+d--------- 2 root root 4096 Jul 12 11:30 tt
+#+end_example
+** [question] 下面ls命令输出之间的间隔符是什么
+#+begin_example
+///60b852829888cc1252b5498d239e247c#$ls /tmp/elmar
+client	data  deps  ebin  if  include  priv  rel  src
+///60b852829888cc1252b5498d239e247c#$ls /tmp/elmar > ./test
+///60b852829888cc1252b5498d239e247c#$cat ./test
+client
+data
+deps
+ebin
+if
+include
+priv
+rel
+src
+///60b852829888cc1252b5498d239e247c#$
+#+end_example
+** [question] shell将如下代码定义成函数
+#+begin_src sh
+while [ -z "$all_servers" ] ; do
+    echo -ne "Enter the ip list for all nodes in the system, separated by whitespace. Sample: 192.168.75.101 192.168.75.102\n> "
+    read -e all_servers
+    update_option_in_conf "$System_file" "all_servers" "$all_servers"
+done
+#+end_src
+** [question] 解释下面shell执行的行为
+#+begin_example
+/sshx:root@192.168.51.102: #$ command='ps -ef | grep "run_erl.*elmar" | grep -v grep | awk -F'\'' '\'' '\''{print $2}'\'' | xargs lsof -p | wc -l'
+/sshx:root@192.168.51.102: #$ echo $command
+ps -ef | grep "run_erl.*elmar" | grep -v grep | awk -F' ' '{print $2}' | xargs lsof -p | wc -l
+/sshx:root@192.168.51.102: #$ ps -ef | grep "run_erl.*elmar" | grep -v grep | awk -F' ' '{print $2}' | xargs lsof -p | wc -l
+12
+/sshx:root@192.168.51.102: #$ `command`
+/sshx:root@192.168.51.102: #$ $(command)
+/sshx:root@192.168.51.102: #$ echo $?
+0
+/sshx:root@192.168.51.102: #$ echo $command
+ps -ef | grep "run_erl.*elmar" | grep -v grep | awk -F' ' '{print $2}' | xargs lsof -p | wc -l
+#+end_example
+** # --8<-------------------------- separator ------------------------>8--
+** Common misunderstood -- 常见疑点
+*** ${x}与$x的区别: ${x}y表示将变量x的值连接上字符y, $xy表示变量xy
+http://unix-school.blogspot.in/2011/07/difference-between-x-and-x.html\\
+*** $*与$@的区别
+*** Internal commands VS External commands
+   http://unix-school.blogspot.in/2012/03/internal-vs-external-commands.html\\
+-  Internal commands are something which is built into the shell.
+-  When an external command has to be executed, a new process has to be spawned and the command gets executed.
+| Item                                               | Comment  |
+|----------------------------------------------------+----------|
+| get the list of Internal commands                  | help     |
+| find out whether a command is internal or external | type cat |
+#+begin_src bash
+# For performance issue, better use internal commands, compared to external commands
+
+# Say to add 2 numbers say x & y:
+
+z=`expr $x+$y` # Not good
+
+let z=x+y #Good
+#+end_src
+** 快捷键 -- Shortcut
+| Item           | Summary                                                                      |
+|----------------+------------------------------------------------------------------------------|
+| ^p, 上箭头     | 显示前一条命令                                                               |
+| ^n, 下箭头     | 显示后一条命令                                                               |
+| history [N]    | 显示命令行历史或最近N条命令                                                  |
+| 搜索命令行历史 | ^r启动搜索,输入任意字符串,显示以输入字符串开头的命令,^p显示前一条匹配结果 |
+** 数组操作 -- list array
+| Item                                           | Summary                   |
+|------------------------------------------------+---------------------------|
+| strs="ab cd"; lists=($strs)                    | shell字符串转成list       |
+| strs="ab cd"; lists=($strs); echo ${lists[1]}  | 取数组第二维              |
+| strs="ab cd"; lists=($strs); echo ${lists[*]}  | 取出数组所有元素          |
+| for i in $(seq 5)                              | Generate range of numbers |
+| for a in "ab" "cd";do echo "12"$a;done;        | 使用以string组成的list    |
+| declare -a nums=(45 33 100 65)                 | 申明一个数组              |
+| a=(1 2 3 4); echo ${#a[@]}                     | 得到数组的大小            |
+*** DONE shell中使用数组: declare -a nums=(45 33 100 65)          :IMPORTANT:
+ CLOSED: [2010-03-04 星期四 13:39]
+#+begin_src sh
+declare -a friends
+friends=(Shery Peter Louise)
+echo ${friends<0>}
+echo ${friends<2>}
+echo "All the firneds are ${friends[*]}"
+echo "The number of elements in the array is ${#friends[*]}"
+unset friends
+#+end_src
+*** DONE [#A] 将"ab cd"作为一个数组来使用: ${lists[*]}            :IMPORTANT:
+    CLOSED: [2012-08-11 六 00:29]
+#+begin_example
+denny@denny-Vostro-1014:/proc$ strs="ab cd"
+denny@denny-Vostro-1014:/proc$ lists=($strs)
+denny@denny-Vostro-1014:/proc$ echo $lists
+ab
+denny@denny-Vostro-1014:/proc$ echo ${lists[0]}
+ab
+denny@denny-Vostro-1014:/proc$ echo ${lists[1]}
+cd
+denny@denny-Vostro-1014:/proc$ for a in ${lists[*]};do echo "12"$a;done;
+12ab
+12cd
+#+end_example
+*** DONE 给定一个list,　得到它的一个随机排列
+    CLOSED: [2012-04-10 Tue 15:18]
+#+begin_src sh
+#!/bin/bash
+## for a given list, return a new list with items re-arranged by random algorithm
+function generate_random_list()
+{
+    local lists=${1?}
+    local lists_ret array count
+    lists_ret=""
+    while [ ! -z "$lists" ]
+    do
+        array=($lists)
+        count=${#array[*]} # item counts of the list
+        index=$((RANDOM % $count))
+        item=${array[$index]}
+        lists=`echo $lists | sed 's/'$item'//g'` # remove the chosen item
+        lists=${lists%% } # remove tailing whitespace
+        lists_ret=$lists_ret" "$item
+        #echo "count:"$count"index:"$index" item:"$item" lists:"$lists" lists_ret:"$lists_ret
+    done
+    echo $lists_ret
+}
+org_list="ab cd ef hb ed af"
+new_list=$(generate_random_list "$org_list")
+echo -e "org_list:"$org_list"\nnew_list:"$new_list
+#+end_src
+** 目录相关操作 -- Directory
+| Item               | Summary                                                          |
+|--------------------+------------------------------------------------------------------|
+| cd -               | 回退当上一次的目录位置                                           |
+| (cd ./deps; ls af) | 进入目录后, 运行shell某个命令, 如果失败, 那么不修改当前的目录 |
+** 文件操作 -- File
+| Item                                                   | Summary                          |
+|--------------------------------------------------------+----------------------------------|
+| sudo bash -c "echo hello >>/tmp/hosts"                 | 向权限不够的文件尾部追加一些内容 |
+| echo "test" ｜ tee -a /test.log                        | 向权限不够的文件尾部追加一些内容 |
+| (cat /etc/hosts; echo "append") ｜ sudo tee ./test.log | 向权限不够的文件尾部追加一些内容 |
+*** DONE globbing文件名替换:ls[!f-z]???                           :IMPORTANT:
+ CLOSED: [2010-03-04 星期四 11:44]
+globbing就是将元字符展开为文件名的过程。
+
+ls *.bak
+ls a?c?
+ls[!f-z]???
+ls f{oo,aa,umble}
+** 字符串操作 -- string
+| 表达式        | 功能                                                       |
+|---------------+------------------------------------------------------------|
+| ${变量%模式}  | 将变量值的尾部与模式进行最小匹配,并将匹配的部分删除       |
+| ${变量%%模式} | 将变量值的尾部与模式进行最大匹配,并将匹配的部分删除       |
+| ${变量#模式}  | 将变量值的头部与模式进行最小匹配,并将匹配的部分删除       |
+| ${变量##模式} | 将变量值的头部与模式进行最大匹配,并将匹配的部分删除       |
+| ${#变量}      | 替换为变量中的字符个数。如果是*或@,长度则是位置参量的个数 |
+*** string compare
+#+BEGIN_EXAMPLE
+ http://www.linux286.com/index.php/action_viewthread_tid_15502.html\\
+ shell中常用系统变量和条件判断
+#+end_example
+*** 示例代码
+#+begin_src sh
+pathname="/usr/bin/local/bin"
+echo ${pathname%/bin*} # /usr/bin/local
+echo ${pathname%%/bin*} # /usr/
+
+pathname=/home/liliput/jake/.bashrc
+echo ${pathname#/home} # /liliput/jake/.bashrc
+
+pathname=/home/liliput/jake/.bashrc
+echo ${pathname##*/} # .bashrc
+
+name="Ebenezer Scrooge"
+echo ${#name} # 16
+;; -------------------------- separator --------------------------
+# An IP range is like "10.32.182.181-184" or just a single IP address
+#
+function __util_parse_ip_range()
+{
+ local range=${1?}
+ local start_ip network start end
+
+ if [[ $range == *-* ]]; then
+ start_ip=${range%-*}
+ end=${range##*-}
+ util_check_ip start_ip && util_check_num end || {
+ log_error "Invalid IP range '$range'"
+ return 1
+ }
+
+ network=${start_ip%.*}
+ start=${start_ip##*.}
+ util_check_num start || {
+ log_error "Invalid IP range '$range'"
+ return 1
+ }
+
+ ((start <= end)) || {
+ log_error "Invalid IP range '$range': end number '$end' is less" \
+ "than start number '$start'"
+ return 1
+ }
+
+ local x
+ for ((x = start; x <= end; x++)); do
+ echo -n "$network.$x "
+ done
+ else
+ util_check_ip range || {
+ log_error "Invalid IP range '$range' - neither a range nor an" \
+ "single address"
+ return 1
+ }
+ echo -n "$range "
+ fi
+
+ return 0
+}
+#+end_src
+*** TODO 从下面CONARY_NEW_VERSION变量中提取出1.2.3.32049
+ CONARY_NEW_VERSION=/maui.lss.emc.com@emc:atmos-1.2-auto/1.2.3.32049-1-1
+*** Check if a string contains a substring
+#+begin_example
+#!/bin/bash
+
+S="Pineapple"
+
+if [[ "${S}" == *apple* ]]; then
+    echo "Yes"
+else
+    echo "No"
+fi
+#+end_example
+*** DONE bash strip whitespace: ${var##*( )}
+  CLOSED: [2016-04-15 Fri 07:47]
+http://www.cyberciti.biz/faq/bash-remove-whitespace-from-string/
+str2=$(echo "${str}" |sed -e 's/^[ \t]*//g')
+str2=$(echo "${str}" |sed -e 's/[ \t]*$//g')
+
+output="    This is a test"
+output="${output##*( )}"
+echo "=${output}="
+** 算术运算 -- algebraic
+*** DONE bash中的算术运算
+ CLOSED: [2010-02-26 星期五 15:08]
+- expr 5 * 4会有语法错误,应该改为expr 5 \* 4
+- let Z=X+Y 或 let Z=$X+$Y
+** 随机 -- random
+| Item                  | Summary                |
+|-----------------------+------------------------|
+| echo $((RANDOM % 10)) | 产生指定区间内的随机数 |
+** shell的位置参量 -- 命令行参数
+| 位置参量 | 指代对象                                      |
+|----------+-----------------------------------------------|
+| $0       | 脚本名                                        |
+| $#       | 位置参量的个数                                |
+| $*       | 所有的位置参量                                |
+| $@       | 未加双引号时,与$*含义相同                    |
+| "$*"     | 扩展为单个变量(例如: "$1 $2 $3"              |
+| "$@"     | 扩展为多个单独的变量(例如："$1", "$2", "$3") |
+| $1...$9  | 最多可引用9个位置参量                         |
+
+- 带参数的set命令将重置位置参量。
+位置参量一旦被重置,原来的参量列表就会丢失
+- 要想清除所有的位置参量,可使用set --
+- 比较$*与$@的异同
+*** 拿到命令行参数
+#+begin_src sh
+version=${1:-"1.4.0"}
+mkdir -p atmos-$version
+newest_applance=$(ls -Xl atmos-auto-$version* |tail -n 1 |awk '{print $9}')
+if [[ ! -f atmos-$version/$newest_applance ]]
+then
+ ln $newest_applance atmos-$version/
+fi
+echo $newest_applance |cut -d'-' -f3
+#+end_src
+*** DONE shell: 怎样通过命令行参数把含有回车符的字符串传给python程序
+程序中的\是可以转换了。而传入的参数中的\是不转义的。如果你使用repr()看一下它们的内部表示就知道了：
+
+对于传入的"a\nb\n"在python运行时其实是"a\\nb\\n",与内部的"a\nb\n"是不同的。
+**** code                                                          :noexport:
+#+BEGIN_SRC -t
+python ttt.py $'a\nb\nc'
+
+;; -------------------------- separator --------------------------
+[root@mail ~]# A="a
+> b
+> c
+> "
+[root@mail ~]# python ttt.py $A
+a
+b
+c
+a
+a
+;; -------------------------- separator --------------------------
+[root@mail ~]# python ttt.py "a
+> b
+> c
+> "
+a
+b
+c
+a
+b
+c
+
+a
+b
+c
+;; -------------------------- separator --------------------------
+#+END_SRC
+**** useful link
+http://bbs.chinaunix.net/archiver/tid-913541.html\\
+怎样通过命令行参数把含有回车符"\n"的字符串传给python程序
+*** DONE shell中的if是指命令成功执行为真,即$?为0
+ CLOSED: [2010-03-15 星期一 11:44]
+#+BEGIN_EXAMPLE
+if fun; then
+if [[ $(fun) -ne 1 ]]; then
+;; -------------------------- separator --------------------------
+
+如下代码的输出为
+here2
+here4
+here7
+;; -------------------------- separator --------------------------
+
+function fun()
+{
+ return 1
+}
+UPGRADE_SKIP_INSTALL="true"
+if $UPGRADE_SKIP_INSTALL; then
+ if fun; then
+ echo "here1"
+ else
+ echo "here2"
+ fi
+else
+ echo "here3"
+fi
+
+if [[ $(fun) -ne 1 ]]; then
+ echo "here4"
+else
+ echo "here5"
+fi
+
+if [[ $(fun) == 1 ]]; then
+ echo "here6"
+else
+ echo "here7"
+fi
+#+end_example
+*** DONE shell的shift命令
+ CLOSED: [2010-02-26 星期五 15:37]
+shift命令指定参数时,会将参量列表左移指定的次数。
+没有给定参数时,shift命令仅把参量列表左移一次。
+一旦列表被移动,左端那个参数就被永远删除了。
+** 变量扩展修饰符                                            :IMPORTANT:HARD:
+http://www.gnu.org/software/bash/manual/bashref.html#Shell-Parameter-Expansion
+
+${EDITOR:-/bin/vi}
+
+修饰符首先提供一个简单的条件测试,用来检查某个变量是否已经被设置,然后根据测试结果给变量赋一个值。
+| 修饰符                     | 值                                                                                                                                  |
+|----------------------------+-------------------------------------------------------------------------------------------------------------------------------------|
+| ${variable:-word}          | 如果变量variable已被设置且非空,则代入它的值。否则,代入word                                                                          |
+| ${variable:=word}          | 已被设置且值非空,就代入它的值。否则,将variable的值设为word。始终代入varialble的值。位置参量不能用这种方式赋值。                     |
+| ${varialble:+word}         | 如果变量variable已被设置且值非空,代入word。否则,什么都 不代入(代入空值)                                                             |
+| ${varialble:?word}         | 如果变量variable已被设置且值非空,就代入它的值。否则,输出word并且从shell退出。如果省略了word,就会显示信息：parameter null or not set |
+| ${varialble:offset}        | 获得变量variable值中位置从offset开始的子串,偏移为从0到串的末尾。                                                                    |
+| ${varialble:offset:length} | 获得变量variable值中位置从offset开始长度为length的子串。                                                                            |
+
+echo $EDITOR
+
+echo ${EDITOR:-/bin/vi}
+
+local timeout=${1?"timeout required"} # in second
+*** DONE shell语法：local extra_tr=${@:-""} 当参数为空时,赋予默认值
+ CLOSED: [2010-03-04 星期四 15:11]
+*** DONE shell：local ip=${1?} 参数的非空检查
+ CLOSED: [2010-03-04 星期四 15:10]
+**** codesnippet
+#+begin_src sh
+__mail_subject_prefix="${1?'mail subject prefix required'}"
+;; -------------------------- separator --------------------------
+function util_is_ip()
+{
+ local ip=${1?}
+
+ [[ $ip =~ ^<0-9>{1,3}\.<0-9>{1,3}\.<0-9>{1,3}\.<0-9>{1,3}$ ]]
+ return $?
+}
+#+end_src
+** 重复执行命令(Event Designators,命令指示符):
+| Item        | Summary                                                |
+|-------------+--------------------------------------------------------|
+| !!          | 重复执行最近一条命令                                   |
+| !str        | 重复执行最近一条以str开头的命令                        |
+| !?str?      | 重复执行最近一条包含str的命令                          |
+| !N          | 重复执行第N条命令                                      |
+| !-N         | 重复执行倒数第N条命令                                  |
+| ^str1^str2^ | 重复执行最近一条命令,但将命令中的字符串str1替换为str2 |
+** 示例代码
+*** 遍历文件夹
+#+begin_src sh
+function ergodic(){
+ for file in ` ls $1 `
+ do
+ if [ -d $1"/"$file ]
+ then
+ ergodic $1"/"$file
+ else
+ echo $1"/"$file
+ fi
+ done
+}
+INIT_PATH="/etc/mysql"
+ergodic $INIT_PATH
+#+end_src
+*** 检查脚本运行用户(是否为root)
+#+begin_src sl
+check_run_use()
+{
+	if [ "$UID" -ne "$ROOT_UID"]
+	then
+		echo "please su to root"
+		exit 0
+	fi
+}
+#+end_src
+*** 检查字符串是否为字母
+#+begin_src sl
+is_alpha()
+{
+	[ $# -eq 1 ] || return $FAILURE
+
+	case $1 in
+	*[!a-zA-Z]*|"") return $FAILURE
+	*) return $SUCCESS
+	esac
+}
+#+end_src
+*** 把传递字符串修改为小写
+#+begin_src sl
+to_lower()
+{
+	if [ -z "$1" ]
+	then
+		echo "(null)"
+		return
+	fi
+	echo "$@" | tr A-Z a-z
+	return
+}
+#+end_src
+*** 完整模板示例                                                   :noexport:
+#+begin_src sh
+#filename
+#author		:	tito
+#email		:	tito@shopex.cn
+#since		:	2009-1-11
+#modify		:	2009-1-12
+#deploy		:	124.74.193.211
+#function	:	clean log dirtory
+
+log_dir="/var/log/httpd"
+this_date=`date +'%Y%m%d'`
+back_file_name="back."this_date".tar.gz"
+#clean up dir
+clean_up_dir(){
+	#$1 is enter dirctory
+	if [ -d "$1" ]
+	then
+		echo "$1 is not a dictory"
+		exit 0
+	fi
+	cd $1
+	#back up the log file
+	tar -zxvf $back_file_name $1/*
+	cp $back_file_name /opt
+	#rm the log file in is dictory
+	rm -f "$1/*"
+	return 0
+}
+
+clean_up_dir() $log_dir
+
+exit 0
+#+end_src
+*** 检查参数
+#+begin_src sl
+#check enter args
+usage ()
+{
+	if [ -z "$1" ]
+	then
+		msg=filename
+	else
+		msg=$@
+	fi
+
+	echo "`basename	$0`"$msg""
+}
+#+end_src
+*** DONE shell 如何打印出标准错误输出后, 退出
+ CLOSED: [2011-01-27 Thu 20:37]
+#+begin_src sh
+ out=$(ssh_do $master_node_ip $cmd || {
+ log_error " Failed to sync time of maui nodes."
+ return 1
+ }
+ )
+#+end_src
+*** DONE [#A] shell中, 如何向文件中添加一行, 如果该行已经存在, 则不添加
+  CLOSED: [2011-10-13 Thu 16:43]
+#+BEGIN_EXAMPLE
+- 保证./test.cfg中, key1的值为value1, 如果key1不存在, 则追加一行key1 = value1
+(grep "key1 \+=" ./test.cfg && sudo sed -i 's/key1 \+=.*/key1 = value1/' ./test.cfg) || ((cat ./test.cfg; echo "key1 = value1") | sudo tee ./test.cfg)
+# --8<-------------------------- §separator§ ------------------------>8--
+
+sudo sed -i 's/xmodmap ~\/.xmodmap 2>\/dev\/null//' /tmp/hosts
+
+echo xmodmap ~/.xmodmap 2>/dev/null | sudo tee /tmp/hosts
+
+sudo sed -i 's/xmodmap ~\/.xmodmap 2>\/dev\/null//' /tmp/hosts
+#+end_example
+*** DONE shell中function使用返回值 - return/echo
+ CLOSED: [2010-03-04 星期四 11:09]
+increment(){
+ sum=`expr $1 + 1`
+ return $sum
+}
+
+echo -n "This sum is "
+increment 5
+
+echo $?
+echo $sum
+
+变量sum虽然是在函数increment中定义的,但它的作用域却是全局的。
+因而可以在调用函数的脚本中被识别。
+*** 逻辑与的示例代码
+#+begin_src sh
+if test -d /home -a -d /tmp2 ; then
+    echo "two directories exist"
+else
+    echo "don't exist"
+fi;
+#+end_src
+** basic use
+*** DONE 单引号内不被解释,双引号内会被解释
+ CLOSED: [2010-03-04 星期四 13:33]
+#+BEGIN_EXAMPLE
+单引号能保护所有元字符不被解释。
+双引号允许对它所括的内容进行变量替换和命令替换。
+
+echo Don\'t you need '$5.00?'
+echo 'Mother yelled, "Time to eat!"'
+
+name=Jody
+echo "Hi $name, I'm glad to meet you!"
+echo "Hey $name, the time is $(date)"
+
+创建脚本时,脚本的第一行通常称为shbang(#!)行。
+当脚本启动后,UNIX内核检查文件的第一行以决定将要执行的程序类型。
+#+end_example
+*** DONE shell调试：set -x开启echo, sh -n解释不执行命令
+ CLOSED: [2010-03-04 星期四 15:39]
+| 命令             | 选项        | 含义                                        |
+| sh -x scriptname | Echo选项    | 在变量替换之后,执行之前显示脚本的每一行     |
+| sh -v scriptname | Verbose选项 | 执行之前显示脚本的每一行,与键入脚本中的一样 |
+| sh -n scriptname | Noexec选项  | 解释但不执行命令                            |
+| set -u           | 未绑定变量  | 尚未设置的标志变量                          |
+| set -x           | 开启echo    | 跟踪脚本执行                                |
+| set +x           | 关闭echo    | 关闭跟踪                                    |
+** useful link
+ http://www.hsrl.rutgers.edu/ug/shell_help.html\\
+ How to write a shell script
+ http://www.freeos.com/guides/lsst/\\
+ Linux Shell Scripting Tutorial v1.05r3
+ http://www.cyberciti.biz/tips/how-to-generating-print-range-sequence-of-numbers.html#comments\\
+ Shell Scripting: Generate or Print Range of Numbers ( Sequence of Numbers for Loop )
+** DONE Shell: Argument list too long
+ CLOSED: [2011-01-27 Thu 22:58]
+#+begin_example
+ http://www.linuxjournal.com/article/6060\\
+ &quot;Argument list too long&quot;: Beyond Arguments and Limitations | Linux Journal
+ http://richmegginson.livejournal.com/11296.html\\
+ richmegginson: Fun with bourne shell: Argument list too long
+ http://en.kioskea.net/faq/1086-unable-to-delete-file-argument-list-too-long\\
+ Unable to delete file: language.org
+ http://www.unix.com/shell-programming-scripting/25666-argument-list-too-long-shell-error.html\\
+ Argument list too long - Shell error - The UNIX and Linux Forums
+#+end_example
+** CANCELED Why below shell script fail                            :noexport:
+ CLOSED: [2011-03-02 Wed 13:34]
+To trigger the recovery proces, please run below command for each SS disk in this node:
+mauisvcmgr -s mauicc -c trigger_cc_rcvrtask -a 'queryStr=<hostname>:<diskid>,act=DiskRecover,taskId=<uuid>'
+
+replace <hostname> with the name of the node.
+replace <diskID> with the id of the SS disk -- the id is order of the output "grep mauiss /etc/fstab", starting from 1.
+replace <uuid> with a random UUID -- you can generate it from uuidgen.
+
+Denny, could you help to write a shell script to automate this step? Thanks.
+*** code snippet                                                   :noexport:
+#!/bin/sh
+# Trigger cc recovery task in all SS disk of current node
+current_hostname=`hostname`
+disk_id=1
+# Iterate each ss disk
+ss_disk_count=`grep mauiss /etc/fstab | wc -l`
+for ss_disk in $(seq $ss_disk_count); do
+ random_uuid=`uuidgen`
+ echo "mauisvcmgr -s mauicc -c trigger_cc_rcvrtask -a 'queryStr=$current_hostname:$disk_id,act=DiskRecover,taskId=$random_uuid'"
+ mauisvcmgr -s mauicc -c trigger_cc_rcvrtask -a 'queryStr=$current_hostname:$disk_id,act=DiskRecover,taskId=$random_uuid'
+ disk_id=`expr $disk_id + 1`
+ echo "========="
+done
+echo "Finish of the script"
+** shell function sample
+#+begin_src sh
+#!/bin/sh
+srv_name=${1?"service name required"}
+node_name=${2?"node name required"}
+srv_port=${3?"service port required"}
+function create_zk_node()
+{
+ local path=${1?}
+ local data=${2?}
+ zk_tool -c query -p $path || zk_tool -c create -p $path -d $data
+}
+create_zk_node "/services" "service"
+create_zk_node "/services/${srv_name}" "service"
+create_zk_node "/services/${srv_name}/instances" "instances"
+create_zk_node "/services/${srv_name}/global_conf" "global_conf"
+create_zk_node "/services/${srv_name}/global_conf/port" $srv_port
+create_zk_node "/services/${srv_name}/instances/${node_name}" "instance"
+create_zk_node "/services/${srv_name}/instances/${node_name}/instance_conf" "instance"
+#+end_src
+** DONE [#A] sample: shell on-line help
+   CLOSED: [2012-03-28 Wed 11:49]
+*** console shot:                                                  :noexport:
+#+begin_example
+///52f4795d9c60ad26bf18beed5c43d11b#$cat /usr/local/bin/thrift_client
+#!/bin/bash
+
+PWD=/usr/local/sanity/lib/sanity-1
+NODE_NAME="$(basename $0 .sh)"
+VERSION=1.0
+
+check()
+{
+    exec erl -noshell -noinput -pa "$PWD/ebin" \
+    +fnu \
+    +K true \
+    -setcookie random \
+    -s sanity_checker $1 $2 $3
+}
+
+usage()
+{
+    echo "${NODE_NAME}: missing argument
+Try \`${NODE_NAME} --help' for more information."
+    exit 0
+}
+
+help()
+{
+cat <<EOF
+${NODE_NAME} version ${VERSION}
+Usage: ${NODE_NAME} [ -s|--server server ] [ -p|--port port ] [ -c|--command command ]
+
+sanity check for those services which implemented ecae thrift service interface
+Mandatory arguments to long options are mandatory for short options too.
+  -s, --server        server ip address or hostname [default = localhost]
+  -p, --port          server port [default = 9105]
+  -c, --command       thrift interface method [default = sanityCheck]
+  -v, --version       output version information
+  -h, --help          display this help
+Example: thrift_client -c sanityCheck -s 192.168.75.108 -p 9200
+EOF
+    exit 0
+}
+
+ARGS=`getopt -a -o s:p:c:vh -l server:,port:,command:,version,help -- "$@"`
+
+[ $? -ne 0 ] && usage
+
+eval set -- "${ARGS}"
+
+while true
+do
+    case "$1" in
+        -s|--server)
+            server="$2"
+            shift
+            ;;
+        -p|--port)
+            port="$2"
+            shift
+            ;;
+        -c|--command)
+            command="$2"
+            shift
+            ;;
+        -v|--version)
+            echo "${NODE_NAME} ver. ${VERSION}"
+            shift
+            exit 0
+            ;;
+        -h|--help)
+            help
+            shift
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+    shift
+done
+
+[ "x" = "x$command" ] && command=sanityCheck
+[ "x" = "x$server" ] && server=localhost
+[ "x" = "x$port" ] && port=9105
+
+check $command $server "$port"
+#+end_example
+** # --8<-------------------------- §separator§ ------------------------>8--
+** TODO shell将如下代码定义成函数
+#+begin_src sh
+while [ -z "$all_servers" ] ; do
+    echo -ne "Enter the ip list for all nodes in the system, separated by whitespace. Sample: 192.168.75.101 192.168.75.102\n> "
+    read -e all_servers
+    update_option_in_conf "$System_file" "all_servers" "$all_servers"
+done
+#+end_src
+** TODO shell为什么没有方便的自增
+///0352ea91def77fd8e5d305f770ca1f70#$failure=0
+///0352ea91def77fd8e5d305f770ca1f70#$failure=`expr $failure + 1`
+** TODO Linux exec command
+ http://www.linuxjournal.com/content/bash-redirections-using-exec\\
+ Bash Redirections Using Exec | Linux Journal
+*** code
+src/mgmt/tools/pgdbsetup
+#+BEGIN_SRC -t
+sub closeMongrelFd
+{
+ my @res = `lsof -i TCP:3000 | grep mongrel | awk '{print \$4}' | sed 's/[a-zA-Z]//'`;
+ my $mongrelFd = $res[0];
+ chomp ($mongrelFd);
+ if($mongrelFd)
+ {
+ my $cmd = "exec $mongrelFd>&-";
+ print $cmd;
+ `$cmd`
+ }
+}
+#+END_SRC
+*** code
+/tmp/tmp:
+
+apples
+pears
+bananas
+pleaches
+plums
+#+BEGIN_SRC -t
+#!/bin/sh
+# Scriptname: speller
+# Purpose: Check and fix spelling errors in a file
+exec < /tmp/tmp
+while read line
+do
+ echo $line
+ echo -n "Is this word correct? [ Y/N]"
+ read answer < /dev/tty
+ case "$answer" in
+ [Yy]* )
+ continue;;
+ *)
+ echo "What is the correct spelling?"
+ read word < /dev/tty
+ sed "s/$line/$word/g" /tmp/tmp >error
+ mv error tmp
+ echo $line has been changed to $word.
+ esac
+done
+#+END_SRC
+*** TODO Shell: Exec命令
+#+BEGIN_EXAMPLE
+ 使用exec命令,不需要创建子shell,就能打开或关闭标准输入和标准输出。
+
+ exec命令常被用来打开文件(根据文件名或文件描述符)以供读写。注意,文件描述符0,1和2已预留
+ 给标准输入、标准输出和标准错误输出。文件打开后,将得到下一个可用的文件描述符。
+#+end_example
+** TODO shell中. ./1.sh与sh ./1.sh的区别是什么
+** CDPATH: 对于访问经常去的目录，　节省cd输入目录路的时间
+** How to find the length of a variable
+http://unix-school.blogspot.in/2010_04_01_archive.html\\
+| Item                                                   | Summary |
+|--------------------------------------------------------+---------|
+| echo ${#VAR}                                           |         |
+| echo -n $VAR ｜ wc -c                                  |         |
+| printf $VAR ｜ wc -c                                   |         |
+| expr $VAR : '.*'                                       |         |
+| echo $VAR ｜ awk '{print length ;}'                    |         |
+| echo $VAR ｜ perl -ne 'chop; print length($_) . "\n";' |         |
+** [#A] shell的启动配置文件执行顺序                               :IMPORTANT:
+   http://zhidao.baidu.com/question/366827280.html
+#+begin_example
+~/.bash_profile 是交互式、login 方式进入 bash 运行的
+~/.bashrc 是交互式 non-login 方式进入 bash 运行的
+shell的分类：
+交互式登录shell：以一个用户的身份登陆进去，输入命令的格式的shell
+读取配置文件的顺序：
+/etc/profile-->/etc/profile.d/*-->~/.bash_profile-->~/.bashrc-->/etc/bashrc
+非交互式登录shell：只在一个脚本的，不需要用户登录，自动运行
+读取配置文件的顺序：
+/.bashrc-->/etc/bashrc-->/etc/profile.d/*
+#+end_example
+*** mail: 怪异的现象                                               :noexport:
+#+begin_example
+From: Denny Zhang <zhangwei@shopex.cn>
+To: 王岩 <wangyan@shopex.cn>
+Subject: Re: 怪异的现象
+In-Reply-To: <d8af518f-4bcb-4148-92d2-dcbeaf0479ee@EXCHANGE1.office.shopex.cn>
+	("王岩"'s message of "Wed, 9 May 2012 18:37:53 +0800")
+References: <d8af518f-4bcb-4148-92d2-dcbeaf0479ee@EXCHANGE1.office.shopex.cn>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/23.2 (gnu/linux)
+X-Draft-From: ("p0-colleague" 452)
+Date: Wed, 09 May 2012 19:39:52 +0800
+Message-ID: <87ipg5furb.fsf@shopex.cn>
+--text follows this line--
+王岩 <wangyan@shopex.cn> writes:
+hi 王岩
+
+Good question!
+
+,----------- http://zhidao.baidu.com/question/366827280.html
+| 交互式登录shell：以一个用户的身份登陆进去，输入命令的格式的shell
+| 读取配置文件的顺序：
+| /etc/profile-->/etc/profile.d/*-->~/.bash_profile-->~/.bashrc-->/etc/bashrc
+`-----------
+
+该环境下， 有一个文件/etc/profile.d/shopex_tty.sh, 它导致了这个行为
+
+,----------- /sshx:liuzifan@192.168.10.220:/etc/profile.d/shopex_tty.sh
+| #!/bin/bash
+|   ...
+|   ...
+| if [ $UID -eq 0 ]
+| then
+|         PS1="\n\n\033[1;34m[\u@\H]\e[m  \033[1;33m$IPADDRS\e[m \n[\t] PWD => \033[1;35m\w\e[m\n\#># "
+| else
+|         PS1="\n\n\033[1;34m[\u@\H]\e[m  \033[1;33m$IPADDRS\e[m \n[\t] PWD => \033[1;35m\w\e[m\n\#>\$ "
+| fi
+`-----------
+
+> 192.168.10.220      liuzifan   * liuzifan3389
+> -+-----------------------------------------------------
+>
+> [liuzifan@ops.shopex123.com]  eth0 = 192.168.10.220     eth0:0 = 10.0.0.220
+> [18:29:00] PWD => ~
+> 17>$
+>
+> 2012-05-09
+> ---------------------------------------------------------------------------------------------------
+> wangyan
+>
+
+--
+Denny Zhang(张巍)
+电话: 18621908421
+邮箱: denny.zhang001@gmail.com
+微博: http://weibo.com/1686664253
+博客: https://github.com/DennyZhang
+团队: http://blog.ec-ae.com/
+
+所谓执行力，就是这件事交给你，你就得一直盯出个结果来，最忌石沉大海。执
+行过程三个关键：完成标准、时间要求和风险控制。对完成标准之理解的不同或
+令辛苦成为无用功；时间点即使老板没明确给，也要自己设定并确认是否可以；
+大部分可发生的意外能预估并加以控制，失控则迅速解决，不要拖延到最后。
+
+╭(╯^╰)╮
+#+end_example
+** TODO shell输出多行内容时的重定向
+** TODO shell hook函数， 在返回时调用一个方法
+** su命令和su -命令的区别
+http://www.ha97.com/4001.html
+#+begin_example
+su命令和su -命令最大的本质区别就是：前者只是切换了root身份，但Shell环境
+仍然是普通用户的Shell；而后者连用户和Shell环境一起切换成root身份了。只
+有切换了Shell环境才不会出现PATH环境变量错误。su切换成root用户以后，pwd
+一下，发现工作目录仍然是普通用户的工作目录；而用su -命令切换以后，工作
+目录变成root的工作目录了。用echo $PATH命令看一下su和su -以后的环境变量
+有何不同。以此类推，要从当前用户切换到其它用户也一样，应该使用su -命令
+#+end_example
+** [ -e /etc/*.conf ] 是不正确的，如果是判断满足某个pattern的文件是否存在，需要用find -name来查找
+** [#A] bash执行带单引号的命令, $command方式是不行的，需要用eval $command :IMPORTANT:
+*** DONE mail: Re: launch php-job                                  :noexport:
+  CLOSED: [2012-08-10 Fri 16:46]
+[[gnus:nnfolder:mail.sent.mail#87txwb6soy.fsf@shopex.cn][Email from Denny Zhang: Re: launch php-job]]
+#+begin_example
+From: Denny Zhang <zhangwei@shopex.cn>
+Subject: Re: launch php-job
+To: 矫雷 <jiaolei@shopex.cn>
+Cc: 优优 <liyouyou@shopex.cn>
+Date: Fri, 10 Aug 2012 16:45:49 +0800
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.1 (gnu/linux)
+
+问题找到了，shell执行有问题。注意第一种方式不对，第二种方式才对
+,----------- sh
+| command="launch 'echo hello'"
+| $command # doesn't work
+| eval $command # works
+`-----------
+
+--
+Denny Zhang(张巍)
+
+不要忙于解决具体问题, 而要善于解决根本问题; 不要力图解决全部问题, 而要
+善于解决关键问题; 不要仅解决当前问题, 而要善于解决未来问题; 不要只解决
+有形问题, 而要学会解决无形问题; 不要先解决别人问题, 而要首先解决自己问
+题
+
+ .oooO...............
+ .(....)... Oooo....
+ .\..(.....(.....).....
+ ..\_)..... )../......
+ .......... (_/....
+
+矫雷 <kxgsy163@gmail.com> writes:
+
+> http://nihao.ecae.dev/  测试job的地址。
+>
+> http://www.ecae.dev/tools/myadmin/index.php?db=d_2292  查看myadmin 如果job执行成功 test表的job字段
+> 数字会增加。
+>
+> www.ecae.dev
+> 帐号：jiaolei
+> 密码：jiaolei
+
+#+end_example
+** Here document 是 shell 的一个非常常用的功能: << EOF ... EOF
+   http://ylinux.org/246
+#+begin_example
+如何结束字符用引号括起来，那么 Here 文档中的变量是不会被替换的：
+$ cat > /tmp/t_here.txt << "EOF"
+UID=$UID
+EOF
+$ cat /tmp/t_here.txt
+UID=$UID
+
+如果结束字符没有用引号括起来：
+
+$ cat > /tmp/t_here.txt << EOF
+UID=$UID
+EOF
+$ cat /tmp/t_here.txt
+UID=1000
+
+#+end_example
+** DONE 已完结
+** DONE mail: 在terminal下cat一个二进制文件，导致之后都乱码的解决方案: 运行reset :noexport:
+  CLOSED: [2012-09-22 六 12:07]
+[[gnus:nnfolder:mail.sent.mail#876276puon.fsf@126.com][Email from Denny Zhang: 在terminal下cat一个二进制文件]]
+#+begin_example
+From: Denny Zhang <denny.zhang001@gmail.com>
+Subject: 在terminal下cat一个二进制文件，导致之后都乱码的解决方案: 运行reset
+To: 王岩 <wangyan@shopex.cn>
+Date: Sat, 22 Sep 2012 12:07:04 +0800
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.2.50 (gnu/linux)
+
+,----------- http://www.361way.com/linuxb2/319.html
+| 重置终端
+|
+| reset
+|
+| 如果你试过不小心cat了某个二进制文件，很可能整个终端就傻掉了，可能不会
+| 换行，没法回显，大堆乱码之类的，这时候敲入reset回车，不管命令有没有显
+| 示，就能回复正常了。
+`-----------
+--
+Denny Zhang(张巍)
+邮箱: markfilebat@126. com
+微博: http://weibo.com/1686664253
+博客: http://blog.ec-ae.com/
+
+ ____________________________________
+( Avoid general TOI-style questions  )
+ ------------------------------------
+  o
+   o
+    /\ /\
+     ( )
+   .( o ).
+
+#+end_example
+** 判断数据类型为int
+#+begin_src sh
+,-----------
+| @@ -91,7 +91,7 @@
+|      print_testcase_info "$testcase_name" "$testcase_desc"
+|      show_output="t"
+|      result=$(remote_command $hostname "ps -ef | grep '$process_regex' | grep -v grep | awk -F' ' '{print \$2}' | xargs ps -o vsz= -p")
+| -    if [ $? -ne 0 ]; then
+| +    if [ $? -ne 0 ] || [ -z "${result##*[!0-9]*}" ]; then
+|          log_failure "$scenario_name" "$testcase_name" \
+|              "Output:($result), Fail to get memory for ($process_regex) in ($hostname).\n\n"
+|      else
+`-----------
+#+end_src
+** [#B] on-line help usage
+#+begin_src sh
+#!/bin/bash
+##-------------------------------------------------------------------
+## @copyright 2013
+## File : xzb_update_user_html.sh
+## Author : filebat <denny.zhang001@gmail.com>
+## Description : Update posts info to mysql
+## --
+## Created : <2013-01-31>
+## Updated: Time-stamp: <2013-01-31 20:08:58>
+##-------------------------------------------------------------------
+. ./utility_xzb.sh
+
+BIN_NAME="$(basename $0 .sh)"
+
+function update_user_html() {
+    user_dir=${1?"user website directory is required"}
+    userid=${2?"userid is required"}
+
+    ## TODO automatically get date, since this may not be mandotary
+    date=${3?"date is required"}
+    index_html="$user_dir/$(echo $date | tr -d -).html"
+
+    python_script="import jinja_html; jinja_html.generate_list_user_post(\"$userid\", \"$date\", \"$index_html\")"
+
+    command="(cd $XZB_HOME/code/smarty_html; python -c '${python_script}')"
+    eval $command
+    if [ $? -ne 0 ]; then
+        log "[$BIN_NAME.sh] Generate $index_html failed."
+        exit 1
+    else
+        log "[$BIN_NAME.sh] Generate $index_html is done."
+    fi
+
+    python_script="import jinja_html; jinja_html.generate_user_all_posts(\"$userid\", \"$date\", \"$user_dir\")"
+    command="(cd $XZB_HOME/code/smarty_html; python -c '${python_script}')"
+    eval $command
+    if [ $? -ne 0 ]; then
+        log "[$BIN_NAME.sh] Generate html files of user posts failed."
+        exit 1
+    else
+        log "[$BIN_NAME.sh] Generate html files of user posts is done."
+    fi
+}
+
+ensure_variable_isset
+ensure_is_root
+
+VERSION=0.1
+
+help()
+{
+cat <<EOF
+Usage: ${BIN_NAME} [OPTION]
+
+Sample: sudo xzb_update_user_html.sh --user denny --date 2013-01-24 --vhostdir /home/wwwroot/denny.youwen.im
++----------------------+   +------------------------------+
+|                      |   |                              |
+| generate index html  +---+ generate html files of posts +
+|                      |   |                              |
++----------------------+   +------------------------------+
+
+${BIN_NAME} is a shell script to generate a user's html files for a given date
+
+Optional arguments:
+  -h, --help               display this help
+  --user                   username
+  --date                   date
+  --vhostdir               root directory for the vhost
+  -v, --version            output version information
+EOF
+    exit 0
+}
+
+ARGS=`getopt -a -o hv -l user:,date:,vhostdir:,version,help -- "$@"`
+[ $? -ne 0 ] && help
+eval set -- "${ARGS}"
+
+while true
+do
+    case "$1" in
+        -v|--version)
+            echo "${BIN_NAME} version ${VERSION}"
+            shift
+            exit 0
+            ;;
+        -h|--help)
+            help
+            shift
+            exit 0
+            ;;
+        --user)
+            userid="$2"
+            shift
+            ;;
+        --date)
+            date="$2"
+            shift
+            ;;
+        --vhostdir)
+            vhostdir="$2"
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+    shift
+done
+
+if [ -z $vhostdir ]; then
+    echo "vhostdir is a mandatory option"
+    help
+    exit 1
+fi
+
+if [ -z $userid ]; then
+    echo "userid is a mandatory option"
+    help
+    exit 1
+fi
+
+if [ -z $date ]; then
+    echo "date is a mandatory option"
+    help
+    exit 1
+fi
+
+update_user_html "$vhostdir" $userid $date
+
+## File : xzb_update_user_html.sh ends
+
+#+end_src
+** DONE shell . utility可能不存在: . $(dirname $0)/utility_xzb.sh (这个需要在同一级目录才行)
+   CLOSED: [2013-02-09 Sat 00:01]
+** DONE crontab与terminal的shell使用的environment parameter可能是不一样的
+   CLOSED: [2013-02-19 Tue 14:15]
+http://unix.stackexchange.com/questions/27289/how-can-i-run-a-cron-command-with-existing-environmental-variables
+
+#+begin_example
+In the crontab, before you command, add . $HOME/.profile. For example:
+
+0 5 * * * . $HOME/.profile; /path/to/command/to/run
+
+Cron knows nothing about your shell; it is started by the system, so
+it has a minimal environment. If you want anything, you need to have
+that brought in yourself.
+#+end_example
+** 运维小脚本
+*** 发报警邮件
+#+begin_src sh
+#!/bin/bash
+function notify_log_for_webcrawler() {
+    err_msg=$(find /usr/local/snake_worker/log -name "erlang.log.*" -a -type f -print0 | xargs -0 -e grep -C 2 -inH -e "fail to run task")
+    if ! [ -z "$err_msg" ]; then
+        echo -e "========= ERROR: some tasks fail ======\n"
+        cat <<EOF | msmtp -C /home/denny/.msmtprc -f denny.zhang001@gmail.com zhangwei@shopex.cn
+Subject: webcrawler fail for some tasks
+
+"$err_msg"
+EOF
+
+    fi;
+}
+
+notify_log_for_webcrawler
+#+end_src
+*** mysql备份脚本：根据配置自动备份，并删除60天前的备份集
+sample: sudo ./backup_mysql.sh  "db1" "username1" "password1" "/root/mysql_backup"
+#+begin_src sh
+#!/bin/bash
+##-------------------------------------------------------------------
+## @copyright 2013
+## File : backup_mysql.sh
+## Author : filebat <denny.zhang001@gmail.com>
+## Description :
+## --
+## Created : <2013-02-01>
+## Updated: Time-stamp: <2013-04-29 00:12:24>
+##-------------------------------------------------------------------
+#sample: sudo ./backup_mysql.sh  "db1" "username1" "password1" "/root/mysql_backup"
+
+function backup_mysql() {
+    db_name=${1?}
+    db_username=${2?}
+    db_pwd=${3?}
+    backup_dir=${4?}
+
+    if [ ! -d $backup_dir ]; then
+        mkdir -p $backup_dir
+    fi;
+
+    my_print " Backup mysql"
+    mysqldump --user=$db_username --password=$db_pwd $db_name | gzip > "$backup_dir"/$db_name-`date +%Y%m%d%H%M`.sql.gz
+    my_print " Remove old backup files 60 days ago"
+    find $backup_dir -name "*.gz" -mtime +60 -exec /bin/rm {} \;
+}
+
+function my_print()
+{
+    local msg=${1?}
+    echo -ne `date +['%Y-%m-%d %H:%M:%S']`"$msg\n"
+}
+
+db_name=${1?"mysql db name"}
+db_username=${2?"mysql db username"}
+db_pwd=${3?"mysql db password"}
+backup_dir=${4?"directory to store the backup set"}
+
+backup_mysql "$1" "$2" "$3" "$4"
+
+## File : backup_mysql.sh ends
+#+end_src
+** DONE bash : event not found: !前要加\做转义
+  CLOSED: [2013-05-30 Thu 00:03]
+bash-3.2$ curl -H 'Content-Type: text/xml' -d "<xml><ToUserName><![CDATA[gh_05d5313dea46]]></ToUserName><FromUserName><![CDATA[oOLGTjiMZ2nhEHcMhSP9Tq_kgLUk]]></FromUserName><CreateTime>1369366098</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[20 吃饭]]></Content><MsgId>5881769154217771468</MsgId></xml>" "http://0.0.0.0:8090/api?signature=7d0e888df44def04c76084d26e92c59fb15c1a50&timestamp=1369459087&nonce=1369763244" 2>/dev/null
+bash: ![CDATA[gh_05d5313dea46]]: event not found
+** DONE bash fail to concat |
+  CLOSED: [2013-06-13 Thu 15:09]
+把${command_str}改在eval $command_str
+*** code
+#+begin_src sh
+command_str="ls | grep a"
+echo "$command_str"
+${command_str}
+#+end_src
+**** console output
+#+begin_example
+bash-3.2$ sh ./test.sh
+ls | grep a
+ls: a: No such file or directory
+ls: grep: No such file or directory
+ls: |: No such file or directory
+#+end_example
+** shell include with relateive direction: . $(dirname $0)/utility_xzb.sh
+. $(dirname $0)/utility_xzb.sh
+** TODO bash -c 调用是什么意思
+** check whether variable is set
+https://github.com/openstack-dev/devstack.git  --> functions
+#+begin_src sh
+function is_set() {
+    local var=\$"$1"
+    eval "[ -n \"$var\" ]" # For ex.: sh -c "[ -n \"$var\" ]" would be better, but several exercises depends on this
+}
+
+# Prints backtrace info
+# filename:lineno:function
+function backtrace {
+    local level=$1
+    local deep=$((${#BASH_SOURCE[@]} - 1))
+    echo "[Call Trace]"
+    while [ $level -le $deep ]; do
+        echo "${BASH_SOURCE[$deep]}:${BASH_LINENO[$deep-1]}:${FUNCNAME[$deep-1]}"
+        deep=$((deep - 1))
+    done
+}
+
+function die() {
+    local exitcode=$?
+    set +o xtrace
+    local line=$1; shift
+    if [ $exitcode == 0 ]; then
+        exitcode=1
+    fi
+    backtrace 2
+    err $line "$*"
+    exit $exitcode
+}
+# Prints line number and "message" in error format
+# err $LINENO "message"
+function err() {
+    local exitcode=$?
+    errXTRACE=$(set +o | grep xtrace)
+    set +o xtrace
+    local msg="[ERROR] ${BASH_SOURCE[2]}:$1 $2"
+    echo $msg 1>&2;
+    if [[ -n ${SCREEN_LOGDIR} ]]; then
+        echo $msg >> "${SCREEN_LOGDIR}/error.log"
+    fi
+    $errXTRACE
+    return $exitcode
+}
+
+function die_if_not_set() {
+    local exitcode=$?
+    FXTRACE=$(set +o | grep xtrace)
+    set +o xtrace
+    local line=$1; shift
+    local evar=$1; shift
+    if ! is_set $evar || [ $exitcode != 0 ]; then
+        die $line "$*"
+    fi
+    $FXTRACE
+}
+
+die_if_not_set $LINENO AMI "Failure registering"
+#+end_src
+** DONE [#B] shell timeout: timeout 10 sh -c "ls -lt"
+   CLOSED: [2013-10-22 Tue 14:29]
+** DONE shell script to update ini/cfg configuration file
+  CLOSED: [2013-10-22 Tue 14:35]
+/Users/mac/backup/tech/large_sourcecode/openstack/openstack-dev/devstack/openstack-dev/functions
+#+begin_src sh
+# Set an option in an INI file
+# iniset config-file section option value
+function iniset() {
+    local file=$1
+    local section=$2
+    local option=$3
+    local value=$4
+
+    if ! grep -q "^\[$section\]" "$file" 2>/dev/null; then
+        # Add section at the end
+        echo -e "\n[$section]" >>"$file"
+    fi
+    if ! ini_has_option "$file" "$section" "$option"; then
+        # Add it
+        sed -i -e "/^\[$section\]/ a\\
+$option = $value
+" "$file"
+    else
+        # Replace it
+        sed -i -e "/^\[$section\]/,/^\[.*\]/ s|^\($option[ \t]*=[ \t]*\).*$|\1$value|" "$file"
+    fi
+}
+
+#+end_src
+** DONE shell $SECONDS show how long the script runs: echo_summary "stack.sh completed in $SECONDS seconds."
+   CLOSED: [2013-10-22 Tue 14:56]
+*** built-in environment: $SECONDS
+stack.sh completed in $SECONDS seconds.
+*** manual caculate
+/Users/mac/backup/tech/large_sourcecode/openstack/openstack-dev/devstack/openstack-dev/exercises/volumes.sh
+#+begin_src sh
+start_time=$(date +%s)
+cinder create --display_name $VOL_NAME --display_description "test volume: $VOL_NAME" $DEFAULT_VOLUME_SIZE || \
+    die $LINENO "Failure creating volume $VOL_NAME"
+if ! timeout $ACTIVE_TIMEOUT sh -c "while ! cinder list | grep $VOL_NAME | grep available; do sleep 1; done"; then
+    die $LINENO "Volume $VOL_NAME not created"
+fi
+end_time=$(date +%s)
+echo "Completed cinder create in $((end_time - start_time)) seconds"
+
+#+end_src
+** shell function in function
+/Users/mac/backup/tech/large_sourcecode/openstack/openstack-dev/devstack/openstack-dev/lib/swift
+#+begin_src sh
+function test() {
+    function test1() {
+        echo "hello1"
+    }
+    test1
+    test1
+    test1
+    test1
+}
+test
+test1
+echo "end"
+#+end_src
+** DONE grep command output: make sure detect the command is running correctly
+   CLOSED: [2013-10-22 Tue 16:42]
+*** 方法:
+#+begin_example
+val=$(nova aggregate-list | grep -c " $aggregate_name ")
+if [[ $? -eq 0 ]] && [[ $val == 0 ]]; then
+#+end_example
+*** 相关信息
+https://review.openstack.org/#/c/53233/1/exercises/aggregates.sh,unified
+#+begin_example
+
+diff --git a/exercises/aggregates.sh b/exercises/aggregates.sh
+index e5fc7de..f8c60f9 100755
+--- a/exercises/aggregates.sh
++++ b/exercises/aggregates.sh
+@@ -48,24 +48,25 @@
+48	48	 # Create an aggregate
+49	49	 # ===================
+50	50
+51	51	 AGGREGATE_NAME=test_aggregate_$RANDOM
+52	52	 AGGREGATE2_NAME=test_aggregate_$RANDOM
+53	53	 AGGREGATE_A_ZONE=nova
+54	54
+55	55	 exit_if_aggregate_present() {
+56	56	     aggregate_name=$1
+57	57
+58		-    if [ $(nova aggregate-list | grep -c " $aggregate_name ") == 0 ]; then
+58	+    val=$(nova aggregate-list | grep -c " $aggregate_name ")
+59	+    if [[ $? -eq 0 ]] && [[ $val == 0 ]]; then
+59	60	         echo "SUCCESS $aggregate_name not present"
+60	61	     else
+61		-        die $LINENO "found aggregate: $aggregate_name"
+62	+        die $LINENO "fail to get aggregate or found aggregate: $aggregate_name"
+62	63	         exit -1
+63	64	     fi
+	64	65	 }
+65	66
+66	67	 exit_if_aggregate_present $AGGREGATE_NAME
+67	68
+68	69	 AGGREGATE_ID=$(nova aggregate-create $AGGREGATE_NAME $AGGREGATE_A_ZONE | grep " $AGGREGATE_NAME " |
+get_field 1)
+69	70	 AGGREGATE2_ID=$(nova aggregate-create $AGGREGATE2_NAME $AGGREGATE_A_ZONE | grep " $AGGREGATE2_NAME "
+ | get_field 1)
+70	71
+71	72	 # check aggregate created
+#+end_example
+** DONE shell contiune loop
+  CLOSED: [2013-10-23 Wed 15:25]
+http://www.cyberciti.biz/faq/unix-linux-bsd-appleosx-continue-in-bash-loop/
+#+begin_src sh
+for i in something
+do
+	[ condition ] && continue
+	cmd1
+	cmd2
+done
+#+end_src
+** DONE trueorfalse
+   CLOSED: [2013-10-23 Wed 15:29]
+/Users/mac/backup/tech/large_sourcecode/openstack/openstack-dev/devstack/is-service-enabled/functions
+#+begin_src sh
+# Normalize config values to True or False
+# Accepts as False: 0 no No NO false False FALSE
+# Accepts as True: 1 yes Yes YES true True TRUE
+# VAR=$(trueorfalse default-value test-value)
+function trueorfalse() {
+    local default=$1
+    local testval=$2
+
+    [[ -z "$testval" ]] && { echo "$default"; return; }
+    [[ "0 no No NO false False FALSE" =~ "$testval" ]] && { echo "False"; return; }
+    [[ "1 yes Yes YES true True TRUE" =~ "$testval" ]] && { echo "True"; return; }
+    echo "$default"
+}
+#+end_src
+** DONE bash backtrace
+  CLOSED: [2013-10-23 Wed 16:12]
+/Users/mac/backup/tech/large_sourcecode/openstack/openstack-dev/devstack/openstack-dev/functions
+#+begin_src sh
+# Prints backtrace info
+# filename:lineno:function
+function backtrace {
+    local level=$1
+    local deep=$((${#BASH_SOURCE[@]} - 1))
+    echo "[Call Trace]"
+    while [ $level -le $deep ]; do
+        echo "${BASH_SOURCE[$deep]}:${BASH_LINENO[$deep-1]}:${FUNCNAME[$deep-1]}"
+        deep=$((deep - 1))
+    done
+}
+#+end_src
+** DONE detech oom-killer
+   CLOSED: [2013-10-30 Wed 19:05]
+/Users/mac/backup/tech/large_sourcecode/openstack/openstack-infra/config/modules/jenkins/files/slave_scripts/jenkins-oom-grep.sh
+#+begin_src sh
+#!/bin/bash
+
+# Copyright 2012 Hewlett-Packard Development Company, L.P.
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+
+# Find out if jenkins has triggered the out-of-memory killer by checking
+# the output of dmesg before and after a test run.
+
+PATTERN=" invoked oom-killer: "
+
+case "$1" in
+    pre)
+        rm -fr /tmp/jenkins-oom-log
+        mkdir /tmp/jenkins-oom-log
+        dmesg > /tmp/jenkins-oom-log/pre
+        exit 0
+        ;;
+    post)
+        dmesg > /tmp/jenkins-oom-log/post
+        diff /tmp/jenkins-oom-log/{pre,post} \
+            | grep "^> " | sed "s/^> //" > /tmp/jenkins-oom-log/diff
+        if grep -q "$PATTERN" /tmp/jenkins-oom-log/diff
+        then
+            cat /tmp/jenkins-oom-log/diff
+            exit 1
+        fi
+        ;;
+esac
+
+#+end_src
+** DONE shell：当$(fun)方式调用时，fun没法quit 当前shell script
+  CLOSED: [2013-12-12 Thu 20:59]
+#+begin_src sh
+get_data() {
+    local match_column=$(($1 + 1))
+    local regex="$2"
+    local output_column=$(($3 + 1))
+    shift 3
+
+    result=$("$@" | \
+           awk -F'|' \
+               "! /^\+/ && \$${match_column} ~ \"^ *${regex} *\$\" \
+                { print \$${output_column} }")
+    [[ -z "$result" ]] || exit -1
+}
+
+output=$(get_data 2 admin 1 keystone role-list)
+echo $output
+#+end_src
+** TODO awk "length>50" /home/zhangwei/elmar/elmar/src/elmar.erl打印出文件名与行号数
+** DONE ask for confirmation
+  CLOSED: [2013-12-31 Tue 23:59]
+#+begin_src sh
+#!/bin/bash
+##-------------------------------------------------------------------
+## File : test.sh
+## Author : filebat <filebat.mark@gmail.com>
+## Description :
+## --
+## Created : <2013-12-29>
+## Updated: Time-stamp: <2013-12-31 23:58:24>
+##-------------------------------------------------------------------
+if [ "$1" = "-y" ] || [ "$1" = "--yes" ]; then
+    SKIP_ASK=y
+    shift
+fi
+
+user_wants() {
+    if [ "$SKIP_ASK" = "y" ]; then return 0; fi
+
+    while true; do
+        read -n 1 -p "$1 " cont
+        echo 1>&2
+        case $cont in
+            y|Y)
+                return 0
+                ;;
+            n|N)
+                return 1
+                ;;
+            *)
+                ;;
+        esac
+    done
+}
+
+if user_wants 'Drop Heat database tables?'; then
+    echo "here"
+fi
+
+## File : test.sh ends
+
+#+end_src
+** DONE sh wrap OS difference
+  CLOSED: [2014-01-01 Wed 00:17]
+/Users/mac/backup/tech/large_sourcecode/openstack/openstack/heat/heat/bin/heat-db-setup
+#+begin_src sh
+# Check for root privileges
+if [[ $EUID -ne 0 ]] ; then
+	echo "This operation requires superuser privileges, using sudo:"
+	if sudo -l > /dev/null ; then
+		ELEVATE="sudo"
+	else
+		exit 1
+	fi
+fi
+
+case "$1" in
+	rpm)
+		echo "Installing on an RPM system."
+		PACKAGE_INSTALL="$ELEVATE yum install"
+		PACKAGE_STATUS="rpm -q"
+		SERVICE_MYSQLD="mysqld"
+		SERVICE_START="$ELEVATE service $SERVICE_MYSQLD start"
+		SERVICE_STATUS="service $SERVICE_MYSQLD status"
+		SERVICE_ENABLE="$ELEVATE chkconfig"
+		;;
+	deb)
+		echo "Installing on a Debian system."
+		PACKAGE_INSTALL="$ELEVATE apt-get install"
+		PACKAGE_STATUS="dpkg-query -s"
+		SERVICE_MYSQLD="mysql"
+		SERVICE_START="$ELEVATE service $SERVICE_MYSQLD start"
+		SERVICE_STATUS="$ELEVATE service $SERVICE_MYSQLD status"
+		SERVICE_ENABLE=""
+		;;
+	*)
+		usage
+		;;
+esac
+
+#+end_src
+** DONE sh check for root privileges, since the euid may not be 0, but still in the admin user group
+  CLOSED: [2014-01-01 Wed 00:19]
+#+begin_src sh
+# Check for root privileges
+if [[ $EUID -ne 0 ]] ; then
+	echo "This operation requires superuser privileges, using sudo:"
+	if sudo -l > /dev/null ; then
+		ELEVATE="sudo"
+	else
+		exit 1
+	fi
+fi
+
+#+end_src
+** DONE shell comparision of float
+  CLOSED: [2014-07-10 Thu 10:11]
+http://stackoverflow.com/questions/11541568/how-to-do-float-comparison-in-bash
+echo "10.2>10.1" | bc
+** DONE shell get ip from eth0
+  CLOSED: [2014-07-17 Thu 15:25]
+/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
+** common shell script
+#+begin_src sh
+#!/bin/bash -e
+##-------------------------------------------------------------------
+## File : backup-all.sh
+## Author : Bill <bill.nguyen@totvs.com>
+## Description :
+## --
+## Created : <2014-07-30>
+## Updated: Time-stamp: <2014-07-30 19:53:23>
+##-------------------------------------------------------------------
+log_file=/var/log/backup-all.log
+
+
+############################# Helper functions ####################
+function log()
+{
+    local msg=${1?}
+    echo -ne `date +['%Y-%m-%d %H:%M:%S']`" $msg\n"
+}
+
+function mk_dir()
+{
+    dir=${1?}
+    if [ ! -e $dir ]; then
+        mkdir -p $dir
+    fi
+}
+
+function is_port_listening()
+{
+    port=${1?}
+    lsof -i tcp:$port | grep LISTEN 1>/dev/null
+}
+
+function service_status()
+{
+   service_name=${1?}
+
+   #TODO: later change to service $service_name status
+   case $service_name in
+       "search")
+           is_port_listening 18085 && echo "yes"; exit 0
+           ;;
+       "rest")
+           is_port_listening 18091 && echo "yes"; exit 0
+           ;;
+       *)
+           echo "ERROR: unsupported service_name($service_name) for service_status"
+   esac
+   echo "no"
+}
+
+function wait_service_stop()
+{
+    service_name=${1?}
+    while [ "$(service_status "$service_name")" = "yes" ]; do
+        # TODO add max seconds to wait
+        sleep 1
+    done;
+}
+####################################################################
+#set -x
+
+# service ntp stop
+# ntpdate -s pool.ntp.org
+# service ntp start
+DATE=`date '+%Y-%m-%d-%H:%M:%S'`
+BACKUPDIR=/data/backup
+
+log "Backup Cloudpass"  ### <--- logging timestamp is critical for performance tunning
+mk_dir $BACKUPDIR/fluigidentity
+# TODO
+#cp -rp /cloudpass $BACKUPDIR/fluigidentity/cloudpass.$DATE
+
+log "Stop search and rest service"
+service search stop
+service rest stop
+
+log "Wait for search service to stop"
+wait_service_stop "search"
+log "Wait for rest service to stop"
+wait_service_stop "rest"
+
+log "Backup search"
+mk_dir $BACKUPDIR/search
+
+cd /data/
+tar -zcf $BACKUPDIR/search/totvslabs.tar.gz.$DATE totvslabs/
+
+log "Start search and rest services"
+service search start
+service rest start
+
+log "Confirm search service is up"
+[ "$(service_status search)" = "yes" ]
+service_status "search"
+
+log "Confirm rest service is up"
+[ "$(service_status search)" = "yes" ]
+service_status "rest"
+
+log "Backup up operation is done"
+## File : backup-all.sh ends
+#+end_src
+** run_command_in_all_nodes.sh
+#+begin_src sh
+#!/bin/bash
+##-------------------------------------------------------------------
+## File : run_command_in_all_nodes.sh
+## Author : Denny <denny.zhang001@gmail.com>
+## Description : Run command in a list of servers.
+##               Here we assume ssh key is properly uploaded, thus we
+##               don't need to input ssh password
+## --
+## Created : <2014-07-10>
+## Updated: Time-stamp: <2014-07-31 14:10:04>
+##-------------------------------------------------------------------
+
+# Example1: Run a command in all nodes of prod env.
+#    sh ./run_command_in_all_nodes.sh "ssh root@HOSTIP date"
+#          Note: We assume ssh public key is uploaded properly
+#          In above, HOSTIP will be replaced by server ip.
+#
+# Example2: Run a command in some nodes
+#    sh ./run_command_in_all_nodes.sh "ssh root@HOSTIP date" "172.20.16.14 172.20.16.12"
+
+command=${1:-"ssh root@HOSTIP date"}
+server_list=${2:-"172.20.16.14 172.20.16.12 172.20.16.17 172.20.16.18 172.20.16.13 172.20.16.15 172.20.16.16 172.20.16.11 172.21.16.11 172.21.16.12 172.20.16.19 172.20.16.20 172.20.16.23 172.20.16.26 172.20.18.13 172.20.18.15 172.20.18.16"}
+
+date=`date +%Y-%m-%d_%H:%M`
+has_error=false
+echo `date +['%Y-%m-%d %H:%M:%S']` "Actions Begin\n"
+
+for server in ${server_list[*]}; do
+    actual_command=`echo $command | sed "s/HOSTIP/$server/g"`
+    echo "\n========== On $server Run: $actual_command =========="
+    output=`$actual_command`
+    if [ $? -ne 0 ]; then
+        has_error=true
+        echo "Error to run: $actual_command\n"
+    else
+        if (echo "$output" | grep -i error 1>/dev/null); then
+            has_error=true
+            echo "========== Action on $server failed =========="
+        fi;
+    fi;
+    echo "${output}\n"
+done;
+
+echo `date +['%Y-%m-%d %H:%M:%S']`" Actions are done\n"
+## File : run_command_in_all_nodes.sh ends
+#+end_src
+** DONE [#A] bash do case                                         :IMPORTANT:
+  CLOSED: [2014-08-30 Sat 20:04]
+http://www.thegeekstuff.com/2010/07/bash-case-statement/
+#+begin_src sh
+$ cat signal.sh
+#!/bin/bash
+
+if [ $# -lt 2 ]
+then
+        echo "Usage : $0 Signalnumber PID"
+        exit
+fi
+
+case "$1" in
+
+1)  echo "Sending SIGHUP signal"
+    kill -SIGHUP $2
+    ;;
+2)  echo  "Sending SIGINT signal"
+    kill -SIGINT $2
+    ;;
+3)  echo  "Sending SIGQUIT signal"
+    kill -SIGQUIT $2
+    ;;
+9) echo  "Sending SIGKILL signal"
+   kill -SIGKILL $2
+   ;;
+*) echo "Signal number $1 is not processed"
+   ;;
+esac
+#+end_src
+** DONE shell if... then..: if true ; then echo "hello" ; fi
+   CLOSED: [2014-10-02 Thu 16:18]
+** DONE shell substract 2 variable: COUNT=`expr $FIRSTV - $SECONDV`
+   CLOSED: [2014-10-03 Fri 11:56]
+** DONE mac get file modified timestamp: stat -f "%Sm" -t "%s" $flagfile
+  CLOSED: [2014-10-03 Fri 11:41]
+http://stackoverflow.com/questions/12169710/formatted-modified-date-time-on-mac-bash
+** DONE shell trim whitespace: echo "${output}" | sed -e 's/^[ \t]*//'
+   CLOSED: [2015-02-21 Sat 07:51]
+** DONE Bash run with parameter
+  CLOSED: [2015-03-19 Thu 11:42]
+/usr/local/bin/run_command_in_all_nodes.sh "ssh $ssh_opt -t -t root@HOSTIP curl -L http://sprepo.fluigidentity.com/fluig_share/chef_cmd/deployment/$deploy_config_file | skip_monitor_log=1 repo_server_ip_port=$repo_server_ip_port deploy_version=$branch_name bash -e"
+
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+** DONE track timespent
+   CLOSED: [2015-04-22 Wed 08:41]
+START=$(date +%s)
+backup_dir
+END=$(date +%s)
+DIFF=$(echo "$END - $START" | bc)
+log "Track time spent: Backup step takes $DIFF seconds"
+** DONE bash -e and cron
+  CLOSED: [2015-04-26 Sun 18:42]
+How to write a daily crontab script
+#+BEGIN_EXAMPLE
+root@ip-172-31-11-0:~/osc_it/backup_dir# vim /tmp/test.sh
+root@ip-172-31-11-0:~/osc_it/backup_dir# chmod 755 /tmp/test.sh
+root@ip-172-31-11-0:~/osc_it/backup_dir# bash /tmp/test.sh
+/etc/hosts
+ls: cannot access /etc/hosts2: No such file or directory
+/etc/hosts
+root@ip-172-31-11-0:~/osc_it/backup_dir# bash -e /tmp/test.sh
+/etc/hosts
+ls: cannot access /etc/hosts2: No such file or directory
+root@ip-172-31-11-0:~/osc_it/backup_dir# cat /tmp/test.sh
+#!/bin/bash -e
+ls /etc/hosts
+ls /etc/hosts2
+ls /etc/hosts
+#+END_EXAMPLE
+** DONE cat VS tac
+   CLOSED: [2015-04-27 Mon 18:53]
+http://stackoverflow.com/questions/742466/how-can-i-reverse-the-order-of-lines-in-a-file
+** DONE less vs more
+   CLOSED: [2015-04-27 Mon 18:54]
+** DONE [#C] bash array separate by new line, instead of whitespace
+  CLOSED: [2015-07-09 Thu 07:57]
+http://mindspill.net/computing/linux-notes/using-the-bash-ifs-variable-to-make-for-loops-split-with-non-whitespace-characters/
+http://stackoverflow.com/questions/19771965/split-bash-string-by-newline-characters
+
+checks="check_gui_home -t 20
+check_gui_login"
+
+IFS=$'\n'
+
+for a in $checks; do echo "--" "$a" "--" ; done
+unset IFS
+** DONE bash divide numbers: echo 5/2 | bc -l: use bc or bash
+  CLOSED: [2015-07-21 Tue 16:46]
+http://stackoverflow.com/questions/1088098/how-do-i-divide-in-the-linux-console
+
+string=84415266816
+echo "$string/(1024*1024*1024)" | bc -l
+
+echo $(( 7 / 3 ))
+** DONE [#A] bash filter string: echo $ram_capacity | sed -n 's/.*\(free.*\)}/\1/p'
+  CLOSED: [2015-07-21 Tue 16:05]
+http://stackoverflow.com/questions/11568859/how-to-extract-text-from-a-string-using-sed
+MacPro:default mac$ echo $ram_capacity
+{u'used': 5064916008, u'total': 84415266816, u'quotaTotal': 84415266816, u'usedByData': 39025953, u'free': 79350350808}
+
+ram_capacity="{u'used': 5064916008, u'total': 84415266816, u'quotaTotal': 84415266816, u'usedByData': 39025953, u'free': 79350350808}"
+echo $ram_capacity | sed -n 's/.*\(free.*\)}/\1/p'
+** DONE [#A] bash function mute output                            :IMPORTANT:
+  CLOSED: [2015-08-01 Sat 22:06]
+#+BEGIN_SRC sh
+#!/bin/bash -e
+function fun() {
+    INSTANCE_ID="id1"
+    echo "hello, world"
+}
+
+echo "run0:"
+fun
+
+val1=${fun}
+echo "run1: $val1"
+
+val2=$(fun)
+echo "run2: $val2"
+
+echo "INSTANCE_ID: $INSTANCE_ID".
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+MacPro:~ mac$ ./test.sh
+run0:
+hello, world
+run1:
+run2: hello, world
+INSTANCE_ID: id1.
+#+END_EXAMPLE
+** DONE linux convert string to int
+  CLOSED: [2015-08-02 Sun 08:20]
+http://stackoverflow.com/questions/11268437/how-to-convert-string-to-integer-in-unix
+
+expr $d1 - $d2
+You can also do:
+
+echo $(( d1 - d2 ))
+
+[ `expr "22" - 23 ` -gt 0 ]; echo $?
+** #  --8<-------------------------- separator ------------------------>8--
+** DONE bash: from a list of directories, remove all except the first two: ls -lth /tmp/ | awk 'NR>2'
+  CLOSED: [2015-08-13 Thu 08:16]
+#+BEGIN_EXAMPLE
+jenkins@1e7c2d4de548:/var/www/repo$ ls -lth | grep dev_code | awk -F' ' '{print $9}'
+dev_code_9d820f6df69cccc2b28be12336a0e4bf88c4d555
+dev
+dev_code_b13a247cf739d75368d63180e5218d22c0c73fdd
+dev_code_4610882ea3b665908ba0726f186ce730ab8a0e9f
+dev_code_ba1965c75f3ccd28f0f37bff0916ed48154c90ed
+dev_code_71d197967f92bb0600afe2d307d1dd86315d5835
+dev_code_0e45206e90a6c1603db676a085b6c531ed655e62
+dev_code_0d23ccf8544ccb87e4511a3c65c8358c15d5325b
+dev_code_429b951934969a7055b72ec2aa9a5549b7778981
+#+END_EXAMPLE
+** DONE bash print line #2 and line #3: ls -lth /tmp/ | awk 'NR==2,NR==3'
+  CLOSED: [2015-08-13 Thu 08:16]
+#+BEGIN_EXAMPLE
+MacPro:org_data mac$ ls -lth /tmp/ | awk 'NR==2,NR==3'
+drwx------  3 root        wheel   102B Aug 13 06:05 KSOutOfProcessFetcher.0.I5ci1K_TwCwqo1sKvc0siaBbJTw=
+-rw-r--r--  1 mac         wheel   8.4K Aug 13 01:41 pre_push.log
+MacPro:org_data mac$ ls -lth /tmp/
+total 32
+drwx------  3 root        wheel   102B Aug 13 06:05 KSOutOfProcessFetcher.0.I5ci1K_TwCwqo1sKvc0siaBbJTw=
+-rw-r--r--  1 mac         wheel   8.4K Aug 13 01:41 pre_push.log
+-rw-r--r--  1 mac         wheel   1.5K Aug  9 09:49 test_docker_reboot.sh
+drwx------  3 root        wheel   102B Aug  7 19:07 launchd-412.p65VLV
+drwx------  3 mac         wheel   102B Aug  7 19:07 launch-fHcqj0
+drwx------  3 mac         wheel   102B Aug  7 19:07 launch-v7pPEn
+drwx------  3 mac         wheel   102B Aug  7 19:05 launchd-268.WPmyrE
+drwx------  3 _spotlight  wheel   102B Aug  7 19:03 launchd-261.pK6Cby
+MacPro:org_data mac$
+#+END_EXAMPLE
+** DONE copy a list of files preseving the directory path
+  CLOSED: [2015-08-13 Thu 08:25]
+http://serverfault.com/questions/180853/how-to-copy-file-preserving-directory-path-in-linux
+#+BEGIN_EXAMPLE
+rm -rf /tmp/backup/*
+cp -r --parents /var/lib/jenkins/jobs/BuildRepoCode /tmp/backup
+ls -lth /tmp/backup
+#+END_EXAMPLE
+** DONE bash string to list delimiter separator: IFS=$'\n'; echo "${System[*]}"
+  CLOSED: [2015-10-27 Tue 11:01]
+http://superuser.com/questions/461981/how-do-i-convert-a-bash-array-variable-to-a-string-delimited-with-newlines
+
+#+BEGIN_EXAMPLE
+Here's a way that utilizes bash parameter expansion and its IFS special variable.
+
+$ System=('s1' 's2' 's3' 's4 4 4')
+$ ( IFS=$'\n'; echo "${System[*]}" )
+#+END_EXAMPLE
+** DONE base dirname: echo ${PIDFILE%/*}
+  CLOSED: [2015-11-24 Tue 20:33]
+#+BEGIN_EXAMPLE
+Denny-mac:~ mac$ PIDFILE="/etc/hosts/abc/123/tmp.pid"
+You have new mail in /var/mail/mac
+Denny-mac:~ mac$ echo ${PIDFILE%/*}
+/etc/hosts/abc/123
+#+END_EXAMPLE
+** DONE bash check variable is number
+  CLOSED: [2016-05-02 Mon 18:41]
+http://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash
+
+#+BEGIN_SRC sh
+re='^[0-9]+$'
+if ! [[ $yournumber =~ $re ]] ; then
+   echo "error: Not a number" >&2; exit 1
+fi
+#+END_SRC
+** DONE bash count matched string: echo "echo 1234 echo" | grep -o echo
+  CLOSED: [2016-05-23 Mon 07:47]
+http://stackoverflow.com/questions/6741967/how-can-i-count-the-occurrences-of-a-string-within-a-file-using-bash
+** DONE bash check whethter string is a valid ip
+  CLOSED: [2016-05-30 Mon 17:44]
+http://stackoverflow.com/questions/13777387/check-for-ip-validity
+#+BEGIN_SRC sh
+#!/bin/bash
+ip=1.2.3.4
+
+if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "success"
+else
+  echo "fail"
+fi
+#+END_SRC
+
+** DONE Changing a linux password via script: echo "root:NEWPASSWD" | chpasswd :noexport:
+  CLOSED: [2016-06-01 Wed 13:59]
+http://stackoverflow.com/questions/27837674/changing-a-linux-password-via-script
+
+echo "root:DevOpsChangeMe1" | chpasswd
+
+ssh -i  /Users/mac/baidu/百度云同步盘/private_data/backup_small/ssh_key/totvslabs/project_ssh_key_id_rsa root@104.131.129.100 "echo root:NEWPASSWD | chpasswd"
+
+echo -e "newpasswd123\nnnewpasswd123" | passwd user
+
+** DONE bash to check whether ssh server reachable
+  CLOSED: [2016-06-10 Fri 10:57]
+function ip_list_ping_reachable() {
+    # Sample:
+    #   ip_list_ping_reachable "true" "172.17.0.2
+    #                                  172.17.0.3
+    #                                  172.17.0.4"
+    #   ip_list_ping_reachable "false" "$ip_list"
+    local exit_if_fail=${1?}
+    local ip_list=${2?}
+    for ip in $ip_list; do
+        # echo "ping ip: ${ip}"
+        if ! ping -c3 "$ip" 2>/dev/null 1>/dev/null; then
+            if [ "$exit_if_fail" = "true" ]; then
+                echo "ERROR: Current machine can't ping $ip. Please check input parameters."
+                exit 1
+            else
+                echo "Warning: Current machine can't ping $ip. Please check input parameters."
+            fi
+        fi
+    done
+}
+
+** DONE bash remove empty lines: sed '/^$/d'
+  CLOSED: [2016-06-10 Fri 13:13]
+http://stackoverflow.com/questions/16414410/delete-empty-lines-using-sed
+
+** DONE bash get file acl mode: stat -c "%a %n" /etc/hosts
+  CLOSED: [2016-06-14 Tue 16:29]
+http://askubuntu.com/questions/152001/how-can-i-get-octal-file-permissions-from-command-line
+
+** DONE bash break long line to short line
+  CLOSED: [2016-06-17 Fri 10:59]
+http://unix.stackexchange.com/questions/82182/having-multi-lines-in-bash-command-substitution
+http://stackoverflow.com/questions/18599711/how-can-i-split-a-bash-command-over-multiple-lines-when-using-an-if-statement
+#+BEGIN_SRC sh
+package_list="lsof curl git tar apt wget vim strace \
+libcurl3 openssh-client "
+#+END_SRC
+** DONE shell break for and continue
+  CLOSED: [2015-05-13 Wed 22:19]
+http://www.tutorialspoint.com/unix/unix-loop-control.htm
+- break
+#+BEGIN_SRC sh
+#!/bin/sh
+
+for var1 in 1 2 3
+do
+   for var2 in 0 5
+   do
+      if [ $var1 -eq 2 -a $var2 -eq 0 ]
+      then
+         break 2
+      else
+         echo "$var1 $var2"
+      fi
+   done
+done
+#+END_SRC
+
+- continue
+#+BEGIN_SRC sh
+#!/bin/sh
+
+NUMS="1 2 3 4 5 6 7"
+
+for NUM in $NUMS
+do
+   Q=`expr $NUM % 2`
+   if [ $Q -eq 0 ]
+   then
+      echo "Number is an even number!!"
+      continue
+   fi
+   echo "Found odd number"
+done
+#+END_SRC
+
+** DONE Check if a function exists before executing it in shell
+  CLOSED: [2016-01-29 Fri 17:27]
+http://stackoverflow.com/questions/17972087/check-if-a-function-exists-before-executing-it-in-shell
+http://www.cyberciti.biz/faq/bash-shell-scripting-find-out-if-function-definedornot/
+#+BEGIN_SRC sh
+if type foo | grep -i function > /dev/null; then
+   # foo is a function
+fi
+#+END_SRC
+
+** TODO set -o pipefail
+pipefail: the return value of a pipeline is the status of the last
+command to exit with a non-zero status, or zero if no command exited
+with a non-zero status
+
+http://stackoverflow.com/questions/1221833/bash-pipe-output-and-capture-exit-status
+** DONE bash remove whitespace and new line
+  CLOSED: [2016-12-08 Thu 17:44]
+http://stackoverflow.com/questions/13659318/how-to-remove-space-from-string
+
+http://www.regular-expressions.info/posixbrackets.html
+
+jenkins_jobs="BuildMDMRepo ,UpdateSandboxMDM,UpdateJenkinsItself,TailLogfile,CollectFiles"
+echo "${jenkins_jobs//[[:blank:]]/}"
+
+echo "$jenkins_jobs" | tr -s " "
+
+#!/bin/bash -e
+jenkins_jobs="BuildMDMRepo ,
+UpdateSandboxMDM,UpdateJenkinsItself,TailLogfile,CollectFiles"
+echo "${jenkins_jobs//[[:space:]]/}"
+
+** #  --8<-------------------------- separator ------------------------>8--
+** DONE remove old backup and keep laest 2 backup
+  CLOSED: [2016-12-26 Mon 10:45]
+ssh -p 2702 root@138.68.4.184
+
+> /tmp/test.sh && vim /tmp/test.sh
+
+bash /tmp/test.sh
+
+#+BEGIN_SRC sh
+#!/bin/bash
+function remove_old_folder() {
+    folder_to_check=${1?}
+    keep_latest_count=${2:-1}
+    i=1
+    cd "$folder_to_check"
+    for d in $(ls -t .); do
+        echo "d: $d, i: $i, keep_latest_count: $keep_latest_count"
+        if [ $i -gt $keep_latest_count ]; then
+            echo "rm $folder_to_check/$d"
+            #rm -rf "$folder_to_check/$d"
+        fi
+        i=$((i+1))
+    done
+}
+
+remove_old_folder "/mnt/cb-backup-01/backup/mdm-staging/" 1
+#+END_SRC
+*** output
+#+BEGIN_EXAMPLE
+root@prod-cb-backup:/mnt/cb-backup-01/backup/mdm-staging# dir_to_check="/mnt/cb-backup-01/backup/mdm-staging/"
+root@prod-cb-backup:/mnt/cb-backup-01/backup/mdm-staging# for d in $(find "$dir_to_check" -type d -ctime +7); do
+>   if [ -d "$d" ]; then
+>     echo "rm $d"
+>     rm -rf $d
+>   fi
+> done
+root@prod-cb-backup:/mnt/cb-backup-01/backup/mdm-staging# ls -lth
+total 12K
+drwxr-xr-x 3 root root 4.0K Dec 25 01:47 2016-12-25T064711Z
+root@prod-cb-backup:/mnt/cb-backup-01/backup/mdm-staging# date
+Sun Dec 25 05:52:57 EST 2016
+
+find . -maxdepth 1 -type d -ctime +7
+
+root@prod-cb-backup:/mnt/cb-backup-01/backup/mdm-staging# find . -maxdepth 1 -type d -ctime +7
+root@prod-cb-backup:/mnt/cb-backup-01/backup/mdm-staging# ls
+2016-12-11T053231Z  2016-12-18T060028Z  2016-12-25T064711Z
+root@prod-cb-backup:/mnt/cb-backup-01/backup/mdm-staging# stat 2016-12-11T053231Z
+  Size: 4096      	Blocks: 8          IO Block: 4096   directory
+Device: 810h/2064d	Inode: 16252977    Links: 7
+Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2016-12-25 04:57:02.775279051 -0500
+Modify: 2016-12-24 00:22:22.999279051 -0500
+Change: 2016-12-24 00:22:22.999279051 -0500
+ Birth: -
+#+END_EXAMPLE
+
+** DONE shell get current file name: basename "$0"
+   CLOSED: [2017-05-12 Fri 22:53]
+** DONE Turning multiple lines into one line with comma separated: sed -e 's/ /,/g'
+  CLOSED: [2017-09-08 Fri 17:34]
+https://stackoverflow.com/questions/15758814/turning-multiple-lines-into-one-line-with-comma-separated-perl-sed-awk
+
+** DONE bash number calculation
+  CLOSED: [2017-10-17 Tue 22:17]
+#+BEGIN_EXAMPLE
+#!/usr/bin/env bash
+##-------------------------------------------------------------------
+## @copyright 2017 DennyZhang.com
+## Licensed under MIT 
+##   https://www.dennyzhang.com/wp-content/mit_license.txt
+##
+## File: test.sh
+## Author : Denny <contact@dennyzhang.com>
+## Description :
+##   https://leetcode.com/problems/transpose-file/description/
+## --
+## Created : <2017-10-17>
+## Updated: Time-stamp: <2017-10-17 22:13:31>
+##-------------------------------------------------------------------
+set -e
+
+one_line=($(head -n1 ./file.txt))
+column_count=${#one_line[@]}
+line_count=$(wc -l ./file.txt | awk -F' ' '{print $1}')
+
+# echo "column_count: $column_count, line_count: $line_count"
+output=($(cat ./file.txt))
+# echo "output: $output"
+
+for((i=0; i<$column_count; i++)); do
+    for((j=0; j<$line_count; j++)); do
+        index=$((i+j*column_count))
+        if [ $((j+1)) -eq $line_count ]; then
+            echo -n "${output[$index]}"
+        else
+            echo -n "${output[$index]} "
+        fi
+        # echo "${output[$index} "
+    done
+    echo ""
+done
+#+END_EXAMPLE
+
+** DONE shell replace string: get master-index-023ea45 from master-index-023ea45: echo "${var//-index/}"
+   CLOSED: [2018-01-29 Mon 16:27]
+
+** DONE bash get parameter of --skip-loggregator
+   CLOSED: [2018-07-02 Mon 14:48]
+ #+BEGIN_SRC bash
+ skip_loggregator="no"
+
+ for arg in "$@"
+ do
+     case "$arg" in
+         -s|--skip-loggregator)
+             shift
+             skip_loggregator="yes"
+             ;;
+         -h|--help)
+             help
+             shift
+             exit 0
+             ;;
+         --)
+             echo "break"
+             shift
+             break
+             ;;
+     esac
+ done
+ #+END_SRC
+
+** DONE linux short filename: basename "$f"
+   CLOSED: [2018-07-05 Thu 17:36]
+
+* TODO shell: create normal users with root priveledge
+  :PROPERTIES:
+  :ID:       1B974171-7A28-419E-8113-36D6B5627B4D
+  :END:
+/home/denny/devstack/stack.sh
+#+begin_src sh
+    # since this script runs as a normal user, we need to give that user
+    # ability to run sudo
+    dpkg -l sudo || apt_get update && apt_get install sudo
+
+    if ! getent passwd stack >/dev/null; then
+        echo "Creating a user called stack"
+        useradd -U -G sudo -s /bin/bash -d $DEST -m stack
+    fi
+
+    echo "Giving stack user passwordless sudo priviledges"
+    # some uec images sudoers does not have a '#includedir'. add one.
+    grep -q "^#includedir.*/etc/sudoers.d" /etc/sudoers ||
+        echo "#includedir /etc/sudoers.d" >> /etc/sudoers
+    ( umask 226 && echo "stack ALL=(ALL) NOPASSWD:ALL" \
+        > /etc/sudoers.d/50_stack_sh )
+#+end_src
+* TODO shell: special matching syntax
+  :PROPERTIES:
+  :ID:       89C8040D-8568-4B78-BD1E-5938522A4D64
+  :END:
+#+begin_src sh
+function is_service_enabled() {
+    services=$@
+    for service in ${services}; do
+        [[ ,${ENABLED_SERVICES}, =~ ,${service}, ]] && return 0
+        [[ ${service} == "nova" && ${ENABLED_SERVICES} =~ "n-" ]] && return 0
+        [[ ${service} == "glance" && ${ENABLED_SERVICES} =~ "g-" ]] && return 0
+        [[ ${service} == "quantum" && ${ENABLED_SERVICES} =~ "q-" ]] && return 0
+    done
+    return 1
+}
+#+end_src
