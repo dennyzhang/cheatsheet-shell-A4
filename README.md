@@ -9,14 +9,13 @@ File me [tickets](https://github.com/DennyZhang/challenges-script/issues) or sta
 
 | Name                         | Comment                                                          |
 | :----------------------      | ---------------------------------------------------------------- |
-| Trap exit signal             | [code/trap_exit.sh](code/trap_exit.sh)                           |
 | Redirect stdout/stderr       | `ls /tmp 1>/dev/null 2>&1`                                       |
 | Compare command output       | `[ 0 -eq $(find ./data -name "*.txt" -type f -print ｜ wc -l) ]` |
 | Deal with filename           | `basename $f`, `dirname $f`                                      |
-| Long option for command line | [code/long_option_parameter.sh](code/long_option_parameter.sh)   |
 | timeout command              | `timeout 10 sh -c "ls -lt"`                                      |
-
-
+| Long option for command line | [code/long_option_parameter.sh](code/long_option_parameter.sh)   |
+| Trap exit signal             | [code/trap_exit.sh](code/trap_exit.sh)                           |
+| shell retry                  | [code/shell_retry.sh](code/shell_retry.sh)                 |
 
 # Scripts
 

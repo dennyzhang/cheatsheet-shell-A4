@@ -1171,7 +1171,6 @@ $ cat /tmp/t_here.txt
 UID=1000
 
 #+end_example
-** DONE 已完结
 ** DONE mail: 在terminal下cat一个二进制文件，导致之后都乱码的解决方案: 运行reset :noexport:
   CLOSED: [2012-09-22 六 12:07]
 [[gnus:nnfolder:mail.sent.mail#876276puon.fsf@126.com][Email from Denny Zhang: 在terminal下cat一个二进制文件]]
