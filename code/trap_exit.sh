@@ -8,7 +8,7 @@
 ## Description :
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2018-07-17 12:22:29>
+## Updated: Time-stamp: <2018-07-29 14:55:11>
 ##-------------------------------------------------------------------
 set -e
 
@@ -19,7 +19,6 @@ function shell_exit {
     else
         echo "ERROR"
     fi
-    exit $errcode
 }
 
 trap shell_exit SIGHUP SIGINT SIGTERM 0

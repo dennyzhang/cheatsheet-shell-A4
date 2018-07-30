@@ -1,16 +1,59 @@
--*- mode:org; fill-column:70; coding:utf-8; -*-
-* org-mode configuration
+* org-mode configuration                                           :noexport:
 #+STARTUP: overview customtime noalign logdone hidestars
-#+TAGS: ARCHIVE(a) WORK(w) LIFE(l) EMACS(e) IMPORTANT(i) Debug(d) Communication(c) RECOMMENDATE(r) Tool(t) Habit(h) noexport(n) Share (s) BLOG(b)
-#+SEQ_TODO: TODO HALF ASSIGN | DONE BYPASS DELEGATE CANCELED DEFERRED
-#+DRAWERS: HIDDEN CODE CONF EMAIL WEBPAGE SNIP
+#+TITLE:  Setup Mac As DevKit
+#+DESCRIPTION: 
+#+KEYWORDS: 
+#+AUTHOR: Denny Zhang
+#+EMAIL:  denny@dennyzhang.com
+#+TAGS: noexport(n)
 #+PRIORITIES: A D C
-#+ARCHIVE: %s_done::** Finished Tasks
-#+OPTIONS: H:nil num:nil
-#+AUTHOR: dennyzhang.com (https://www.dennyzhang.com/contact)
-#+OPTIONS: toc:nil \n:t ^:nil creator:nil d:nil
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://www.dennyzhang.com/wp-content/uploads/org.css">
-* [#A] Difficulties in shell/bash                           :Coding:Personal:
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+EXPORT_EXCLUDE_TAGS: exclude noexport
+#+SEQ_TODO: TODO HALF ASSIGN | DONE BYPASS DELEGATE CANCELED DEFERRED
+#+LINK_UP:   
+#+LINK_HOME: 
+* Summary
+#+BEGIN_HTML
+<a href="https://www.linkedin.com/in/dennyzhang001"><img src="https://www.dennyzhang.com/wp-content/uploads/sns/linkedin.png" alt="linkedin" /></a>
+<a href="https://github.com/DennyZhang"><img src="https://www.dennyzhang.com/wp-content/uploads/sns/github.png" alt="github" /></a>
+<a href="https://www.dennyzhang.com/slack" target="_blank" rel="nofollow"><img src="http://slack.dennyzhang.com/badge.svg" alt="slack"/></a>
+<a href="https://github.com/DennyZhang"><img align="right" width="200" height="183" src="https://www.dennyzhang.com/wp-content/uploads/denny/watermark/github.png" /></a>
+
+<br/><br/>
+
+<a href="http://makeapullrequest.com" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"/></a>
+#+END_HTML
+* CheatSheet
+File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or star [[https://github.com/DennyZhang/challenges-shell][this repo]].
+
+See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][#denny-cheatsheets]]
+| Name                         | Comment                                                          |
+|------------------------------+------------------------------------------------------------------|
+| Redirect stdout/stderr       | =ls /tmp 1>/dev/null 2>&1=                                       |
+| Compare command output       | =[ 0 -eq $(find ./data -name "*.txt" -type f -print ｜ wc -l) ]= |
+| Deal with filename           | =basename $f=, =dirname $f=                                      |
+| timeout command              | =timeout 10 sh -c "ls -lt"=                                      |
+| Long option for command line | [[code/long_option_parameter.sh][code/long_option_parameter.sh]]                                    |
+| Trap exit signal             | [[code/trap_exit.sh][code/trap_exit.sh]]                                                |
+| shell retry                  | [[code/shell_retry.sh][code/shell_retry.sh]]                                              |
+
+# Scripts
+
+- get ip from eth0
+
+#+BEGIN_SRC sh
+/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
+#+END_SRC
+* More Resources
+License: Code is licensed under [[https://www.dennyzhang.com/wp-content/mit_license.txt][MIT License]].
+#+BEGIN_HTML
+<a href="https://www.dennyzhang.com"><img align="right" width="201" height="268" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/denny_201706.png"></a>
+
+<a href="https://www.dennyzhang.com"><img align="right" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/dns_small.png"></a>
+#+END_HTML
+* #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* [#A] Difficulties in shell/bash                  :noexport:Coding:Personal:
 :PROPERTIES:
 :type:   Linux_Language
 :END:
@@ -2445,7 +2488,509 @@ done
 ** DONE shell replace string: get master-index-023ea45 from master-index-023ea45: echo "${var//-index/}"
    CLOSED: [2018-01-29 Mon 16:27]
 
-* TODO shell: create normal users with root priveledge
+* Useful shell code snippet                                 :noexport:Coding:
+:PROPERTIES:
+:type:   Language_Linux
+:END:
+
+#+begin_example
+Please note: WORDPRESS differentiates among the following:
+| ｜, ' ‘, -- －, "“
+#+end_example
+
+- process
+| Question                          | Solution                                                                                                           | Use case                          |
+|-----------------------------------+--------------------------------------------------------------------------------------------------------------------+-----------------------------------|
+| 列出某个进程打开了哪些文件        | lsof +p 1971                                                                                                       |                                   |
+| 显示内存占用量最高的前10个process | ps aux ｜ sort -nk +4 ｜ tail                                                                                      |                                   |
+| 查看某类进程启动的时间            | ps -ef ｜ awk '/[p]hp-fpm/{print $2,$5,$7,$8}'                                                                     | 查找超时进程                      |
+| 列出运行超过一天的php进程         | ps -o etime,ppid,uid,pid,command -e ｜ grep '/usr/bin/php' ｜ awk -F' ' '{print $1" "$2" "$5}' ｜ grep '^[0-9]\+-' | 查找超时进程                      |
+| 列出所有父进程为init1的进程       | ps -f --ppid 1                                                                                                     | 查找孤儿进程,判断是否进行垃圾回收 |
+| 如何查出某个pid运行在哪个cpu上    | ps -efP ｜　grep 21587                                                                                             |                                   |
+| get process detail start time     | ps -o uid,pid,etime -p 11880                                                                                       |                                   |
+| 查看emacs的资源占用情况           | top -p $(pidof emacs)                                                                                              |                                   |
+
+- Common used
+| Question                                                     | Solution                                                                                                                                                                                | Use case |
+|--------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------|
+| 按更新时间, 查看某个文件夹                                   | ls -alth                                                                                                                                                                                |          |
+| 循环运行某个命令                                             | for ((b=1; b<=100; b++)); do echo hello; done;                                                                                                                                          |          |
+| if...else的条件判断                                          | if [ ! -d /tmp/tt ]; then mkdir /tmp/tt; else echo exists; fi;                                                                                                                          |          |
+| 模拟并发请求                                                 | 在多个terminal下，同时执行: for ((b=1; b<=100; b++)); do thrift_client -c sanityCheck -s 192.168.75.108 -p 9401; done;                                                                  |          |
+| 对一组远端服务器, 同时执行某个命令                           | command="date"; for puppet_client_ip in "192.168.75.108" "192.168.75.109" "192.168.75.110" "192.168.75.111"; do ssh -o StrictHostKeyChecking=no root@$puppet_client_ip "$command";done; |          |
+| 向文件中追加一个key=value的键值对, 如果存在则修改它          | (grep "key1 \+=" ./test.cfg && sudo sed -i 's/key1 \+=.*/key1 = value1/' ./test.cfg) ｜｜ ((cat ./test.cfg; echo "key1 = value1") ｜ sudo tee ./test.cfg)                               |          |
+| 查看svn的某个revision的修改                                  | svn diff -r 135:136 http://test.server.cn/project/trunk                                                                                                                                 |          |
+| 临时进入某个目录， 并运行某个命令， 同时不改变当前目录的位置 | (cd /tmp && ls)                                                                                                                                                                         |          |
+| 当命令A执行完后, 需要执行命令B, 但不修改$?　                 | A && B ｜｜ true                                                                                                                                                                        |          |
+| 查看某个文件夹下, 今天被修改文件的最后若干行                 |                                                                                                                                                                                         |          |
+| 在指定时间运行某个命令                                       | echo "ls -l" ｜ at midnight                                                                                                                                                             |          |
+| 重新执行上一个命令                                           | (sudo !!)                                                                                                                                                                               |          |
+| 按字符串搜索查找某个文件夹                                   | grep -lir "some text" *                                                                                                                                                                 |          |
+| 监控某个文件是否被修改了                                     | yum install inotify-tools; while inotifywait -e modify /var/log/message; do echo "changed"; done                                                                                        |          |
+
+- file management
+| Question                                                                            | Solution                                                                                                          | Use case         |
+|-------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------+------------------|
+| 查看某个文件的第5到第8行                                                            | sed -n 5,8p /etc/hosts                                                                                            |                  |
+| 删除某个文件指定的几行                                                              | sed -i 2,3d /etc/hosts                                                                                            |                  |
+| 列出某个文件中太长的行                                                              | awk 'length>50' /etc/hosts                                                                                        |                  |
+| 列出某个文件夹下， 最近60分钟内被修改的文件及文件夹                                 | sudo find /var/log -mmin 60 -type f                                                                               |                  |
+| 列出/var/log/下， 文件大小介于50k到100k之间的文件                                   | sudo find /var/log -type f -size +50k -size -100k                                                                 |                  |
+| 找出满足条件的文件， 并将它们删除                                                   | find ./ -name Thumbs.db -delete                                                                                   |                  |
+| Graphical tree of sub-directories                                                   | ls -R ｜ grep ":$" ｜ sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/｜/'                         |                  |
+| quickly backup or copy a file with bash                                             | cp filename{,.bak}                                                                                                |                  |
+| Delete all files in a folder that don't match a certain file extension              | rm !(*.foo｜*.bar｜*.baz)                                                                                         |                  |
+| List the size (in human readable form) of all sub folders from the current location | du -h --max-depth=1                                                                                               |                  |
+| make directory tree                                                                 | mkdir -p work/{d1,d2}/{src,bin,bak}                                                                               |                  |
+| 递归地删除所有空文件夹                                                              | find . -type d -empty -delete                                                                                     |                  |
+| 比较两个目录树的差异                                                                | diff <(cd dir1 && find ｜ sort) <(cd dir2 && find ｜ sort)                                                        |                  |
+| Get the 10 biggest files/folders for the current direcotry                          | du -s * ｜ sort -n ｜ tail                                                                                        |                  |
+| Remove all but one specific file                                                    | rm -f !(survivior.txt)                                                                                            |                  |
+| Find files that were modified by a given command                                    | touch /tmp/file ; $EXECUTECOMMAND ; find /path -newer /tmp/file                                                   |                  |
+| Copy a file structure without files                                                 | find * -type d -exec mkdir /where/you/wantem/\{\} \;                                                              |                  |
+| 找出一个文件夹下， md5相同的文件                                                    | fdupes -r . 或者 find . -type f -exec md5sum '{}' ';' ｜ sort ｜ uniq --all-repeated=separate -w 33 ｜ cut -c 35- |                  |
+| 对于一个文件， 指定两个开始和结束的regexp, 只显示满足条件的区间内容                 | awk '/127.0.0.1/,/The following/' /etc/hosts                                                                      |                  |
+| 删除修改时间在一年以上的文件                                                        | find <directory path> -mtime +365 -and -not -type d -delete                                                       | 删除不需要的文件 |
+| 创建一个指定大小的文件                                                              | truncate -s 1M file 或者 dd if=/dev/zero of=foo.txt bs=1M count=1                                                 | 测试文件系统性能 |
+| 找出最新三天修改的某类文件                                                          | find . -name "*.org" -a \( -mtime 0 -o -mtime 1 -o -mtime 2 \)                                                    |                  |
+| 创建文件时，　指定acl                                                               | umask 226 && echo "stack ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/50_stack_sh                                    |                  |
+| 打印一个文件夹的所有内容                                                            | for f in `ls .` ; do { echo -e "\n======== $f ======"; tail $f;}; done                                            |                  |
+
+- network
+| Question                                             | Solution                                                                                                                                                                                | Use case |
+|------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------|
+| 查看某个tcp端口被哪个pid占用                         | lsof -i tcp:80                                                                                                                                                                          |          |
+| 显示本机与所有remote host已经建立的网络链接          | netstat -an ｜ grep ESTABLISHED ｜ awk '{print $5}' ｜ awk -F: '{print $1}' ｜ sort ｜ uniq -c ｜ awk '{ printf("%s\t%s\t",$2,$1) ; for (i = 0; i < $1; i++) {printf("*")}; print "" }' |          |
+| 显示本机的外网ip                                     | curl ifconfig.me                                                                                                                                                                        |          |
+| Show apps that use internet connection at the moment | ss -p                                                                                                                                                                                   |          |
+| List alive hosts in specific subnet                  | nmap -sP 192.168.1.0/24                                                                                                                                                                 |          |
+| 查看当前网段， 有哪些机器开了某个端口                | nmap -sT -p 80 -oG - 192.168.1.*                                                                                                                                                        |          |
+| check open ports                                     | lsof -Pni4 ｜ grep LISTEN                                                                                                                                                               |          |
+| 查看各网卡的流入与流出带宽                           | ifstat -nt                                                                                                                                                                              |          |
+| 诊断网络状况                                         | mtr --report-cycles=5 --interval=2 --split                                                                                                                                              |          |
+
+- remote host management
+| Question                         | Solution                                                                         | Use case |
+|----------------------------------+----------------------------------------------------------------------------------+----------|
+| 对两个不同机器上的文件进行diff   | diff <(ssh alice cat /etc/apt/sources.list) <(ssh bob cat /etc/apt/sources.list) |          |
+| 在远端的两个host之间进行文件传输 | scp user@hostb:file user@hostc:                                                  |          |
+
+- view system information
+| Question                                   | Solution                                                  | Use case |
+|--------------------------------------------+-----------------------------------------------------------+----------|
+| 将当前机器硬件生成一个全面，美观的html报表 | lshw -html > hardware.html                                |          |
+| 查看OS是64位，　还是32位                   | file /usr/bin/file; uname -m; getconf -a ｜ grep LONG_BIT |          |
+| 查看CPU信息                                | cat /proc/cpuinfo                                         |          |
+| 如何查看linux系统是哪个版本的              | lsb_release -a                                            |          |
+| 查看系统内核                               | uname -a                                                  |          |
+
+- Memory
+| Question                 | Solution                            | Use case |
+|--------------------------+-------------------------------------+----------|
+| 按内存使用量对进程排序   | ps -eo pid,pmem,rss,comm --sort rss |          |
+| 查看某个进程的内存使用量 | ps -p 2977 -o vsz=                  |          |
+| 查看某个进程的内存使用量 | pmap 2977                           |          |
+| 查看某个进程的内存使用量 | top -n 1 -p 2977                    |          |
+| 显示系统内存使用情况     | free -m -t                          |          |
+| 显示系统内存使用情况     | cat /proc/meminfo                   |          |
+
+- Misc
+| Question                                                    | Solution                                                                                                                                | Use case |
+|-------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+----------|
+| 在指定时间点运行某个脚本                                    | at -f /tmp/test.sh -v 18:07                                                                                                             |          |
+| Convert seconds to human-readable format                    | date -d@1234567890                                                                                                                      |          |
+| Get utc seconds                                             | date +%s                                                                                                                                |          |
+| get yesterday                                               | date "+%a %d/%m/%Y" --date="1 days ago"                                                                                                 |          |
+| Quick access to the ascii table.                            | man ascii                                                                                                                               |          |
+| Start COMMAND, and kill it if still running after 5 seconds | timeout 5s COMMAND                                                                                                                      |          |
+| 产生一串随机数                                              | echo $RANDOM; echo {0..1}{0..1}{0..1}{0..1}                                                                                             |          |
+| 限制某个进程对cpu的使用率                                   | cpulimit -p 1234 -l 50                                                                                                                  |          |
+| 列出当前安装软件的包大小                                    | dpkg-query -Wf '${Installed-Size}\t${Package}\n' ｜ sort -n                                                                             |          |
+| 按固定大小将一个大文件切分成几个小文件                      | split -b 500k /var/log/messages message_part_                                                                                           |          |
+| Display GCC Predefined Macros                               | gcc -dM -E - < /dev/null                                                                                                                |          |
+| svn up某个文件夹下的所有子文件夹                            | find . -maxdepth 1 -type d ｜ xargs svn up                                                                                              |          |
+| 批量缩小图片                                                | rm -rf ../new && mkdir ../new && for img in `find . -iname '*.jpg' -a -size +1M`; do convert -resize 50%x50% "$img" ../new/"$img"; done |          |
+| 计算sin(5)的值                                              | echo 's(5)' ｜ bc -l                                                                                                                    |          |
+| 找出满足条件的文件夹，进行删除                              | ls -t /var/lib/hudson/jobs ｜ xargs -I '{}' find /var/lib/hudson/jobs/'{}'/builds/ -name "*" -mtime +15 -and -not -type d -delete       |          |
+| 算md5值                                                     | echo -n "password" ｜ md5sum                                                                                                            |          |
+| 列出所有本机IPv4的网络连接                                  | lsof -Pnl +M -i4                                                                                                                        |          |
+| CPU architecture information helper                         | cat /proc/cpuinfo;  lscpu                                                                                                               |          |
+| 下载递归某个站点                                            | wget -r -p -np -k http://xxx.com/abc/                                                                                                   |          |
+| 直接在控制台可以运行的, shell for循环                       | for((i=0; i< 3; i++)); do { echo $i; }; done                                                                                            |          |
+| 将patch.cfg中的1.3.x字符串替换成1.3.x, 1.4.x                | sed -i 's/1.3.x/1.3.x, 1.4.x/g' patch.cfg                                                                                               |          |
+| 将十进制转成十六进制                                        | bc <<< "obase=16; 11"                                                                                                                   |          |
+| 查看机器是否为虚拟机                                        | dmidecode -s system-manufacturer                                                                                                        |          |
+| hexdump以二进制看文件                                       | hexdump -C -n 100 caifv-images.s3.b2c.ekaidian.com.elmar0516                                                                            |          |
+| 查看某个文件第10字节后的20个字节                            | hexdump -C -n 20 -s 10 /etc/hosts                                                                                                       |          |
+| grep只显示matched的string                                   | grep --only-matching '[^ ]*fxw.vmod.cn' /usr/local/nginx/conf/vhosts/default.conf                                                       |          |
+** DONE linux at命令: 定义一个定时任务，在指定时间内执行           :noexport:
+  CLOSED: [2012-05-28 Mon 18:09]
+#+begin_example
+///6f667c06190b783231f9e708249a1d5d#$cat /tmp/test.sh
+echo `date` >>/tmp/test.log
+///6f667c06190b783231f9e708249a1d5d#$/etc/init.d/atd status
+atd (pid 4060) is running...
+///6f667c06190b783231f9e708249a1d5d#$date
+Mon May 28 18:05:30 CST 2012
+///6f667c06190b783231f9e708249a1d5d#$sudo at -f /tmp/test.sh -v 18:06
+Mon May 28 18:06:00 2012
+
+job 1 at 2012-05-28 18:06
+///6f667c06190b783231f9e708249a1d5d#$sudo at -f /tmp/test.sh -v 18:07
+Mon May 28 18:07:00 2012
+
+job 2 at 2012-05-28 18:07
+///6f667c06190b783231f9e708249a1d5d#$date
+Mon May 28 18:07:01 CST 2012
+///6f667c06190b783231f9e708249a1d5d#$cat /tmp/test.log
+Mon May 28 18:06:00 CST 2012
+Mon May 28 18:07:00 CST 2012
+#+end_example
+** DONE 运行某个shell命令, 但如果$?是失败的，仍然返回失败: 通过中间变量来实现
+  CLOSED: [2012-09-10 一 00:50]
+echo http://192.168.75.236:8999/health_check/report.html && ssh root@192.168.75.108 "ecae-health-check --report-dir /usr/local/ecae-health-check/report --only-simpletest"; scp root@192.168.75.108://usr/local/ecae-health-check/report/report.html /var/lib/hudson/tsung_log/health_check/report.html
+** sample usage                                                    :noexport:
+#+begin_src python
+#!/usr/bin/python
+# __CR__
+# Copyright (c) 2008-2010 EMC Corporation
+# All Rights Reserved
+#
+# This software contains the intellectual property of EMC Corporation
+# or is licensed to EMC Corporation from third parties.  Use of this
+# software and the intellectual property contained therein is expressly
+# limited to the terms and conditions of the License Agreement under which
+# it is provided by or on behalf of EMC.
+# __CR__
+
+#
+
+#
+# author: Denny Zhang
+# date:   06/07/10
+#
+
+import sys
+import os
+import getopt
+import xml.dom.minidom
+
+ELEMENT_NAME = "entry"
+ATTRIBUTE_KEY = "key"
+ATTRIBUTE_VALUE = "value"
+
+#default indentation when adding new entry
+INDENTATION = "\n    "
+
+FAILURE = 1
+SUCCESS = 0
+
+"""
+Update xml configuration files, for the given key.
+"""
+
+class AtmosXMLCfg:
+    """
+    AtmosXMLCfg manage maui xml configuration.
+    Notice: The format of each entry shall be "<entry key="..." value="..."/>
+    """
+
+    ####################### Public Begin #######################################
+    def update_entry(self, key_name, key_value):
+        """
+        Find first entry of <entry key=key_name value="..."/>, update the value with key_value.
+
+        Raise exception for unexpected content of xml.
+        """
+        count = self.__count_element_by_attribute(ELEMENT_NAME, ATTRIBUTE_KEY, key_name)
+        if count != 1:
+            msg = "Find %d entries, rather than exactly 1, with the value of <%s %s=\"%s\" ...>!" % \
+                (count, ELEMENT_NAME, ATTRIBUTE_KEY, key_name)
+            raise Exception(msg)
+
+        element = self.__get_first_element_by_attribute(ELEMENT_NAME, ATTRIBUTE_KEY, key_name)
+
+        if element.hasAttribute(ATTRIBUTE_VALUE) == False:
+            msg = "Can't find entry <%s %s=\"\" %s=\"\">!" % \
+                (ELEMENT_NAME, ATTRIBUTE_KEY, ATTRIBUTE_VALUE)
+            raise Exception(msg)
+
+        element.setAttribute(ATTRIBUTE_VALUE, key_value)
+
+    def remove_entry(self, key_name):
+        """
+        Remove entry with the attribute of key_name.
+
+        Raise exception for unexpected content of xml.
+        """
+        count = self.__count_element_by_attribute(ELEMENT_NAME, ATTRIBUTE_KEY, key_name)
+        # The qualified element shall be exactly one.
+        if count != 1:
+            msg = "Find %d entries, rather than exactly 1, with the value of <%s %s=\"%s\" ...>!" % \
+                (count, ELEMENT_NAME, ATTRIBUTE_KEY, key_name)
+            raise Exception(msg)
+
+        element = self.__get_first_element_by_attribute(ELEMENT_NAME, ATTRIBUTE_KEY, key_name)
+
+        parent_element = element.parentNode
+        parent_element.removeChild(element)
+
+    def add_entry(self, last_key_name, key_name, key_value, indentation):
+        """
+        Add an entry after the first entry which is <entry key=last_key_name value=...>
+
+        If we fail to find the entry to append the new entry, append the entry as the last child.
+
+        Raise exception for unexpected content of xml.
+        """
+        count = self.__count_element_by_attribute(ELEMENT_NAME, ATTRIBUTE_KEY, key_name)
+        # When adding new entry, it shall not exists before
+        if count != 0:
+            msg = "Already have %d entries, with the value of <%s %s=\"%s\" ...>!" % \
+                (count, ELEMENT_NAME, ATTRIBUTE_KEY, key_name)
+            raise Exception(msg)
+
+        if last_key_name == "":
+            parent_element = self.get_last_entry()
+            ref_child = None
+        else:
+            element = self.__get_first_element_by_attribute(ELEMENT_NAME, ATTRIBUTE_KEY, last_key_name)
+            if element == None:
+                msg = "Add entry fail: %s not found, can't add new entry." % (last_key_name)
+                raise Exception(msg)
+            # Get parent entry
+            parent_element = element.parentNode
+            ref_child = element.nextSibling
+
+        # Construct a new entry
+        new_entry = self.xml_doc.createElement(ELEMENT_NAME)
+        key_attribute_node = self.xml_doc.createAttribute(ATTRIBUTE_KEY)
+        value_attribute_node = self.xml_doc.createAttribute(ATTRIBUTE_VALUE)
+
+        new_entry.setAttributeNode(key_attribute_node)
+        new_entry.setAttribute(ATTRIBUTE_KEY, key_name)
+
+        new_entry.setAttributeNode(value_attribute_node)
+        new_entry.setAttribute(ATTRIBUTE_VALUE, key_value)
+
+        # insert the new entry to the right location
+        if ref_child == None:
+            parent_element.appendChild(new_entry)
+        else:
+            parent_element.insertBefore(new_entry, ref_child)
+
+        # append a newline and prefix of indentation to the head of the new entry
+        empty_text_node = self.xml_doc.createTextNode(indentation)
+        parent_element.insertBefore(empty_text_node, new_entry)
+
+    def write_xml_to_file(self, fname):
+        """
+        Flush xml dom object to a file.
+        """
+        fw = open(fname, 'w')
+        fw.write(self.xml_doc.toxml())
+        fw.close()
+
+    def get_last_entry(self):
+        last_entry = None
+        if self.xml_doc.childNodes != None:
+            length = len(self.xml_doc.childNodes)
+            last_entry = self.xml_doc.childNodes[length -1 ]
+        return last_entry
+
+    def xml_check(self):
+        """
+        Check whether the xml is in the right format.
+        Raise exception, if not.
+        The xml shall conform the following format:
+        - The xml is composed of three nodes: xml version, license, and maui properties.
+        - Each child node of maui properties shall be either comment,
+                     text node or element node with the format of <entry key="..." value="..."/>
+        - Maui properties's children shall have no duplicate key.
+        """
+        # TODO, denny
+        return
+
+    ####################### Public End #######################################
+
+    ####################### Private Begin ######################################
+    def __init__(self, fname):
+        self.fname = fname
+        self.xml_doc = xml.dom.minidom.parse(self.fname)
+        self.xml_check()
+
+    def __count_element_by_attribute(self, tag_name, attribute_name, \
+                                           attribute_value):
+        """
+        Return how many qualified elements which has attribute like the following:
+               <tag_name attribute_name=attribute_value...>
+        """
+        count = 0
+        for element in self.xml_doc.getElementsByTagName(tag_name):
+            if element.hasAttribute(attribute_name) and \
+                    element.getAttribute(attribute_name) == attribute_value:
+                count = count + 1
+        return count
+
+    def __get_first_element_by_attribute(self, tag_name, attribute_name, \
+                                               attribute_value):
+        """
+        Return the first element which has attribute like the following:
+               <tag_name attribute_name=attribute_value...>
+        """
+        ret = None
+        for element in self.xml_doc.getElementsByTagName(tag_name):
+            if element.hasAttribute(attribute_name) and \
+                    element.getAttribute(attribute_name) == attribute_value:
+                ret = element
+        return ret
+    ####################### Private End #######################################
+
+def pre_check(fname, action, after_key, key, value, indentation):
+    """
+    Input parameter check
+    """
+
+    if fname == "":
+        msg = "ERROR: Mandatory setting of file are not given"
+        print msg
+        return False
+
+    if action not in ("add", "remove", "update"):
+        if action == "":
+            msg = "ERROR: Mandatory setting of action are not given"
+        else:
+            msg = "Action of %s is not supported." % (action)
+        print msg
+        return False
+
+    if key == "":
+        msg = "ERROR: Mandatory setting of key are not given"
+        print msg
+        return False
+
+    if action in ("update", "add"):
+        if value == "":
+            msg = "ERROR: For operation of %s, mandatory setting of value are not given" % (action)
+            print msg
+            return False
+
+    return True
+
+def do_operation(fname, action, after_key, keys, values,
+                    indentation=INDENTATION):
+    """
+    Perform the operation on maui xml configuration.
+    """
+    xml_cfg = AtmosXMLCfg(fname)
+
+    if action == "update":
+        for k, v in zip(keys, values):
+            xml_cfg.update_entry(k, v)
+
+    if action == "remove":
+        for k in keys:
+            xml_cfg.remove_entry(k)
+
+    if action == "add":
+        for k, v in zip(keys, values):
+            xml_cfg.add_entry(after_key, k, v, indentation)
+
+    xml_cfg.write_xml_to_file(fname)
+
+def usage():
+    _usage = """Usage: %s <OPTION> [SETTING]
+Update xml configuration files, for the given key.
+
+OPTION:
+  -h --help                help info
+  -a --action              Action what will be performed.
+                           Supported options are add, remove, update
+  -f --file                The file location of xml
+  -k --key                 The name of key
+  -v --value               The value of key
+  --after-key              It indicates after which entry the new entry is appended.
+                           If option is not given, the new entry will be appened at the end of maui section.
+  -i --indentation         Append indentation in the new entry, when adding entry.
+                           Default value is "\\n    ".
+Example:
+
+ 1. Add certain key, after certain key.
+    # %s --action='add' --file='/etc/maui/cm_cfg.xml' --after-key='key' --key='key1' --value='value2'
+
+ 2. Add certain key, after certain key, with the prefix of "\\n    ".
+    # %s --action='add' --file='/etc/maui/cm_cfg.xml' --after-key='key' --key='key1' --value='value2' --indentation=$'\\n  '
+
+ 3. Update certain key
+    # %s --action='update' --file='/etc/maui/cm_cfg.xml' --key='key1' --value='value2'
+
+ 4. Remove certain key
+    # %s --action='remove' --file='/etc/maui/cm_cfg.xml' --key='key1'
+
+Report bugs to Maui System Management Team.
+    """
+    _name_filler = (os.path.basename(sys.argv[0]),) * 5
+
+    print _usage %_name_filler
+
+if __name__=='__main__':
+    # Get options
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "ha:k:v:f:i:",
+                ["help", "action=", "file=",
+                "key=", "value=", "after-key=", "indentation="
+                 ])
+    except getopt.GetoptError, err:
+        print str(err)
+        usage()
+        sys.exit(1)
+
+    #set default value
+    action = ""
+    fname = ""
+    after_key = ""
+    key = ""
+    value = ""
+    indentation = INDENTATION
+
+    # Parse options
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit(0)
+        elif o in ("-a", "--action"):
+            action = a
+        elif o in ("--after-key"):
+            after_key = a
+        elif o in ("-f", "--file"):
+            fname = a
+        elif o in ("-k", "--key"):
+            key = a
+        elif o in ("-v", "--value"):
+            value = a
+        elif o in ("-i", "--indentation"):
+            indentation = a
+        else:
+            print("Invalid option: " + o)
+            usage()
+            sys.exit(FAILURE)
+
+    # Input parameter check
+    if pre_check(fname, action, after_key, [key], [value], indentation) == False:
+        usage()
+        sys.exit(FAILURE)
+
+    try:
+        do_operation(fname, action, after_key, key, value, indentation)
+        print "Operation succeeds."
+    except Exception, msg:
+        print "Operation fails."
+        print msg
+        sys.exit(FAILURE)
+
+    sys.exit(SUCCESS)
+#+end_src
+* TODO shell: create normal users with root priveledge             :noexport:
   :PROPERTIES:
   :ID:       1B974171-7A28-419E-8113-36D6B5627B4D
   :END:
@@ -2467,7 +3012,7 @@ done
     ( umask 226 && echo "stack ALL=(ALL) NOPASSWD:ALL" \
         > /etc/sudoers.d/50_stack_sh )
 #+end_src
-* TODO shell: special matching syntax
+* TODO shell: special matching syntax                              :noexport:
   :PROPERTIES:
   :ID:       89C8040D-8568-4B78-BD1E-5938522A4D64
   :END:
@@ -2483,4 +3028,1457 @@ function is_service_enabled() {
     return 1
 }
 #+end_src
+
+* #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* echo                                                             :noexport:
+| Question         | Solution                                                |
+|------------------+---------------------------------------------------------|
+| 使用红色输出内容 | echo -en hello, '\E[47;31m'"\033[1mdenny\033[0m"        |
+| 输出多行         | echo -e "hello,\ndenny"                                 |
+| 加粗显示         | echo -e hello, "\033[1mThis is bold text.\033[0m"       |
+| 下划线           | echo -e hello, "\033[4mThis is underlined text.\033[0m" |
+* grep                                                             :noexport:
+| Question                                            | Solution                                                                                                                                                  | Use case |
+|-----------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------+----------|
+| 向文件中追加一个key=value的键值对, 如果存在则修改它 | (grep "key1 \+=" ./test.cfg && sudo sed -i 's/key1 \+=.*/key1 = value1/' ./test.cfg) ｜｜ ((cat ./test.cfg; echo "key1 = value1") ｜ sudo tee ./test.cfg) |          |
+| 按字符串搜索查找某个文件夹                          | grep -lir "some text" *                                                                                                                                   |          |
+| show line number                                    | grep -in null myfile.txt                                                                                                                                  |          |
+** DONE grep a directory: grep -R "dennyzhang" .
+  CLOSED: [2016-04-11 Mon 20:32]
+http://stackoverflow.com/questions/4121803/how-can-i-use-grep-to-find-a-word-inside-a-folder
+http://www.cyberciti.biz/faq/grep-subdirectory-for-files-on-linux-bsd-osx-unix-oses/
+** DONE grep two words with or: grep -iE "word1|word2|word3" a.txt
+   CLOSED: [2015-02-09 Mon 19:17]
+** TODO why grep is so fast
+  :PROPERTIES:
+  :ID:       41F3231C-F7D5-4E4D-AE50-E18DCBC46AEE
+  :END:
+  http://xboss.diandian.com/post/2011-08-19/4094774
+  http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html
+  http://news.ycombinator.com/item?id=2393587
+#+begin_example
+denny@denny-Vostro-1014:~/backup/pirate$ ls -lth ./xp.iso
+-rwxrwxr-x. 1 denny denny 687M Sep 25 09:53 ./xp.iso
+denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso
+Binary file xp.iso matches
+
+real	0m0.197s
+user	0m0.012s
+sys	0m0.020s
+denny@denny-Vostro-1014:~/backup/pirate$  time  grep "hello" xp.iso
+
+real	0m10.211s
+user	0m0.752s
+sys	0m0.748s
+denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso
+Binary file xp.iso matches
+
+real	0m0.046s
+user	0m0.016s
+sys	0m0.000s
+denny@denny-Vostro-1014:~/backup/pirate$  time  grep "world" xp.iso
+Binary file xp.iso matches
+
+real	0m0.023s
+user	0m0.012s
+sys	0m0.008s
+denny@denny-Vostro-1014:~/backup/pirate$  time  grep "microsoft" xp.iso
+Binary file xp.iso matches
+
+real	0m0.008s
+user	0m0.004s
+sys	0m0.000s
+#+end_example
+*** mail: Re: grep为什么会快得过硬盘读取速度？                     :noexport:
+  :PROPERTIES:
+  :ID:       32CD21F1-1502-487E-8E2F-11C16056F160
+  :END:
+[[gnus:p0-tech#CAAe%3D0GQPOYcRjGunyED0ZhJDQWuD0oiEuZvGV-6_pPx5YdO-dw@mail.gmail.com][Email from Yongkun Anfernee Gui (Mon, 24 Dec 2012 21:21:07 +0800): Re: grep为什么会快得过硬盘读取]]
+#+begin_example
+From: Yongkun Anfernee Gui <agui@rbcon.com>
+Subject: Re: grep为什么会快得过硬盘读取速度？
+To: Denny Zhang <denny.zhang001@gmail.com>
+Date: Mon, 24 Dec 2012 21:21:07 +0800
+
+是因为操作系统和磁盘的各种buffer吗？
+
+On Mon, Dec 24, 2012 at 6:18 PM, Denny Zhang <denny.zhang001@gmail.com> wrote:
+
+    hi 归泳昆
+
+    硬盘的读取速度是400MB/s，但是grep一个687M的数据，只需要不一１秒.
+    好不可思议！
+
+    http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html
+    http://xboss.diandian.com/post/2011-08-19/4094774
+
+    ,-----------
+    | denny@denny-Vostro-1014:~$ dd if=/dev/zero of=/tmp/test.out bs=4096 count=1000 |
+    | 1000+0 records in                                                              |
+    | 1000+0 records out                                                             |
+    | 4096000 bytes (4.1 MB) copied, 0.0105119 s, 390 MB/s                           |
+    | denny@denny-Vostro-1014:~/backup/pirate$ ls -lth ./xp.iso                      |
+    | -rwxrwxr-x. 1 denny denny 687M Sep 25 09:53 ./xp.iso                           |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso             |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.197s                                                                 |
+    | user  0m0.012s                                                                 |
+    | sys   0m0.020s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "hello" xp.iso            |
+    |                                                                                |
+    | real  0m10.211s                                                                |
+    | user  0m0.752s                                                                 |
+    | sys   0m0.748s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso             |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.046s                                                                 |
+    | user  0m0.016s                                                                 |
+    | sys   0m0.000s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "world" xp.iso            |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.023s                                                                 |
+    | user  0m0.012s                                                                 |
+    | sys   0m0.008s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "microsoft" xp.iso        |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.008s                                                                 |
+    | user  0m0.004s                                                                 |
+    | sys   0m0.000s                                                                 |
+    `-----------
+
+    --
+    Denny Zhang(张巍)
+    邮箱: markfilebat@126. com
+    微博: http://weibo.com/dennyzhang001
+    博客: http://blog.ec-ae.com/
+
+     _______________________________________
+    ( If you overvalue trivial matters, you )
+    ( probably have not experienced enough  )
+    ( hardship.                             )
+     ---------------------------------------
+           o (__)
+             (oo)
+       /------\/
+      / |    ||
+     *  /\---/\
+        ~~   ~~
+
+--
+Cheers,
+Anfernee
+
+#+end_example
+*** mail: Re: grep为什么会快得过硬盘读取速度？                     :noexport:
+  :PROPERTIES:
+  :ID:       9B47360B-0622-416E-A5BB-E551AE7F747A
+  :END:
+[[gnus:p0-friend#CAGffWzoGUFCsfJrFrV-3p54aU8HhtDb1ejDs2X4RpfBFe2kySA@mail.gmail.com][Email from ming zhang (Mon, 24 Dec 2012 11:29:38 -0500): Re: grep为什么会快得过硬盘读取]]
+#+begin_example
+From: ming zhang <ming.zhang.china@gmail.com>
+Subject: Re: grep为什么会快得过硬盘读取速度？
+To: Denny Zhang <denny.zhang001@gmail.com>
+Date: Tue, 25 Dec 2012 00:29:38 +0800
+
+all these skewed number were caused by Linux cache layer.
+
+1) you can use sg_inq to find out your hard disk model number. with that model number, you can find
+out the real speed this disk can provide.
+2) dd write a lot to cache, so it appear to be fast than real number.
+3) grep actually reads from cache, not disk, try to cleanup cache and do it again. see http://linux-mm.org/Drop_Caches
+
+On Mon, Dec 24, 2012 at 5:17 AM, Denny Zhang <denny.zhang001@gmail.com> wrote:
+
+    hi Ming
+
+    硬盘的读取速度是400MB/s，但是grep一个687M的数据，只需要不一１秒.
+    好不可思议！
+
+    http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html
+    http://xboss.diandian.com/post/2011-08-19/4094774
+
+    ,-----------
+    | denny@denny-Vostro-1014:~$ dd if=/dev/zero of=/tmp/test.out bs=4096 count=1000 |
+    | 1000+0 records in                                                              |
+    | 1000+0 records out                                                             |
+    | 4096000 bytes (4.1 MB) copied, 0.0105119 s, 390 MB/s                           |
+    | denny@denny-Vostro-1014:~/backup/pirate$ ls -lth ./xp.iso                      |
+    | -rwxrwxr-x. 1 denny denny 687M Sep 25 09:53 ./xp.iso                           |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso             |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.197s                                                                 |
+    | user  0m0.012s                                                                 |
+    | sys   0m0.020s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "hello" xp.iso            |
+    |                                                                                |
+    | real  0m10.211s                                                                |
+    | user  0m0.752s                                                                 |
+    | sys   0m0.748s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso             |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.046s                                                                 |
+    | user  0m0.016s                                                                 |
+    | sys   0m0.000s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "world" xp.iso            |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.023s                                                                 |
+    | user  0m0.012s                                                                 |
+    | sys   0m0.008s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "microsoft" xp.iso        |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.008s                                                                 |
+    | user  0m0.004s                                                                 |
+    | sys   0m0.000s                                                                 |
+    `-----------
+
+    --
+    Denny Zhang(张巍)
+    邮箱: markfilebat@126. com
+    微博: http://weibo.com/dennyzhang001
+    博客: http://blog.ec-ae.com/
+
+     _____________________________
+    ( Never use the last bullet!  )
+     -----------------------------
+        o               ,-----._
+      .  o         .  ,'        `-.__,------._
+     //   o      __\\'                        `-.
+    ((    _____-'___))                           |
+     `:='/     (alf_/                            |
+     `.=|      |='                               |
+        | )   O                                   | \                                 |
+        |                                         | /\  \                             |
+        | /                          .    /  \  \ |                                   |
+        | .-..__            ___   .--' \          | \   \                             |
+        | o o                                     | ``--.___.  /   `-'      \  \\   \ |
+        `--''        '  .' / /             |  | |   | \
+                     |   | / / |   |   | mmm |   |
+                     |   |     |   |   | /   |   |
+                     ( .' \ \              || | |
+                     |   | \ \            // / / |   |   |   |
+                     |   | \ \                   |   |   | _ |
+                    /  |    |_/         /_|
+                   /__/
+
+#+end_example
+*** mail: Re: grep为什么会快得过硬盘读取速度？                     :noexport:
+  :PROPERTIES:
+  :ID:       ADD61087-39C0-459E-B2AC-A9E919B91D3C
+  :END:
+[[gnus:p0-tech#CAFtCgjFePEEJCKSAFVvqe_nGevrGKhriYSft%3Dd-0zRoX4Qwc3A@mail.gmail.com][Email from Zhou Hang (Wed, 26 Dec 2012 09:22:30 +0800): Re: grep为什么会快得过硬盘读取]]
+#+begin_example
+From: Zhou Hang <utopia.zh@gmail.com>
+Subject: Re: grep为什么会快得过硬盘读取速度？
+To: Denny Zhang <denny.zhang001@gmail.com>
+Date: Wed, 26 Dec 2012 09:22:30 +0800
+
+是不是对binary只找第一个就返回了？
+grep 一个文本文件可能会慢一些？
+
+在 2012-12-24 下午6:18，"Denny Zhang" <denny.zhang001@gmail.com>写道：
+
+    hi hanghang
+
+    硬盘的读取速度是400MB/s，但是grep一个687M的数据，只需要不一１秒.
+    好不可思议！
+
+    http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html
+    http://xboss.diandian.com/post/2011-08-19/4094774
+
+    ,-----------
+    | denny@denny-Vostro-1014:~$ dd if=/dev/zero of=/tmp/test.out bs=4096 count=1000 |
+    | 1000+0 records in                                                              |
+    | 1000+0 records out                                                             |
+    | 4096000 bytes (4.1 MB) copied, 0.0105119 s, 390 MB/s                           |
+    | denny@denny-Vostro-1014:~/backup/pirate$ ls -lth ./xp.iso                      |
+    | -rwxrwxr-x. 1 denny denny 687M Sep 25 09:53 ./xp.iso                           |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso             |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.197s                                                                 |
+    | user  0m0.012s                                                                 |
+    | sys   0m0.020s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "hello" xp.iso            |
+    |                                                                                |
+    | real  0m10.211s                                                                |
+    | user  0m0.752s                                                                 |
+    | sys   0m0.748s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso             |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.046s                                                                 |
+    | user  0m0.016s                                                                 |
+    | sys   0m0.000s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "world" xp.iso            |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.023s                                                                 |
+    | user  0m0.012s                                                                 |
+    | sys   0m0.008s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "microsoft" xp.iso        |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.008s                                                                 |
+    | user  0m0.004s                                                                 |
+    | sys   0m0.000s                                                                 |
+    `-----------
+
+    --
+    Denny Zhang(张巍)
+    邮箱: markfilebat@126. com
+    微博: http://weibo.com/dennyzhang001
+    博客: http://blog.ec-ae.com/
+
+     ________________________________________
+    ( The only way to do great work is to    )
+    ( love what you do. If you haven't found )
+    ( it yet, keep looking. Don't settle. As )
+    ( with all matters of the heart, you'll  )
+    ( know when you find it -- Steve jobs    )
+     ----------------------------------------
+      o
+       o
+    .oooO...............
+    .(....)... Oooo....
+    ...(.....(.....).....
+    .._)..... )../......
+    .......... (_/....
+
+#+end_example
+*** mail: Re: grep为什么会快得过硬盘读取速度？                     :noexport:
+  :PROPERTIES:
+  :ID:       4D84E977-DDAE-4BEE-A9E7-357A862D7070
+  :END:
+[[gnus:p0-friend#CAAbS3d4wRwycUnZ10evHwBtdneWL7XHeWX4CuKYHxX3XnKY9HA@mail.gmail.com][Email from chunjie zhu (Fri, 4 Jan 2013 09:24:33 +0800): Re: grep为什么会快得过硬盘读取]]
+#+begin_example
+From: chunjie zhu <ptrace2008@gmail.com>
+Subject: Re: grep为什么会快得过硬盘读取速度？
+To: Denny Zhang <denny.zhang001@gmail.com>
+Date: Fri, 04 Jan 2013 09:24:33 +0800
+
+休了个长假，刚回来
+
+"dd if=/dev/zero of=/tmp/test.out bs=4096 count=1000" 这条命令一般是用来测量disk写入速度，这里的用
+法似乎有点问题，写入的对象是tmpfs，这和disk有区别；另外，data是从/dev/zero中读的，这个是个伪设备，
+IO操作实际上是memcpy，通常memcpy会使用一些类似Intel SSE指令优化，应该是非常快的，读取应该比400MB/s
+还要猛的多
+
+grep的行为有点奇怪，命中和不命中差很多，grep是基于行搜索的，可能binary文件在它看来只有1行，所以在命
+中的情况下可能grep不会去读取整个文件，当然这只是我一厢情愿的猜测
+
+| denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso  |
+| Binary file xp.iso matches                                          |
+|                                                                     |
+| real  0m0.197s  <-----                                              |
+| user  0m0.012s                                                      |
+| sys   0m0.020s                                                      |
+| denny@denny-Vostro-1014:~/backup/pirate$  time  grep "hello" xp.iso |
+|                                                                     |
+| real  0m10.211s <-----                                              |
+| user  0m0.752s                                                      |
+| sys   0m0.748s                                                      |
+
+此致敬礼，
+春杰
+
+2012/12/24 Denny Zhang <denny.zhang001@gmail.com>
+
+    hi 春杰
+
+    硬盘的读取速度是400MB/s，但是grep一个687M的数据，只需要不一１秒.
+    好不可思议！
+
+    http://lists.freebsd.org/pipermail/freebsd-current/2010-August/019310.html
+    http://xboss.diandian.com/post/2011-08-19/4094774
+
+    ,-----------
+    | denny@denny-Vostro-1014:~$ dd if=/dev/zero of=/tmp/test.out bs=4096 count=1000 |
+    | 1000+0 records in                                                              |
+    | 1000+0 records out                                                             |
+    | 4096000 bytes (4.1 MB) copied, 0.0105119 s, 390 MB/s                           |
+    | denny@denny-Vostro-1014:~/backup/pirate$ ls -lth ./xp.iso                      |
+    | -rwxrwxr-x. 1 denny denny 687M Sep 25 09:53 ./xp.iso                           |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso             |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.197s                                                                 |
+    | user  0m0.012s                                                                 |
+    | sys   0m0.020s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "hello" xp.iso            |
+    |                                                                                |
+    | real  0m10.211s                                                                |
+    | user  0m0.752s                                                                 |
+    | sys   0m0.748s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "test" xp.iso             |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.046s                                                                 |
+    | user  0m0.016s                                                                 |
+    | sys   0m0.000s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "world" xp.iso            |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.023s                                                                 |
+    | user  0m0.012s                                                                 |
+    | sys   0m0.008s                                                                 |
+    | denny@denny-Vostro-1014:~/backup/pirate$  time  grep "microsoft" xp.iso        |
+    | Binary file xp.iso matches                                                     |
+    |                                                                                |
+    | real  0m0.008s                                                                 |
+    | user  0m0.004s                                                                 |
+    | sys   0m0.000s                                                                 |
+    `-----------
+
+    --
+    Denny Zhang(张巍)
+    邮箱: markfilebat@126. com
+    微博: http://weibo.com/dennyzhang001
+    博客: http://blog.ec-ae.com/
+
+     __________________________________
+    ( A smile is the shortest distance )
+    ( between two people.              )
+     ----------------------------------
+      o
+       o
+        /\ /\
+         ( )
+       .( o ).
+
+#+end_example
+** DONE grep a text file which contains some binary data: grep -a(--text):
+  CLOSED: [2016-10-08 Sat 11:37]
+man grep 
+
+   File and Directory Selection
+       -a, --text
+              Process a binary file as if it were text; this is equivalent to the --binary-files=text option.
+
+
+http://stackoverflow.com/questions/9988379/how-to-grep-a-text-file-which-contains-some-binary-data
+root@wilson-sandbox-qa:~# tail -n 200000 /root/test.log | grep  -C 3 password
+tail -n 200000 /root/test.log | grep  -C 3 password
+Binary file (standard input) matches
+
+* find                                                             :noexport:
+| Question                                            | Solution                                                        | Use case         |
+|-----------------------------------------------------+-----------------------------------------------------------------+------------------|
+| 列出某个文件夹下， 最近60分钟内被修改的文件及文件夹 | sudo find /var/log -mmin 60 -type f                             |                  |
+| 列出/var/log/下， 文件大小介于50k到100k之间的文件   | sudo find /var/log -type f -size +50k -size -100k               |                  |
+| 找出满足条件的文件， 并将它们删除                   | find ./ -name Thumbs.db -delete                                 |                  |
+| 递归地删除所有空文件夹                              | find . -type d -empty -delete                                   |                  |
+| Find files that were modified by a given command    | touch /tmp/file ; $EXECUTECOMMAND ; find /path -newer /tmp/file |                  |
+| 删除修改时间在一年以上的文件                        | find <directory path> -mtime +365 -and -not -type d -delete     | 删除不需要的文件 |
+** [#A] web page: Linux and Unix find command tutorial with examples | George Ornbo
+https://shapeshed.com/unix-find/
+*** webcontent                                                     :noexport:
+#+begin_example
+Location: https://shapeshed.com/unix-find/
+  * Home
+  * Archive
+  * Contact
+
+Last updated Tuesday, Jul 12, 2016
+
+Linux and Unix find command tutorial with examples
+
+Tutorial on using find, a UNIX and Linux command for walking a file hierarchy. Examples of finding
+a file by name, finding and deleting a file, finding a directory and searching by modification time
+and permissions.
+
+Estimated reading time: 3 minutes
+
+Table of contents
+
+  *
+      + What is the find command in UNIX?
+      + How to find a single file by name
+      + How to find and delete a file
+      + How to find a directory
+      + How to find files by modification time
+      + How to find files by permission
+      + How to find and operate on files
+      + How to find and replace in a range of files
+      + How to search for text within multiple files
+      + Further reading
+
+find man page
+
+What is the find command in UNIX?
+
+The find command in UNIX is a command line utility for walking a file hierarchy. It can be used to
+find files and directories and perform subsequent operations on them. It supports searching by
+file, folder, name, creation date, modification date, owner and permissions. By using the - exec
+other UNIX commands can be executed on files or folders found.
+
+How to find a single file by name
+
+To find a single file by name pass the -name option to find along with the name of the file you are
+looking for.
+
+Suppose the following directory structure exists shown here as the output of the tree command.
+
+foo
+├── bar
+├── baz
+│   └── foo.txt
+└── bop
+
+The file foo.txt can be located with the find by using the -name option.
+
+find ./foo -name foo.txt
+./foo/baz/foo.txt
+
+How to find and delete a file
+
+To find and delete a file pass the --delete option to find. This will delete the file with no undo
+so be careful.
+
+find ./foo -name foo.txt --delete
+
+To be prompted to confirm deletion combine -exec with rm -i.
+
+find ./foo -name foo.txt -exec rm -i {} \;
+
+How to find a directory
+
+To find a directory specify the option -type d with find.
+
+find ./foo -type d -name bar
+./foo/bar
+
+How to find files by modification time
+
+To find files by modification time use the -mtime option followed by the number of days to look
+for. The number can be a positive or negative value. A negative value equates to less then so -1
+will find files modified within the last day. Similarly +1 will find files modified more than one
+day ago.
+
+find ./foo -mtime -1
+find ./foo -mtime +1
+
+How to find files by permission
+
+To find files by permission use the -perm option and pass the value you want to search for. The
+following example will find files that everyone can read, write and execute.
+
+find ./foo -perm 777
+
+How to find and operate on files
+
+To find and operate on file us the -exec option. This allows a command to be executed on files that
+are found.
+
+find ./foo -type f -name bar -exec chmod 777 {} \;
+
+How to find and replace in a range of files
+
+To find and replace across a range of files the find command may be combined with another utility
+like sed to operate on the files by using the -exec option. In the following example any occurrence
+of find is replaced with replace.
+
+find ./ -type f -exec sed -i 's/find/replace/g' {} \;
+
+How to search for text within multiple files
+
+Another use of combining find with exec is to search for text within multiple files.
+
+find ./ -type f -name "*.md" -exec grep 'foo'  {} \;
+
+Further reading
+
+  * find man page
+  * A collection of Unix/Linux find command examples
+  * Find Command in Unix and Linux Examples
+  * Some examples of using UNIX find command
+
+Tags
+
+  * UNIX
+
+Recent Posts
+
+  * Linux and Unix ls command tutorial with examples
+    Tutorial on using ls, a UNIX and Linux command for listing directory contents. Examples of
+    listing a directory, showing hidden files, showing long listings, sorting on various items and
+    showing recursive listings.
+
+  * Linux and Unix tail command tutorial with examples
+    Tutorial on using tail, a UNIX and Linux command for outputting the last part of files.
+    Examples of outputting the last ten lines of a file, limiting the number of lines, limiting the
+    number of bytes, showing multiple files, watching a file for changes and using pipes.
+
+  * Linux and Unix fc command tutorial with examples
+    Tutorial on using fc, a UNIX and Linux command for editing and re-executing commands previously
+    entered into an interactive shell. Examples of editing and re-executing the last command,
+    editing and executing a previous command, setting the text editor to be used, listing previous
+    commands and executing a command without editing it.
+
+About the author
+
+Picture of George Ornbo
+
+George Ornbo is co-founder and Managing Director of http://pebblecode.com.
+
+He is the author of Sams Teach Yourself Node.js in 24 Hours. He can be found in most of the usual
+places as shapeshed including Twitter and GitHub.
+
+← http://shapeshed.com
+
+#+end_example
+** DONE find command sort file by modified time
+  CLOSED: [2016-04-14 Thu 15:43]
+http://superuser.com/questions/294161/unix-linux-find-and-sort-by-date-modified
+find /var/lib/jenkins/jobs -name config.xml
+
+find /var/lib/jenkins/jobs -name config.xml -printf '%T@ %p\n' | sort -n | tail -n 1 | awk -F' ' '{print $2}'
+** DONE linux find file encoding 编码: file -i
+  CLOSED: [2015-09-11 Fri 10:06]
+root@aio:~# file -i /var/iam/audit/event_log/doc-mgr.log
+/var/iam/audit/event_log/doc-mgr.log: text/plain; charset=us-ascii
+
+http://stackoverflow.com/questions/805418/how-to-find-encoding-of-a-file-in-unix-via-scripts
+** DONE find remove folder generated 2 days ago
+  CLOSED: [2016-09-13 Tue 14:41]
+http://stackoverflow.com/questions/13868821/shell-script-delete-folders-older-than-n-days
+sudo find /tmp/ -name 'npm-*' -type d -ctime +2 -exec rm -rf {} +
+
+* ps                                                               :noexport:
+** web page: Linux and Unix ps command tutorial with examples | George Ornbo          
+https://shapeshed.com/unix-ps/
+*** webcontent                                                     :noexport:
+#+begin_example
+Location: https://shapeshed.com/unix-ps/                                                                                       
+  * Home
+  * Archive
+  * Contact
+
+Last updated Monday, Sep 5, 2016
+
+Linux and Unix ps command tutorial with examples
+
+Tutorial on using ps, a UNIX and Linux command for reporting information on running processes.
+Examples of searching by user, group, executable name and killing processes.
+
+Estimated reading time: 5 minutes
+
+Table of contents
+
+  * 
+      + What is the ps command in UNIX?
+      + How to show processes for the current shell
+      + How to list all processes
+      + How to list all processes for a user
+      + How to list all processes for a group
+      + How to list all processes by process number
+      + How to list all processes by executable name
+      + How to show a process hierarchy or tree
+      + How to just get the process id
+      + How to search for an kill a process
+      + Further reading
+
+Terminal showing ps man page
+
+What is the ps command in UNIX?
+
+The ps command reports information on current running processes, outputting to standard output. It
+is frequently used to find process identifier numbers. It supports searching for processes by user,
+group, process id or executable name. Related commands include pgrep that supports searching for
+processes and pkill that can kill processes based on a search.
+
+How to show processes for the current shell
+
+To show the processes for the current running shell run ps. If nothing else is running this will
+return information on the shell process being run and the ps command that is being run.
+
+ps
+PID  TTY          TIME CMD
+5763 pts/3    00:00:00 zsh
+8534 pts/3    00:00:00 ps
+
+The result contains four columns of information.
+
+  * PID - the number of the process
+  * TTY - the name of the console that the user is logged into
+  * TIME- the amount of CPU in minutes and seconds that the process has been running
+  * CMD - the name of the command that launched the process
+
+To demonstrate that other processes will show by just running ps a task can be put into the
+background before running the command.
+
+sleep 10 &
+ps
+PID   TTY          TIME CMD
+5763  pts/3    00:00:00 zsh
+10254 pts/3    00:00:00 sleep
+10258 pts/3    00:00:00 ps
+
+How to list all processes
+
+To list all processes on a system use the -e option.
+
+ps -e
+PID TTY          TIME CMD
+  1 ?        00:00:01 systemd
+  2 ?        00:00:00 kthreadd
+  3 ?        00:00:00 ksoftirqd/0
+....  
+
+This option can be combined with the -f and -F options to provide more information on processes.
+The -f option offers full-format listing.
+
+ps -f
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 19:58 ?        00:00:01 /sbin/init
+root         2     0  0 19:58 ?        00:00:00 [kthreadd]
+root         3     2  0 19:58 ?        00:00:00 [ksoftirqd/0]
+...
+
+The -F provides extra full format information.
+
+ps -F 
+UID        PID  PPID  C    SZ   RSS PSR STIME TTY          TIME CMD
+root         1     0  0 13250  6460   1 19:58 ?        00:00:01 /sbin/init
+root         2     0  0     0     0   1 19:58 ?        00:00:00 [kthreadd]
+root         3     2  0     0     0   0 19:58 ?        00:00:00 [ksoftirqd/0]
+...
+
+Another commonly used syntax to achieve seeing every process on the system using BSD syntax is ps
+aux.
+
+ps aux
+USER       PID % CPU % MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.0  53120  6368 ?        Ss   Sep19   0:01 /sbin/init
+root         2  0.0  0.0      0     0 ?        S    Sep19   0:00 [kthreadd]
+...
+
+How to list all processes for a user
+
+To list all processes by user use the -u option. This supports the user ID or name.
+
+ps -u george
+ PID TTY          TIME CMD
+1053 ?        00:00:00 systemd
+1062 ?        00:00:00 (sd-pam)
+1074 tty1     00:00:00 zsh
+...
+
+How to list all processes for a group
+
+To list all processes by group use the -g option. This supports the group ID or name.
+
+ps -g users
+ PID TTY          TIME CMD
+ 997 ?        00:00:00 login
+1053 ?        00:00:00 systemd
+1062 ?        00:00:00 (sd-pam)
+...
+
+How to list all processes by process number
+
+To list all processes by process number use the -p option. This selects the processes whose numbers
+match the list provided to the -p option.
+
+ps -p 12608 3995
+  PID TTY      STAT   TIME COMMAND
+ 3995 ?        Ss     0:00 st
+12608 pts/2    S+     0:04 vim content/post/unix-ps.md
+
+How to list all processes by executable name
+
+To list all processes by executable name use the -C option. This selects the processes whose
+executables match the list of executables given to the -C option.
+
+ps -C tmux
+ PID TTY          TIME CMD
+5733 pts/0    00:00:00 tmux
+5735 ?        00:00:06 tmux
+
+How to show a process hierarchy or tree
+
+To show a process hierarchy or tree use the -H option. This outputs a process tree.
+
+ps -eH
+  PID TTY          TIME CMD
+ 5735 ?        00:00:07   tmux
+ 5736 pts/2    00:00:00     zsh
+12608 pts/2    00:00:08       vim
+ 5763 pts/3    00:00:00     zsh
+17185 pts/3    00:00:00       ps
+
+This may also be displayed in ASCII format by using the --forest option.
+
+ps -e --forest
+ PID TTY          TIME CMD
+ 5735 ?        00:00:07 tmux
+ 5736 pts/2    00:00:00  \_ zsh
+12608 pts/2    00:00:08  |   \_ vim
+ 5763 pts/3    00:00:00  \_ zsh
+16952 pts/3    00:00:00      \_ ps
+
+How to just get the process id
+
+A common task is to find the process id of a running process. Like many things in UNIX this can be
+achieved in a number of ways. In the examples above the ps command can look for processes by user,
+group or executable name. The ps can be also be piped to grep to search for arbitrary items.
+
+ps -ef | grep vim
+george   12608  5736  0 21:00 pts/2    00:00:11 vim content/post/unix-ps.md
+george   18324  5763  0 21:32 pts/3    00:00:00 grep vim
+
+On many systems the pgrep command also exists that supports a number of ways to search for a
+process id. This is very useful if you are just interested in process id rather than other
+information. To search for all processes for an executable the pgrep command can be used.
+
+pgrep tmux
+5733
+5735
+
+To search by user pass the -u option.
+
+pgrep -u george
+1053
+1062
+1074
+...
+
+To search by group pass the -G option.
+
+pgrep -G users
+997
+1053
+1062
+...
+
+How to search for an kill a process
+
+To search for an kill a process the ps command can first be used to find the process id before
+using the kill command to terminate the process. In the following example ps is piped to grep and
+awk.
+
+sleep 100 &
+[1] 21664
+kill $(ps -e | grep 'sleep' | awk '{print $1}')
+[1]  + terminated  sleep 100
+
+On some systems the pkill command is also available to accomplish this.
+
+sleep 100 &
+pkill sleep
+[1]  + terminated  sleep 100
+
+Further reading
+
+  * ps man page
+  * The ps command
+  * 10 basic examples of Linux ps command
+
+Tags
+
+  * UNIX
+  * Linux
+
+Recent Posts
+
+  * Linux and Unix ls command tutorial with examples
+    Tutorial on using ls, a UNIX and Linux command for listing directory contents. Examples of
+    listing a directory, showing hidden files, showing long listings, sorting on various items and
+    showing recursive listings.
+   
+  * Linux and Unix tail command tutorial with examples
+    Tutorial on using tail, a UNIX and Linux command for outputting the last part of files.
+    Examples of outputting the last ten lines of a file, limiting the number of lines, limiting the
+    number of bytes, showing multiple files, watching a file for changes and using pipes.
+   
+  * Linux and Unix fc command tutorial with examples
+    Tutorial on using fc, a UNIX and Linux command for editing and re-executing commands previously
+    entered into an interactive shell. Examples of editing and re-executing the last command,
+    editing and executing a previous command, setting the text editor to be used, listing previous
+    commands and executing a command without editing it.
+   
+About the author
+
+Picture of George Ornbo
+
+George Ornbo is co-founder and Managing Director of http://pebblecode.com.
+
+He is the author of Sams Teach Yourself Node.js in 24 Hours. He can be found in most of the usual
+places as shapeshed including Twitter and GitHub.
+
+← http://shapeshed.com
+
+#+end_example
+
+** DONE Get process start time: ps -o lstart= -p 26351
+  CLOSED: [2014-11-28 Fri 15:40]
+root@fluig-id-cust-01:/data/fluigidentity-logs# ps -o lstart= -p 26351
+ps -o lstart= -p 26351
+Wed Nov 26 06:18:22 2014
+
+** DONE linux sort process by memory: ps aux --sort -rss
+  CLOSED: [2014-07-12 Sat 11:02]
+root@fluig-id-cdn-02:~# ps aux --sort -rss
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root     25599  0.3 10.1 3370268 410612 ?      Ssl  Apr14 417:40 /usr/bin/java -jar /usr/share/jenkins/jenkins.war --webroot=
+root     11612  0.7  3.9 3331600 158532 ?      Sl   13:05   0:52 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+nexus    58383  0.5  3.5 3389740 144252 ?      Sl   Feb09 1177:34 java -Djava.net.preferIPv4Stack=true -Dcom.sun.jndi.ldap.co
+root     11889  0.7  3.4 3333656 140252 ?      Sl   13:10   0:51 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     15937  0.8  3.3 3062260 134052 ?      Sl   14:15   0:28 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     16390  0.9  3.2 2929132 132868 ?      Sl   14:25   0:24 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     12545  0.6  3.1 3330572 127676 ?      Sl   13:25   0:42 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     13014  0.7  3.1 3333656 126944 ?      Sl   13:30   0:44 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     12339  0.6  3.1 3331600 126608 ?      Sl   13:20   0:42 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     17264  1.0  3.0 2929132 121268 ?      Sl   14:40   0:19 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     17705  1.2  2.9 2929132 119496 ?      Sl   14:50   0:15 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     17473  1.1  2.9 2995696 118172 ?      Sl   14:45   0:16 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     12089  0.8  2.8 3330572 116780 ?      Sl   13:15   0:55 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     17923  1.5  2.7 2995696 111152 ?      Sl   14:55   0:13 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     13723  0.7  2.7 3062260 109888 ?      Sl   13:45   0:37 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     15068  0.7  2.6 2929132 108616 ?      Sl   14:00   0:33 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     11310  0.7  2.6 3333656 107176 ?      Sl   13:00   1:01 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     17022  0.9  2.6 2929132 106328 ?      Sl   14:35   0:19 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     14066  0.6  2.6 2995696 106192 ?      Sl   13:50   0:30 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     13525  0.7  2.6 3330572 105688 ?      Sl   13:40   0:40 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     18307  2.8  2.6 2929132 105364 ?      Sl   15:00   0:16 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     16762  0.9  2.6 2929132 105336 ?      Sl   14:30   0:21 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     15730  0.7  2.6 2929132 105100 ?      Sl   14:10   0:26 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     16180  0.8  2.5 3062260 104524 ?      Sl   14:20   0:25 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     18591  4.9  2.5 2929132 104480 ?      Sl   15:05   0:13 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     14564  0.7  2.5 3128824 101512 ?      Sl   13:55   0:33 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     13262  0.7  2.3 3330572 96968 ?       Sl   13:35   0:40 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     15476  0.7  2.3 2929132 94704 ?       Sl   14:05   0:29 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+root     10881  0.7  2.3 3334684 94336 ?       Sl   12:55   1:03 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
+syslog   56615  0.0  0.1 250284  7168 ?        Sl   Apr14  15:35 rsyslogd -c5
+root     53233  0.0  0.1 122068  6100 ?        S    Jul10   0:29 python webserver.py
+root     18656  0.0  0.0  73472  3688 ?        Ss   15:06   0:00 sshd: root@pts/2
+root     18945  0.0  0.0  73472  3688 ?        Ss   15:07   0:00 sshd: root@pts/3
+root     19083  0.0  0.0  20876  3368 pts/3    Ss   15:07   0:00 -bash
+root     18873  0.3  0.0  20876  3364 pts/2    Ss+  15:06   0:00 -bash
+root     29896  0.0  0.0  67872  1756 ?        Ss   May31   9:40 /usr/sbin/apache2 -k start
+postfix  17738  0.0  0.0  27216  1664 ?        S    14:51   0:00 pickup -l -t fifo -u -c
+www-data 61614  0.0  0.0 1995452 1528 ?        Sl   Jul06   0:06 /usr/sbin/apache2 -k start
+www-data 61648  0.0  0.0 1995452 1468 ?        Sl   Jul06   0:05 /usr/sbin/apache2 -k start
+root     15694  0.0  0.0  11092  1456 ?        S    14:10   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     15917  0.0  0.0  11092  1456 ?        S    14:15   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     16143  0.0  0.0  11092  1456 ?        S    14:20   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17453  0.0  0.0  11092  1456 ?        S    14:45   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17903  0.0  0.0  11092  1456 ?        S    14:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     18264  0.0  0.0  11092  1456 ?        S    15:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root      1041  0.1  0.0  93784  1452 ?        S     2013 500:30 /usr/sbin/vmtoolsd
+root     15456  0.0  0.0  11092  1452 ?        S    14:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     16370  0.0  0.0  11092  1452 ?        S    14:25   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     16736  0.0  0.0  11092  1452 ?        S    14:30   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17002  0.0  0.0  11092  1452 ?        S    14:35   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17228  0.0  0.0  11092  1452 ?        S    14:40   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     18571  0.0  0.0  11092  1452 ?        S    15:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17669  0.0  0.0  11092  1448 ?        S    14:50   0:00 /bin/bash /usr/bin/vagetcompany.sh
+snmp     46702  0.0  0.0  48516  1448 ?        S     2013  99:52 /usr/sbin/snmpd -Lsd -Lf /dev/null -u snmp -g snmp -I -smux
+root     14988  0.0  0.0  11092  1424 ?        S    14:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     14544  0.0  0.0  11092  1420 ?        S    13:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     12302  0.0  0.0  11092  1404 ?        S    13:20   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     14029  0.0  0.0  11092  1404 ?        S    13:50   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     11270  0.0  0.0  11092  1400 ?        S    13:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     11592  0.0  0.0  11092  1400 ?        S    13:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     12524  0.0  0.0  11092  1400 ?        S    13:25   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     13488  0.0  0.0  11092  1400 ?        S    13:40   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     13703  0.0  0.0  11092  1400 ?        S    13:45   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     19230  0.0  0.0  17036  1256 pts/3    R+   15:09   0:00 ps aux --sort -rss
+root         1  0.0  0.0  24416  1220 ?        Ss    2013   4:11 /sbin/init
+root     12069  0.0  0.0  11092  1204 ?        S    13:15   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     10861  0.0  0.0  11092  1172 ?        S    12:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     11852  0.0  0.0  11092  1172 ?        S    13:10   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     12968  0.0  0.0  11092  1172 ?        S    13:30   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     13242  0.0  0.0  11092  1172 ?        S    13:35   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     51570  0.0  0.0 121576  1164 ?        Sl   Apr14   5:29 /usr/lib/accountsservice/accounts-daemon
+postfix  48860  0.0  0.0  27380  1160 ?        S    Jun17   1:35 qmgr -l -t fifo -u
+root     45493  0.0  0.0  11080  1128 ?        S    Jun18   0:00 /bin/bash /usr/bin/vacheckclient.sh
+root     48856  0.0  0.0  25152  1120 ?        Ss   Jun17   0:20 /usr/lib/postfix/master
+root     56735  0.0  0.0  50072  1104 ?        Ss   Apr14   0:40 /usr/sbin/sshd -D
+root     35202  0.0  0.0  83472  1068 ?        S    Apr30   1:44 /usr/openv/netbackup/bin/bpcd -standalone
+root     35197  0.0  0.0  66604   968 ?        S    Apr30   1:57 /usr/openv/netbackup/bin/vnetd -standalone
+root     53232  0.0  0.0  37708   920 ?        S    Jul10   0:00 sudo python webserver.py
+www-data 61613  0.0  0.0  67880   880 ?        S    Jul06   0:00 /usr/sbin/apache2 -k start
+root     15032  0.0  0.0  11092   844 ?        S    14:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     15706  0.0  0.0  11092   844 ?        S    14:10   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     15923  0.0  0.0  11092   844 ?        S    14:15   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     16156  0.0  0.0  11092   844 ?        S    14:20   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17459  0.0  0.0  11092   844 ?        S    14:45   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17909  0.0  0.0  11092   844 ?        S    14:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     18281  0.0  0.0  11092   844 ?        S    15:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     14550  0.0  0.0  11092   840 ?        S    13:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     15462  0.0  0.0  11092   840 ?        S    14:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     16376  0.0  0.0  11092   840 ?        S    14:25   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17008  0.0  0.0  11092   840 ?        S    14:35   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     12315  0.0  0.0  11092   836 ?        S    13:20   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     14042  0.0  0.0  11092   836 ?        S    13:50   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     16748  0.0  0.0  11092   836 ?        S    14:30   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17240  0.0  0.0  11092   836 ?        S    14:40   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     17678  0.0  0.0  11092   836 ?        S    14:50   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     18577  0.0  0.0  11092   836 ?        S    15:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     11287  0.0  0.0  11092   832 ?        S    13:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     11598  0.0  0.0  11092   832 ?        S    13:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     12531  0.0  0.0  11092   832 ?        S    13:25   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     13500  0.0  0.0  11092   832 ?        S    13:40   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     13709  0.0  0.0  11092   832 ?        S    13:45   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     55945  0.0  0.0  28404   800 ?        Ss    2013   3:06 /usr/sbin/rpc.mountd --manage-gids
+root     28255  0.0  0.0  50056   768 ?        S     2013   0:32 /opt/VRTSpbx/bin/pbx_exchange
+root     45524  0.0  0.0 105452   708 ?        Sl   Jun18   0:00 /opt/chef/embedded/bin/ruby /usr/bin/knife node show zf0y84v
+root     12075  0.0  0.0  11092   700 ?        S    13:15   0:00 /bin/bash /usr/bin/vagetcompany.sh
+nagios   42080  0.0  0.0  25472   692 ?        Ss   Jun01  14:09 /usr/sbin/nrpe -c /etc/nagios/nrpe.cfg -d
+root     45496  0.0  0.0  11080   636 ?        S    Jun18   0:00 /bin/bash /usr/bin/vacheckclient.sh
+root     57249  0.0  0.0  21504   624 ?        Ss   Apr14   0:00 /sbin/udevd --daemon
+root     10867  0.0  0.0  11092   600 ?        S    12:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     11865  0.0  0.0  11092   600 ?        S    13:10   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     12980  0.0  0.0  11092   600 ?        S    13:30   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     13248  0.0  0.0  11092   600 ?        S    13:35   0:00 /bin/bash /usr/bin/vagetcompany.sh
+root     46541  0.0  0.0  19156   488 ?        Ss    2013   5:22 cron
+whoopsie   959  0.0  0.0 187664   448 ?        Ssl   2013   0:28 whoopsie
+997      57066  0.0  0.0   7496   440 ?        S    Apr14   6:31 /opt/couchbase/lib/erlang/erts-5.8.5/bin/epmd -daemon
+root     53231  0.0  0.0  11088   428 ?        S    Jul10   0:00 /bin/bash -e ./start_service.sh
+102        458  0.0  0.0  23952   408 ?        Ss    2013   0:04 dbus-daemon --system --fork --activation=upstart
+nexus    58381  0.1  0.0  17868   408 ?        Sl   Feb09 279:16 /usr/local/nexus/bin/jsw/linux-x86-64/wrapper /usr/local/nex
+root       892  0.0  0.0  15984   348 ?        Ss    2013  81:17 /usr/sbin/irqbalance
+root     63849  0.0  0.0  21500   320 ?        S    Apr14   0:00 /sbin/udevd --daemon
+root     57247  0.0  0.0  17276   220 ?        S    Apr14   0:00 upstart-udev-bridge --daemon
+root     34271  0.0  0.0  14548   184 tty4     Ss+  Feb12   0:00 /sbin/getty -8 38400 tty4
+root       761  0.0  0.0  15192   176 ?        S     2013   0:00 upstart-socket-bridge --daemon
+statd    55872  0.0  0.0  21548   172 ?        Ss    2013   0:00 rpc.statd -L
+root     33927  0.0  0.0  54496   152 tty1     Ss   Feb12   0:00 /bin/login --
+root     55868  0.0  0.0  19240   136 ?        Ss    2013   1:17 rpcbind -w
+daemon   46677  0.0  0.0  16956   100 ?        Ss    2013   0:04 atd
+root     47581  0.0  0.0  29804    40 ?        Ss    2013   0:16 rpc.idmapd
+root       852  0.0  0.0  14508    20 tty5     Ss+   2013   0:00 /sbin/getty -8 38400 tty5
+root       863  0.0  0.0  14508    20 tty2     Ss+   2013   0:00 /sbin/getty -8 38400 tty2
+root       865  0.0  0.0  14508    20 tty3     Ss+   2013   0:00 /sbin/getty -8 38400 tty3
+root       867  0.0  0.0  14508    20 tty6     Ss+   2013   0:00 /sbin/getty -8 38400 tty6
+root       871  0.0  0.0   4332    16 ?        Ss    2013   0:00 acpid -c /etc/acpi/events -s /var/run/acpid.socket
+root     63850  0.0  0.0  21500     4 ?        S    Apr14   0:00 /sbin/udevd --daemon
+
+** DONE sort process: ps -e -o 'pid,comm,args,pcpu,rsz,vsz,stime,user,uid' | sort -nrk5
+   CLOSED: [2016-01-28 Thu 16:08]
+
+** DONE [#B] linux get memory landscape quickly: sortmem: ps aux | sort -nk +4 | tail
+   CLOSED: [2014-08-21 Thu 15:19]
+
+* xargs                                                            :noexport:
+| Question                          | Solution                                                           | Use case |
+|-----------------------------------+--------------------------------------------------------------------+----------|
+| 对满足条件的文件， 进行按内容查找 | find /etc/yum.repos.d/ -name "*.repo" -type f ｜ xargs grep "http" |          |
+| 对满足条件的文件, 进行匹配重命名  | find -iname "*.pdf" ｜ xargs -I '{}' mv '{}.tmp' '{}.tmp2'   |          |
+
+#
+* awk                                                              :noexport:
+- awk syntax: awk 'pattern{action}' file
+| Question                                                            | Solution                                                          | Use case |
+|---------------------------------------------------------------------+-------------------------------------------------------------------+----------|
+| 将文件按行反序                                                      | awk '{ a[NR]=$0 } END { for(i=NR; i; --i) print a[i] } ' datafile |          |
+| 查找/etc/hosts中, 以"# The"开头的内容, 并将该行及之后的内容打印出来 | awk "/^# The/{a=1} {if(a) print $1}" /etc/hosts                   |          |
+| 显示文件的第一列                                                    | awk '{print $1}' <file>                                           |          |
+| 反序显示文件的前两列                                                | awk '{print $2,”\t”,$1}' <file>                                   |          |
+| 输出前两列的总和                                                    | awk '{print $1 + $2}' <file>                                      |          |
+| 查找所有包括”money” 行并输出最后一列                                | awk '/money/ {print $NF}' <file>                                  |          |
+| 查找第二列中包含 “money”                                            | awk '$2 ~ /money/ {print $0}' <file>                              |          |
+| 查找第三列中不包括”A”                                               | awk '$3 !~ /A$/ {print $0}' <file>                                |          |
+| 从文件找出太长的行，打印出来，并给出行号                            | awk -F' '  'length>100{print NR $0}' ./filebat.txt                |          |
+** basic use
+#+begin_example
+awk的处理文本和数据的方式是这样的，它逐行扫描文件，从第一行到最后一行，
+寻找匹配的特定模式的行，并在这些行上进行你想要的操作。如果没有指定处理
+动作，则把匹配的行显示到标准输出(屏幕)，如果没有指定模式，则所有被操作
+所指定的行都被处理。
+
+awk的语法有两种形式:
+- awk [options] 'script' var=value file(s)
+- awk [options] -f scriptfile var=value file(s)
+#+end_example
+** useful link
+   http://hi.baidu.com/beibeiboo/blog/item/48906fce7cb5cb2cb600c892.html\\
+   AWK详细参考(转载整理)
+   http://en.wikipedia.org/wiki/AWK\\
+   awk
+** DONE awk filter row and manage column
+   CLOSED: [2013-12-30 Mon 19:04]
+https://review.openstack.org/#/c/61904/3/bin/heat-keystone-setup
+keystone user-list | awk -F'|' "NR == 2 && /^|/ { for (i=2; i<NF; i++) if (\$i ~ \"^ *name *\$\") print (i - 1) }"
+** DONE awk show rest of columns
+  CLOSED: [2016-06-17 Fri 11:13]
+http://stackoverflow.com/questions/2961635/using-awk-to-print-all-columns-from-the-nth-to-the-last
+
+awk -F' ' '{$1=$2=""; print $0;}' /etc/hosts
+
+awk '{out=""; for(i=3;i<=NF;i++){out=out" "$i}; print out}' /etc/hosts
+awk '{for(i=3;i<=NF;++i) print $i}' /etc/hosts
+** DONE 乱序排列一个文件: awk 'BEGIN{srand()}{b[rand()NR]=$0}END{for(x in b)print b[x]}' ./data.sql
+   CLOSED: [2014-03-22 Sat 17:41]
+
+** DONE linux shell remove tailing \n: awk 1 ORS='' file
+   CLOSED: [2014-12-10 Wed 22:22]
+
+** DONE bash: extract entire block that starts from "begin" till "end":  awk '/begin/,/end/' text.
+  CLOSED: [2015-10-13 Tue 10:29]
+http://askubuntu.com/questions/551338/how-do-i-grep-for-multiple-patterns-on-multiple-lines
+
+** DONE awk: group entries by fields and do the sum by group
+  CLOSED: [2015-06-26 Fri 21:31]
+ cat test.txt | grep '^[1-9]' | awk '{a[substr($4,2,17)] += $10;}END{for(x in a)print x" "a[x];}'
+*** mail: Re: Could anyone help me do a statistics with shell or python based on log file?thx :noexport:
+[[gnus:mail.misc#CAAgZUNJX6F574icb1003vDqyvJLsd_fPHY1kaGDOLr45RRNy7Q@mail.gmail.com][Email from qingjie zhao (Fri, 26 Jun 2015 22:10:21 -0400): Re: Could anyone help me do a ]]
+#+begin_example
+From: qingjie zhao <zhaoqingjie@gmail.com>
+Subject: Re: Could anyone help me do a statistics with shell or python based on log file?thx
+To: Denny Zhang <filebat.mark@gmail.com>
+Cc: Yaodong Hu <yaodonghu@gmail.com>, jay Zheng <jay.zheng@oscgc.com>,
+        John Xu <jianjohnxu@gmail.com>, Lei Zhang <thunder426@gmail.com>,
+        Meng Dai <vanish1984@gmail.com>, 曾瑞林 <hidder1984@gmail.com>
+Date: Fri, 26 Jun 2015 21:10:21 -0500
+
+# 统计'26/Jun/2015:22:47'这一分钟里面的所有请求数量：
+
+cat test | grep '26/Jun/2015:22:47' | wc -l
+
+# 对 outsize 按分钟进行分组求和
+
+ cat test.txt | grep '^[1-9]' | awk '{a[substr($4,2,17)] += $10;}END{for(x in a)print x" "a[x];}'
+
+On Fri, Jun 26, 2015 at 8:08 PM, Qingjie Zhao <zhaoqingjie@gmail.com> wrote:
+
+    yes， go on...
+
+    Sent from my iPhone
+
+    > On Jun 26, 2015, at 7:21 PM, Denny Zhang <filebat.mark@gmail.com> wrote:
+    >
+    > Hi Qingjie
+    >
+    > Like this?
+    > ,----------- sh
+    > | log_file="test.txt"
+    > | check_min="26/Jun/2015:22:46"
+    > | check_method="GET"
+    > | grep "${check_min}.*${check_method}" test.txt | wc -l
+    > `-----------
+    >
+    > --
+    > Denny Zhang(张巍)
+    >
+    > Brick walls let us show our dedication
+    >
+    > +_+
+    >
+    > Fri, 26 Jun 2015 19:12:21 -0400 qingjie zhao <zhaoqingjie@gmail.com>
+    > writes:
+    >
+    >> 我想写一个shell or python脚本1，统计每分钟有多少个请求，包括POST/GET/HEAD
+    >> 钟数作为脚本参数，可以选择任何log中得任何完整地一分钟。
+    >>
+    >> 数据格式如下：
+    >>
+    >> 173.162.164.137 - - [26/Jun/2015:22:47:44 +0000] "HEAD /media/CG0kMoJ6x9wEi7tB4kB7PQ.mp4
+    HTTP/1.1"
+    >> 200 488325 0.0010
+    >>
+    >> 173.162.164.137 - - [26/Jun/2015:22:47:00 +0000] "GET /network/4/ HTTP/1.1" 200 589 0.0507
+    >>
+    >> 173.162.164.137 - - [26/Jun/2015:22:46:45 +0000] "POST /network/4/camera/4/liveview/enable
+    HTTP/
+    >> 1.1" 200 53 0.1217
+    >>
+    >> -----------------------------------------------------
+    >>
+    >> 200 之后的是outsize是488325
+    >>
+    >> 200 之后的是outsize是589
+    >>
+    >> 200 之后的是outsize是53
+    >>
+    >> 我想写一个shell or python脚本2，统计每分钟所有的的outsize之和是多少？分钟数作为脚本参数，可
+    以选择任
+    >> 何log中得任何完整地一分钟，
+    >>
+    >> 详情参考log附件
+    >>
+    >> --
+    >>
+    >> Cheers,
+    >> Qingjie Zhao (Q)
+    >> Master of Science in Information Science
+    >> Syracuse University
+    >> Cell: (315)416-1144
+    >> Email: zhaoqingjie@gmail.com
+
+--
+
+Cheers,
+Qingjie Zhao (Q)
+Master of Science in Information Science
+Syracuse University
+Cell: (315)416-1144
+Email: zhaoqingjie@gmail.com
+
+#+end_example
+* [#A] sed                                                         :noexport:
+| Question                                                            | Solution                                                                                                         |
+|---------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------|
+| 查看某个文件的第5到第8行                                            | sed -n 5,8p /etc/hosts                                                                                           |
+| 删除某个文件指定的几行                                              | sed -i 2,3d /etc/hosts                                                                                           |
+| 修改某个cfg文件的键值对                                             | sudo sed -i 's/GSSAPIAuthentication no/GSSAPIAuthentication yes/' /etc/ssh/sshd_config                           |
+| 查找/etc/hosts中, 以"# The"开头的内容, 并将该行及之后的内容打印出来 | export find_line=$(grep -n '# The' /etc/hosts ｜ awk -F: '{print $1}') ｜ sed -n "$find_line, 10000p" /etc/hosts |
+| 在行开头插入文本                                                    | sed -i 's/^/> /' 1.txt                                                                                           |
+| 在行尾插入文本                                                      | sed 's/$/end/' -i 1.txt                                                                                          |
+| 删除一个区域                                                        | sed -i '/BEGIN QUOTE/,/END QUOTE/d' 1.txt                                                                        |
+| sed中使用变量                                                       | item="ab"; command=`echo "ab cd" ｜ sed 's/'$item'//g'`; echo $command                                           |
+** useful link
+ http://www.grymoire.com/Unix/Sed.html\\
+ Sed - An Introduction and Tutorial
+http://www.grymoire.com/Unix/Sed.html#uh-39\\
+Sed - An Introduction and Tutorial
+http://www.cppblog.com/prayer/archive/2009/09/03/95269.html\\
+linux sed批量替换字符串
+http://blog.chinaunix.net/u1/53616/showart_576565.html\\
+sed基础知识
+http://blog.chinaunix.net/u2/75321/showart_1164426.html\\
+unix的sed 用法介绍
+http://blog.chinaunix.net/u1/53616/showart_576565.html\\
+sed基础知识
+** TODO sed has duplicate line
+out=$(cat << __textarea_eof
+<pre>
+mauiverify started at 2010-02-25 20:15:23
+Verify mauis correctness...
+Please check /var/log/mauiverify.log for detail output.
+The console output of each entry is composed of result, test case and core check rule.
+Test category:VerifyLog
+ || FAILED ||verify upgrade log ||" grep -ni 'ERROR' /var/log/maui/upgrade.log | wc -l "||
+ || PASSED ||verify raa log ||" grep -ni 'warning: conflicts' /var/log/raa/raa-service.log | w..."||
+</pre>
+__textarea_eof
+)
+echo "$out" | sed -e "s/FAILED/~FAILED~/p"
+** TODO 在第N行之后添加一行
+将maui系统中的所有结点的/etc/init.d/capd文件, 加一行内容
+/etc/init.d/capd
+ start)
++ sqlite3 /var/cap/db/captaskmgmt.db "UPDATE tasks SET ecode = 0 WgHERE ecode IS NULL"
+ start
+*** useful link
+http://www.unix.com/shell-programming-scripting/9831-sed-awk-insert-comment-defined-line-number.html\\
+sed/awk to insert comment at defined line number
+** TODO 如下两个命令为何效果不一样                                :IMPORTANT:
+ sed -ne '/#public_ips/,//p' -e '/^$/d' /etc/hosts | sort
+ sed -e '/^$/d' -ne '/#public_ips/,//p' /etc/hosts | sort
+;; ------------------------------- separator -------------------------------
+
+[root@RMG01-IS01-001 ~]# cat /etc/hosts
+127.0.0.1 localhost.localdomain localhost
+192.168.11.11 RMG01-IS01-001-mgmt
+192.168.11.12 RMG01-IS01-002-mgmt
+192.168.11.13 RMG01-IS01-003-mgmt
+192.168.11.14 RMG01-IS01-004-mgmt
+
+192.168.13.11 RMG01-IS01-001-ipmi
+192.168.13.12 RMG01-IS01-002-ipmi
+192.168.13.13 RMG01-IS01-003-ipmi
+192.168.13.14 RMG01-IS01-004-ipmi
+
+192.168.13.139 RMG01-IS01-001-bmc
+192.168.13.140 RMG01-IS01-002-bmc
+192.168.13.141 RMG01-IS01-003-bmc
+192.168.13.142 RMG01-IS01-004-bmc
+
+#Don't remove the marker below
+#public_ips
+10.32.171.201 RMG01-IS01-001
+10.32.171.202 RMG01-IS01-002
+10.32.171.203 RMG01-IS01-003
+10.32.171.204 RMG01-IS01-004
+
+[root@RMG01-IS01-001 ~]# sed -ne '/#public_ips/,//p' -e '/^$/d' /etc/hosts | sort
+
+10.32.171.201 RMG01-IS01-001
+10.32.171.202 RMG01-IS01-002
+10.32.171.203 RMG01-IS01-003
+10.32.171.204 RMG01-IS01-004
+#public_ips
+[root@RMG01-IS01-001 ~]# sed -e '/^$/d' -ne '/#public_ips/,//p' /etc/hosts | sort
+10.32.171.201 RMG01-IS01-001
+10.32.171.202 RMG01-IS01-002
+10.32.171.203 RMG01-IS01-003
+10.32.171.204 RMG01-IS01-004
+#public_ips
+** TODO sample1: sed -ne "s/^#//" -ne "/<Version=1.2.1>/,/<Version=1.2.1>/p" tmp
+** TODO sample2: sed -ne "s/^#//" -ne "/<Version=1.2.1>/,/<Version=1.2.1>/p" tmp | sed -ne "/<Stage=PostUpgradeStart>/,/<Stage=PostUpgradeEnd>/p" | grep -v "<Stage=PostUpgradeStart>" | grep -v "<Stage=PostUpgradeEnd>"
+** DONE How to use sed to replace only the first occurrence in a file?
+   CLOSED: [2017-10-22 Sun 21:45]
+ https://stackoverflow.com/questions/148451/how-to-use-sed-to-replace-only-the-first-occurrence-in-a-file
+ 0,/Apple/{s/Apple/Banana/}
+
+ sed -i "0,/discovery.zen.ping.unicast.hosts.*/s//discovery.zen.ping.unicast.hosts: new_node_list/" "mdm.yml"
+
+ diff mdm.ymlbak mdm.yml
+** DONE sed delete by line number: sed -i 11d /root/.ssh/known_hosts
+   CLOSED: [2014-01-22 Wed 11:46]
+** DONE Understatnd sed command: sed -e '89 s/false/true/g' ${f} > ${f}.0
+  CLOSED: [2014-08-29 Fri 16:13]
+https://github.com/TOTVS/devop/blob/master/jenkins_conf/fi-build-all.sh
+http://unix.stackexchange.com/questions/70878/replacing-string-based-on-line-number
+
+awk 'FNR==34 { sub("AAA", "BBB") }'
+
+sed '34s/AAA/BBB/'
+** DONE mac sed in place change: sed -i "" 's/THESTRING/THEGRANDSTRING' /tmp/jestinkt.txt
+  CLOSED: [2014-12-05 Fri 10:03]
+http://stackoverflow.com/questions/9744300/sed-command-not-working-in-mac
+#+BEGIN_EXAMPLE
+The OSX version of sed is not the same as those found in most Linux systems.
+
+It extends the -i option to give you the opportunity save a file with a different extension, but requires input for that extension.
+
+If you just want to overwrite the file in place, you need to use sed -i "" ...sedCmd.... fileName to rename your file in-place.
+
+Per @JamesMcMahon 's comment, see here for the full doc for OSX/BSD sed.
+
+I hope this helps.
+#+END_EXAMPLE
+
+sed -i.bak  -e 's/File/Wenjian/g' test.sh
+  CLOSED: [2015-11-01 Sun 00:56]
+http://unix.stackexchange.com/questions/92895/how-to-achieve-portability-with-sed-i-in-place-editing
+http://blog.remibergsma.com/2012/09/18/sed-inline-editing-different-on-mac-osx/
+** DONE linux remove entries match certain pattern: sed -i.bak '/pattern to match/d' ./infile
+  CLOSED: [2016-12-21 Wed 19:04]
+http://stackoverflow.com/questions/5410757/delete-lines-in-a-text-file-that-containing-a-specific-string
+http://ccm.net/faq/1451-delete-lines-from-a-file-using-sed
+
+sed -i.bak '/pattern to match/d' ./infile
+
+** DONE sed replace string escape: change delimiter other than /
+  CLOSED: [2016-08-25 Thu 22:41]
+http://askubuntu.com/questions/76785/how-to-escape-file-path-in-sed
+
+sed 's|<passwordHash>.*</passwordHash>|<passwordHash>#jbcrypt:$2a$10$rWfJt3QmA.EVTHxf4N51XuPf/6RDusRUwxvvzpMx3gVfWtFcklRue</passwordHash>|g' test.txt
+
+#jbcrypt:$2a$10$Ic2p9aYNJnS2Vf9vUIWHfuMHG3O6dgCIAQ90.8GRxdwumi93LAg/W -->
+#jbcrypt:$2a$10$rWfJt3QmA.EVTHxf4N51XuPf/6RDusRUwxvvzpMx3gVfWtFcklRue
+
+a="#jbcrypt:$2a$10$rWfJt3QmA.EVTHxf4N51XuPf/6RDusRUwxvvzpMx3gVfWtFcklRue"
+echo "$a" | tr / \\\\/
+
+    <hudson.security.HudsonPrivateSecurityRealm_-Details>
+      <passwordHash>#jbcrypt:$2a$10$Ic2p9aYNJnS2Vf9vUIWHfuMHG3O6dgCIAQ90.8GRxdwumi93LAg/W</passwordHash>
+    </hudson.security.HudsonPrivateSecurityRealm_-Details>
+
+** DONE sed use variable: sed "s/mytext/$var/"
+  CLOSED: [2014-07-31 Thu 13:54]
+http://www.unix.com/shell-programming-and-scripting/14085-how-can-i-use-variable-sed.html
+
+For starters, you can switch to double quotes:
+
+sed "s/mytext/$var/"
+
+Sometimes that does not work. It would depend on the exact value of mytext. So another solution is to turn the single quoted string into two single quoted strings:
+
+sed 's/mytext/'$var'/'
+
+In this case, the 2nd single quoted string is '/'. Just using a backslash would work to that and it saves a character:
+
+sed 's/mytext/'$var\/
+
+There is actually no reason to quote a slash so this should also work with most shells:
+
+sed 's/mytext/'$var/
+
+And there may be no reason to quote anything at all, but again, the actual vakue of mytext determines this. So this may work:
+
+sed s/mytext/$var/
+
+Opps...you only wanted a solution, so I'll quit now..
+* sort                                                             :noexport:
+** DONE sort by integer: n for numeric:  ps -e -o %cpu | sed '1d' | sort -nr
+   CLOSED: [2017-10-18 Wed 08:36]
+ https://stackoverflow.com/questions/16129403/sorting-by-integer-value
+
+** DONE sort by second column: sort -k 2 file.txt
+   CLOSED: [2017-10-17 Tue 22:39]
+https://stackoverflow.com/questions/4262650/linux-shell-sort-file-according-to-the-second-column
+* cron                                                             :noexport:
+** DONE manually start cron: cron
+   CLOSED: [2016-10-24 Mon 11:42]
+** DONE linux list all crontab
+  CLOSED: [2016-10-23 Sun 16:58]
+1.for user in $(cut -f1 -d: /etc/passwd); do crontab -u $user -l; done
+2. /etc/crontab*
+
+http://stackoverflow.com/questions/134906/how-do-i-list-all-cron-jobs-for-all-users
+http://unix.stackexchange.com/questions/7053/how-can-get-a-list-of-all-scheduled-cron-jobs-on-my-machine
+http://www.cyberciti.biz/faq/linux-show-what-cron-jobs-are-setup/
+
+#+BEGIN_EXAMPLE
+Depending on how your linux system is set up, you can look in:
+
+/var/spool/cron/* (user crontabs)
+/etc/crontab (system-wide crontab)
+also, many distros have:
+
+/etc/cron.d/* These configurations have the same syntax as /etc/crontab
+/etc/cron.hourly, /etc/cron.daily, /etc/cron.weekly, /etc/cron.monthly
+These are simply directories that contain executables that are executed hourly, daily, weekly or monthly, per their directory name.
+
+On top of that, you can have at jobs (check /var/spool/at/*), anacron (/etc/anacrontab and /var/spool/anacron/*) and probably others I'm forgetting.
+#+END_EXAMPLE
+** DONE [#A] Learn: For crontab job, redirect stderr to logfile
+  CLOSED: [2014-12-09 Tue 20:55]
+root@denny-chef-ubuntu-13:/# bash -e /usr/local/bin/fluig_backup_file.sh /cloudpass/backend/build/bin/CloudpassKeystore >> /var/log/backup_cloudpasskeystore.log 2>&1
+root@denny-chef-ubuntu-13:/# tail  /var/log/backup_cloudpasskeystore.log
+bash: /usr/local/bin/fluig_backup_file.sh: No such file or directory
+** DONE Linux create crontab, without editor
+  CLOSED: [2016-10-23 Sun 17:10]
+cat > /etc/cron.d/crontab_test << EOF
+PATH=/usr/lib/sysstat:/usr/sbin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Activity reports every 10 minutes everyday
+*/5 * * * * root echo "hello, world" >> /tmp/test.log
+
+# Additional run at 23:59 to rotate the statistics file
+EOF
+
+"crontab -l" won't find it
+
+watch "tail /tmp/test.log"
+** DONE crontab format: (Min, Hour, DayOfMonth, Month, DayOfWeek, Command)
+  CLOSED: [2017-01-10 Tue 10:41]
+http://www.nncron.ru/help/EN/working/cron-format.htm
+
+https://www.pantz.org/software/cron/croninfo.html
+#+BEGIN_EXAMPLE
+# Minute   Hour   Day of Month       Month          Day of Week        Command
+# (0-59)  (0-23)     (1-31)    (1-12 or Jan-Dec)  (0-6 or Sun-Sat)
+    0        2          12             *                *            /usr/bin/find
+#+END_EXAMPLE
+* DONE Permanently change hostname                                 :noexport:
+  CLOSED: [2018-07-23 Mon 17:02]
+** DONE centos change hostname persistently:  /etc/sysconfig/network
+   CLOSED: [2014-05-27 Tue 16:08]
+http://www.rackspace.com/knowledge_center/article/centos-hostname-change
+cp  /etc/sysconfig/network{,.bak}
+sed -i 's/HOSTNAME=.*/HOSTNAME=new/g' /etc/sysconfig/network
+** DONE ubuntu永久修改hostname: /etc/hostname
+   CLOSED: [2014-05-27 Tue 16:08]
+cat> /etc/hostname<<EOF
+ubuntu2.dennyzhang.com
+EOF
+
+vim /etc/hosts
+* #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* Misc
+| Question                            | Solution                                  |
+|-------------------------------------+-------------------------------------------|
+| watch -d -n 1 stat /var/log/message | 查看命令输出的变化， 并高亮提醒变化部分。 |
 
