@@ -8,7 +8,7 @@
 ## Description :
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2018-07-17 18:51:35>
+## Updated: Time-stamp: <2018-07-30 21:56:32>
 ##-------------------------------------------------------------------
 
 # wait/retry and check
@@ -47,5 +47,4 @@ kubectl get pods -n "$namespace" | grep "$pod_name_pattern"
 
 echo "List all pods"
 kubectl get pods -n "$namespace"
-
 ## File: shell_retry.sh ends

@@ -28,20 +28,38 @@
 File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or star [[https://github.com/DennyZhang/challenges-shell][this repo]].
 
 See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][#denny-cheatsheets]]
-| Name                         | Comment                                                          |
-|------------------------------+------------------------------------------------------------------|
-| Redirect stdout/stderr       | =ls /tmp 1>/dev/null 2>&1=                                       |
-| Compare command output       | =[ 0 -eq $(find ./data -name "*.txt" -type f -print ｜ wc -l) ]= |
-| Deal with filename           | =basename $f=, =dirname $f=                                      |
-| timeout command              | =timeout 10 sh -c "ls -lt"=                                      |
-| Long option for command line | [[code/long_option_parameter.sh][code/long_option_parameter.sh]]                                    |
-| Trap exit signal             | [[code/trap_exit.sh][code/trap_exit.sh]]                                                |
-| shell retry                  | [[code/shell_retry.sh][code/shell_retry.sh]]                                              |
-
-# Scripts
-
+** Basic
+| Name                            | Comment                                                          |
+|---------------------------------+------------------------------------------------------------------|
+| Redirect stdout/stderr          | =ls /tmp 1>/dev/null 2>&1=                                       |
+| Compare command output          | =[ 0 -eq $(find ./data -name "*.txt" -type f -print ｜ wc -l) ]= |
+| Deal with filename              | =basename $f=, =dirname $f=                                      |
+| Use timeout: avoid command hang | timeout 10 sh -c "ls -lt"                                        |
+| Long option for command line    | [[code/long_option_parameter.sh][code/long_option_parameter.sh]]                                    |
+| Trap exit signal                | [[code/trap_exit.sh][code/trap_exit.sh]]                                                |
+| shell retry                     | [[code/shell_retry.sh][code/shell_retry.sh]]                                              |
+** String
+| Name            | Comment |
+|-----------------+---------|
+| ${var%pattern}  |         |
+| ${var%%pattern} |         |
+| ${var#pattern}  |         |
+| ${var##pattern} |         |
+| ${#var}         |         |
+** Numeric
+| Name           | Comment                     |
+|----------------+-----------------------------|
+| multiplication | =expr 5 \* 4=               |
+| add two nums   | let z=x+y, z=$x+$y          |
+| Compare        | [ $? -eq 0 ] && echo "good" |
+| equal          | int1 -eq int2               |
+| >=             | int1 -ge int2               |
+| >              | int1 -gt int2               |
+| <=             | int1 -le int2               |
+| <              | int1 -lt int2               |
+| !=             | int1 -ne int2               |
+** Scripts
 - get ip from eth0
-
 #+BEGIN_SRC sh
 /sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
 #+END_SRC
@@ -70,7 +88,6 @@ License: Code is licensed under [[https://www.dennyzhang.com/wp-content/mit_lice
 | (sh /tmp/1.sh ; echo "error code $?") >/tmp/1.log              | 追加sh运行后的$?于log文件                                   |
 | read -e variablename                                           | 读取用户输入                                                |
 | eval __value="\$$env"                                          | eval命令在处理命令行时,先执行所有的shell替换,然后执行命令行 |
-| [ $? -eq 0 ] && /sbin/modprobe fuse                            | 保证顺序执行, 出错就中止                                    |
 | /bin/sh -xe /tmp/hudson366585559507073478.sh                   | echo shell                                                  |
 | declare -a PRE_ROLLING_SCRIPT=`cat $output_file`               | 申明变量                                                    |
 ** 测试操作 -- test                                                :noexport:
@@ -488,11 +505,6 @@ str2=$(echo "${str}" |sed -e 's/[ \t]*$//g')
 output="    This is a test"
 output="${output##*( )}"
 echo "=${output}="
-** 算术运算 -- algebraic
-*** DONE bash中的算术运算
- CLOSED: [2010-02-26 星期五 15:08]
-- expr 5 * 4会有语法错误,应该改为expr 5 \* 4
-- let Z=X+Y 或 let Z=$X+$Y
 ** 随机 -- random
 | Item                  | Summary                |
 |-----------------------+------------------------|
