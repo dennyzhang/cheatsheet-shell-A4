@@ -8,9 +8,10 @@
 ## Description :
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2018-07-30 21:56:32>
+## Updated: Time-stamp: <2018-08-01 17:37:51>
 ##-------------------------------------------------------------------
 
+## Sample 1:
 # wait/retry and check
 echo "Verify pod($pod_syslog) has the given message"
 n=0
@@ -29,22 +30,28 @@ do
 done
 
 ################################################################################
-# wait and retry, in order to check pod status
-echo "Wait for slow pod start"
-n=0
-until [ $n -ge 20 ]
-do
-    [ "$(kubectl get pods -n "$namespace" | grep -c ContainerCreating)" == 0 ] && break
-    n=$((n+1))
-    echo "Sleep 1 second for pod slow start"
-    sleep 1
+# Sample 2
+
+echo -n "Waiting until flow $NAMESPACE/$NAME is ready"
+for i in {1..150}; do  # timeout after 5 minutes
+  local typeCount=0
+  local readyCount=0
+  # TODO: Validate all the types exist. bashfu weak...
+  for types in `kubectl get -n $NAMESPACE flows $NAME -o 'jsonpath={.status.conditions[*].type}'`; do
+    typeCount=$((typeCount+1))
+  done
+  for statuses in `kubectl get -n $NAMESPACE flows $NAME -o 'jsonpath={.status.conditions[*].status}'`; do
+    if [ "$statuses" = "True" ]; then
+      readyCount=$((readyCount+1))
+    fi
+  done
+
+  if [ $typeCount -eq 5 ]; then
+    if [ $readyCount -eq 5 ]; then
+      return 0
+    fi
+  fi
+  echo -n "."
+  sleep 2
 done
-
-echo "Confirm one $pod_name_pattern running pod for each k8s node"
-[ "$(kubectl get nodes | grep -c NAME)" \
-      -eq "$(kubectl get pods -n "$namespace" | grep "$pod_name_pattern" | grep -c Running)" ]
-kubectl get pods -n "$namespace" | grep "$pod_name_pattern"
-
-echo "List all pods"
-kubectl get pods -n "$namespace"
 ## File: shell_retry.sh ends
