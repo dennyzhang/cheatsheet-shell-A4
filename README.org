@@ -1,4 +1,4 @@
-* Shell CheatSheet         :Languages:
+* Shell CheatSheet                                                    :Linux:
 :PROPERTIES:
 :type:     shell
 :END:
@@ -26,9 +26,9 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Redirect stdout/stderr          | =ls /tmp >/dev/null 2>&1=     |
 | Deal with filename              | =basename $f=, =dirname $f=   |
 | Use timeout: avoid command hang | timeout 10 sh -c "ls -lt"     |
-| Long option for command line    | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/long_option_parameter.sh][code/long_option_parameter.sh]] |
-| Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/trap_exit.sh][code/trap_exit.sh]]             |
-| shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/shell_retry.sh][code/shell_retry.sh]]           |
+| Long option for command line    | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/long-option-parameter.sh][code/long-option-parameter.sh]] |
+| Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/trap-exit.sh][code/trap-exit.sh]]             |
+| shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/shell-retry.sh][code/shell-retry.sh]]           |
 
 - Compare command output
 #+BEGIN_SRC sh
@@ -123,7 +123,7 @@ fi
 |----------------------------------------------------------------+-------------------------------------------------------------|
 | ${cmds}/$(cmd)                                                 | 在当前shell中执行命令/在子shell中执行命令                   |
 | ${x}y/$xy                                                      | 将变量x连上字符y/变量xy                                     |
-| $*/$@                                                          | 当某个输入变量含空格时， 两者是不同的                       |
+| $*/$@                                                          | 当某个输入变量含空格时, 两者是不同的                       |
 |----------------------------------------------------------------+-------------------------------------------------------------|
 | type                                                           | 查看命令的类型(内置命令,别名,函数,可执行文件等)             |
 | (sh /tmp/1.sh ; echo "error code $?") >/tmp/1.log              | 追加sh运行后的$?于log文件                                   |
@@ -182,7 +182,7 @@ http://blog.chinaunix.net/u/28814/showart_1422464.html\\
  shell中常用系统变量和条件判断
  常用系统变量
  $0 当前程序的名称
- $n 当前程序的第n个参数,n=1,2,…9
+ $n 当前程序的第n个参数,n=1,2,...9
  $* 当前程序的所有参数(不包括程序本身)
  $# 当前程序的参数个数(不包括程序本身)
  $$ 当前程序的PID
@@ -221,7 +221,7 @@ http://blog.chinaunix.net/u/28814/showart_1422464.html\\
 | fg          | 将后台作业调到前台                                           |
 | jobs        | 列出所有正在运行的作业                                       |
 | kill        | 向指定作业发送kill信号                                       |
-| ^Z(Ctrl-Z)  | 终止(挂起)作业。屏幕上将出现提示符                         |
+| ^Z(Ctrl-Z)  | 终止(挂起)作业.屏幕上将出现提示符                         |
 |-------------+--------------------------------------------------------------|
 | stop        | 挂起一个后台作业                                             |
 | stty tostop | 当一个后台作业向终端发送输出时就挂起它                       |
@@ -288,7 +288,7 @@ echo $!
 ./parse_conf.sh: line 19: zk-servers=127.0.0.1: command not found
 #+end_example
 ** [question] [ test=ab ]; echo $? 输出为什么为0
-** [question] 如何在shell文件内部，将stdout重定向
+** [question] 如何在shell文件内部,将stdout重定向
 ** [question] 解释下面umask的行为
 #+begin_example
 ///c98c8cb7008ad33b849ed394ba96520d#$umask 0; mkdir /tmp/usr/local/ecae-health-check/report/t7
@@ -445,7 +445,7 @@ echo -e "org_list:"$org_list"\nnew_list:"$new_list
 | (cat /etc/hosts; echo "append") ｜ sudo tee ./test.log | 向权限不够的文件尾部追加一些内容 |
 *** DONE globbing文件名替换:ls[!f-z]???                           :IMPORTANT:
  CLOSED: [2010-03-04 星期四 11:44]
-globbing就是将元字符展开为文件名的过程。
+globbing就是将元字符展开为文件名的过程.
 
 ls *.bak
 ls a?c?
@@ -458,7 +458,7 @@ ls f{oo,aa,umble}
 | ${变量%%模式} | 将变量值的尾部与模式进行最大匹配,并将匹配的部分删除       |
 | ${变量#模式}  | 将变量值的头部与模式进行最小匹配,并将匹配的部分删除       |
 | ${变量##模式} | 将变量值的头部与模式进行最大匹配,并将匹配的部分删除       |
-| ${#变量}      | 替换为变量中的字符个数。如果是*或@,长度则是位置参量的个数 |
+| ${#变量}      | 替换为变量中的字符个数.如果是*或@,长度则是位置参量的个数 |
 *** string compare
 #+BEGIN_EXAMPLE
  http://www.linux286.com/index.php/action_viewthread_tid_15502.html\\
@@ -546,10 +546,10 @@ echo "=${output}="
 | $*       | 所有的位置参量                                |
 | $@       | 未加双引号时,与$*含义相同                    |
 | "$*"     | 扩展为单个变量(例如: "$1 $2 $3"              |
-| "$@"     | 扩展为多个单独的变量(例如："$1", "$2", "$3") |
+| "$@"     | 扩展为多个单独的变量(例如:"$1", "$2", "$3") |
 | $1...$9  | 最多可引用9个位置参量                         |
 
-- 带参数的set命令将重置位置参量。
+- 带参数的set命令将重置位置参量.
 位置参量一旦被重置,原来的参量列表就会丢失
 - 要想清除所有的位置参量,可使用set --
 - 比较$*与$@的异同
@@ -565,9 +565,9 @@ fi
 echo $newest_applance |cut -d'-' -f3
 #+end_src
 *** DONE shell: 怎样通过命令行参数把含有回车符的字符串传给python程序
-程序中的\是可以转换了。而传入的参数中的\是不转义的。如果你使用repr()看一下它们的内部表示就知道了：
+程序中的\是可以转换了.而传入的参数中的\是不转义的.如果你使用repr()看一下它们的内部表示就知道了:
 
-对于传入的"a\nb\n"在python运行时其实是"a\\nb\\n",与内部的"a\nb\n"是不同的。
+对于传入的"a\nb\n"在python运行时其实是"a\\nb\\n",与内部的"a\nb\n"是不同的.
 **** code                                                          :noexport:
 #+BEGIN_SRC -t
 python ttt.py $'a\nb\nc'
@@ -645,32 +645,32 @@ fi
 #+end_example
 *** DONE shell的shift命令
  CLOSED: [2010-02-26 星期五 15:37]
-shift命令指定参数时,会将参量列表左移指定的次数。
-没有给定参数时,shift命令仅把参量列表左移一次。
-一旦列表被移动,左端那个参数就被永远删除了。
+shift命令指定参数时,会将参量列表左移指定的次数.
+没有给定参数时,shift命令仅把参量列表左移一次.
+一旦列表被移动,左端那个参数就被永远删除了.
 ** 变量扩展修饰符                                            :IMPORTANT:HARD:
 http://www.gnu.org/software/bash/manual/bashref.html#Shell-Parameter-Expansion
 
 ${EDITOR:-/bin/vi}
 
-修饰符首先提供一个简单的条件测试,用来检查某个变量是否已经被设置,然后根据测试结果给变量赋一个值。
+修饰符首先提供一个简单的条件测试,用来检查某个变量是否已经被设置,然后根据测试结果给变量赋一个值.
 | 修饰符                     | 值                                                                                                                                  |
 |----------------------------+-------------------------------------------------------------------------------------------------------------------------------------|
-| ${variable:-word}          | 如果变量variable已被设置且非空,则代入它的值。否则,代入word                                                                          |
-| ${variable:=word}          | 已被设置且值非空,就代入它的值。否则,将variable的值设为word。始终代入varialble的值。位置参量不能用这种方式赋值。                     |
-| ${varialble:+word}         | 如果变量variable已被设置且值非空,代入word。否则,什么都 不代入(代入空值)                                                             |
-| ${varialble:?word}         | 如果变量variable已被设置且值非空,就代入它的值。否则,输出word并且从shell退出。如果省略了word,就会显示信息：parameter null or not set |
-| ${varialble:offset}        | 获得变量variable值中位置从offset开始的子串,偏移为从0到串的末尾。                                                                    |
-| ${varialble:offset:length} | 获得变量variable值中位置从offset开始长度为length的子串。                                                                            |
+| ${variable:-word}          | 如果变量variable已被设置且非空,则代入它的值.否则,代入word                                                                          |
+| ${variable:=word}          | 已被设置且值非空,就代入它的值.否则,将variable的值设为word.始终代入varialble的值.位置参量不能用这种方式赋值.                     |
+| ${varialble:+word}         | 如果变量variable已被设置且值非空,代入word.否则,什么都 不代入(代入空值)                                                             |
+| ${varialble:?word}         | 如果变量variable已被设置且值非空,就代入它的值.否则,输出word并且从shell退出.如果省略了word,就会显示信息:parameter null or not set |
+| ${varialble:offset}        | 获得变量variable值中位置从offset开始的子串,偏移为从0到串的末尾.                                                                    |
+| ${varialble:offset:length} | 获得变量variable值中位置从offset开始长度为length的子串.                                                                            |
 
 echo $EDITOR
 
 echo ${EDITOR:-/bin/vi}
 
 local timeout=${1?"timeout required"} # in second
-*** DONE shell语法：local extra_tr=${@:-""} 当参数为空时,赋予默认值
+*** DONE shell语法:local extra_tr=${@:-""} 当参数为空时,赋予默认值
  CLOSED: [2010-03-04 星期四 15:11]
-*** DONE shell：local ip=${1?} 参数的非空检查
+*** DONE shell:local ip=${1?} 参数的非空检查
  CLOSED: [2010-03-04 星期四 15:10]
 **** codesnippet
 #+begin_src sh
@@ -830,8 +830,8 @@ increment 5
 echo $?
 echo $sum
 
-变量sum虽然是在函数increment中定义的,但它的作用域却是全局的。
-因而可以在调用函数的脚本中被识别。
+变量sum虽然是在函数increment中定义的,但它的作用域却是全局的.
+因而可以在调用函数的脚本中被识别.
 *** 逻辑与的示例代码
 #+begin_src sh
 if test -d /home -a -d /tmp2 ; then
@@ -844,8 +844,8 @@ fi;
 *** DONE 单引号内不被解释,双引号内会被解释
  CLOSED: [2010-03-04 星期四 13:33]
 #+BEGIN_EXAMPLE
-单引号能保护所有元字符不被解释。
-双引号允许对它所括的内容进行变量替换和命令替换。
+单引号能保护所有元字符不被解释.
+双引号允许对它所括的内容进行变量替换和命令替换.
 
 echo Don\'t you need '$5.00?'
 echo 'Mother yelled, "Time to eat!"'
@@ -854,10 +854,10 @@ name=Jody
 echo "Hi $name, I'm glad to meet you!"
 echo "Hey $name, the time is $(date)"
 
-创建脚本时,脚本的第一行通常称为shbang(#!)行。
-当脚本启动后,UNIX内核检查文件的第一行以决定将要执行的程序类型。
+创建脚本时,脚本的第一行通常称为shbang(#!)行.
+当脚本启动后,UNIX内核检查文件的第一行以决定将要执行的程序类型.
 #+end_example
-*** DONE shell调试：set -x开启echo, sh -n解释不执行命令
+*** DONE shell调试:set -x开启echo, sh -n解释不执行命令
  CLOSED: [2010-03-04 星期四 15:39]
 | 命令             | 选项        | 含义                                        |
 | sh -x scriptname | Echo选项    | 在变量替换之后,执行之前显示脚本的每一行     |
@@ -1083,13 +1083,13 @@ done
 #+END_SRC
 *** TODO Shell: Exec命令
 #+BEGIN_EXAMPLE
- 使用exec命令,不需要创建子shell,就能打开或关闭标准输入和标准输出。
+ 使用exec命令,不需要创建子shell,就能打开或关闭标准输入和标准输出.
 
- exec命令常被用来打开文件(根据文件名或文件描述符)以供读写。注意,文件描述符0,1和2已预留
- 给标准输入、标准输出和标准错误输出。文件打开后,将得到下一个可用的文件描述符。
+ exec命令常被用来打开文件(根据文件名或文件描述符)以供读写.注意,文件描述符0,1和2已预留
+ 给标准输入`标准输出和标准错误输出.文件打开后,将得到下一个可用的文件描述符.
 #+end_example
 ** TODO shell中. ./1.sh与sh ./1.sh的区别是什么
-** CDPATH: 对于访问经常去的目录，　节省cd输入目录路的时间
+** CDPATH: 对于访问经常去的目录,　节省cd输入目录路的时间
 ** How to find the length of a variable
 http://unix-school.blogspot.in/2010_04_01_archive.html\\
 | Item                                                   | Summary |
@@ -1103,43 +1103,43 @@ http://unix-school.blogspot.in/2010_04_01_archive.html\\
 ** [#A] shell的启动配置文件执行顺序                               :IMPORTANT:
    http://zhidao.baidu.com/question/366827280.html
 #+begin_example
-~/.bash_profile 是交互式、login 方式进入 bash 运行的
+~/.bash_profile 是交互式`login 方式进入 bash 运行的
 ~/.bashrc 是交互式 non-login 方式进入 bash 运行的
-shell的分类：
-交互式登录shell：以一个用户的身份登陆进去，输入命令的格式的shell
-读取配置文件的顺序：
+shell的分类:
+交互式登录shell:以一个用户的身份登陆进去,输入命令的格式的shell
+读取配置文件的顺序:
 /etc/profile-->/etc/profile.d/*-->~/.bash_profile-->~/.bashrc-->/etc/bashrc
-非交互式登录shell：只在一个脚本的，不需要用户登录，自动运行
-读取配置文件的顺序：
+非交互式登录shell:只在一个脚本的,不需要用户登录,自动运行
+读取配置文件的顺序:
 /.bashrc-->/etc/bashrc-->/etc/profile.d/*
 #+end_example
 
 ** TODO shell输出多行内容时的重定向
-** TODO shell hook函数， 在返回时调用一个方法
+** TODO shell hook函数, 在返回时调用一个方法
 ** su命令和su -命令的区别
 http://www.ha97.com/4001.html
 #+begin_example
-su命令和su -命令最大的本质区别就是：前者只是切换了root身份，但Shell环境
-仍然是普通用户的Shell；而后者连用户和Shell环境一起切换成root身份了。只
-有切换了Shell环境才不会出现PATH环境变量错误。su切换成root用户以后，pwd
-一下，发现工作目录仍然是普通用户的工作目录；而用su -命令切换以后，工作
-目录变成root的工作目录了。用echo $PATH命令看一下su和su -以后的环境变量
-有何不同。以此类推，要从当前用户切换到其它用户也一样，应该使用su -命令
+su命令和su -命令最大的本质区别就是:前者只是切换了root身份,但Shell环境
+仍然是普通用户的Shell;而后者连用户和Shell环境一起切换成root身份了.只
+有切换了Shell环境才不会出现PATH环境变量错误.su切换成root用户以后,pwd
+一下,发现工作目录仍然是普通用户的工作目录;而用su -命令切换以后,工作
+目录变成root的工作目录了.用echo $PATH命令看一下su和su -以后的环境变量
+有何不同.以此类推,要从当前用户切换到其它用户也一样,应该使用su -命令
 #+end_example
-** [ -e /etc/*.conf ] 是不正确的，如果是判断满足某个pattern的文件是否存在，需要用find -name来查找
-** [#A] bash执行带单引号的命令, $command方式是不行的，需要用eval $command :IMPORTANT:
+** [ -e /etc/*.conf ] 是不正确的,如果是判断满足某个pattern的文件是否存在,需要用find -name来查找
+** [#A] bash执行带单引号的命令, $command方式是不行的,需要用eval $command :IMPORTANT:
 
 ** Here document 是 shell 的一个非常常用的功能: << EOF ... EOF
    http://ylinux.org/246
 #+begin_example
-如何结束字符用引号括起来，那么 Here 文档中的变量是不会被替换的：
+如何结束字符用引号括起来,那么 Here 文档中的变量是不会被替换的:
 $ cat > /tmp/t_here.txt << "EOF"
 UID=$UID
 EOF
 $ cat /tmp/t_here.txt
 UID=$UID
 
-如果结束字符没有用引号括起来：
+如果结束字符没有用引号括起来:
 
 $ cat > /tmp/t_here.txt << EOF
 UID=$UID
@@ -1332,7 +1332,7 @@ EOF
 
 notify_log_for_webcrawler
 #+end_src
-*** mysql备份脚本：根据配置自动备份，并删除60天前的备份集
+*** mysql备份脚本:根据配置自动备份,并删除60天前的备份集
 sample: sudo ./backup_mysql.sh  "db1" "username1" "password1" "/root/mysql_backup"
 #+begin_src sh
 #!/bin/bash
@@ -1659,7 +1659,7 @@ case "$1" in
 esac
 
 #+end_src
-** DONE shell：当$(fun)方式调用时，fun没法quit 当前shell script
+** DONE shell:当$(fun)方式调用时,fun没法quit 当前shell script
   CLOSED: [2013-12-12 Thu 20:59]
 #+begin_src sh
 get_data() {
@@ -2395,7 +2395,7 @@ done
 
 #+begin_example
 Please note: WORDPRESS differentiates among the following:
-| ｜, ' ‘, -- －, "“
+| ｜, ' ', -- －, ""
 #+end_example
 
 - process
@@ -2416,11 +2416,11 @@ Please note: WORDPRESS differentiates among the following:
 | 按更新时间, 查看某个文件夹                                   | ls -alth                                                                                                                                                                                |          |
 | 循环运行某个命令                                             | for ((b=1; b<=100; b++)); do echo hello; done;                                                                                                                                          |          |
 | if...else的条件判断                                          | if [ ! -d /tmp/tt ]; then mkdir /tmp/tt; else echo exists; fi;                                                                                                                          |          |
-| 模拟并发请求                                                 | 在多个terminal下，同时执行: for ((b=1; b<=100; b++)); do thrift_client -c sanityCheck -s 192.168.75.108 -p 9401; done;                                                                  |          |
+| 模拟并发请求                                                 | 在多个terminal下,同时执行: for ((b=1; b<=100; b++)); do thrift_client -c sanityCheck -s 192.168.75.108 -p 9401; done;                                                                  |          |
 | 对一组远端服务器, 同时执行某个命令                           | command="date"; for puppet_client_ip in "192.168.75.108" "192.168.75.109" "192.168.75.110" "192.168.75.111"; do ssh -o StrictHostKeyChecking=no root@$puppet_client_ip "$command";done; |          |
 | 向文件中追加一个key=value的键值对, 如果存在则修改它          | (grep "key1 \+=" ./test.cfg && sudo sed -i 's/key1 \+=.*/key1 = value1/' ./test.cfg) ｜｜ ((cat ./test.cfg; echo "key1 = value1") ｜ sudo tee ./test.cfg)                               |          |
 | 查看svn的某个revision的修改                                  | svn diff -r 135:136 http://test.server.cn/project/trunk                                                                                                                                 |          |
-| 临时进入某个目录， 并运行某个命令， 同时不改变当前目录的位置 | (cd /tmp && ls)                                                                                                                                                                         |          |
+| 临时进入某个目录, 并运行某个命令, 同时不改变当前目录的位置 | (cd /tmp && ls)                                                                                                                                                                         |          |
 | 当命令A执行完后, 需要执行命令B, 但不修改$?　                 | A && B ｜｜ true                                                                                                                                                                        |          |
 | 查看某个文件夹下, 今天被修改文件的最后若干行                 |                                                                                                                                                                                         |          |
 | 在指定时间运行某个命令                                       | echo "ls -l" ｜ at midnight                                                                                                                                                             |          |
@@ -2434,9 +2434,9 @@ Please note: WORDPRESS differentiates among the following:
 | 查看某个文件的第5到第8行                                                            | sed -n 5,8p /etc/hosts                                                                                            |                  |
 | 删除某个文件指定的几行                                                              | sed -i 2,3d /etc/hosts                                                                                            |                  |
 | 列出某个文件中太长的行                                                              | awk 'length>50' /etc/hosts                                                                                        |                  |
-| 列出某个文件夹下， 最近60分钟内被修改的文件及文件夹                                 | sudo find /var/log -mmin 60 -type f                                                                               |                  |
-| 列出/var/log/下， 文件大小介于50k到100k之间的文件                                   | sudo find /var/log -type f -size +50k -size -100k                                                                 |                  |
-| 找出满足条件的文件， 并将它们删除                                                   | find ./ -name Thumbs.db -delete                                                                                   |                  |
+| 列出某个文件夹下, 最近60分钟内被修改的文件及文件夹                                 | sudo find /var/log -mmin 60 -type f                                                                               |                  |
+| 列出/var/log/下, 文件大小介于50k到100k之间的文件                                   | sudo find /var/log -type f -size +50k -size -100k                                                                 |                  |
+| 找出满足条件的文件, 并将它们删除                                                   | find ./ -name Thumbs.db -delete                                                                                   |                  |
 | Graphical tree of sub-directories                                                   | ls -R ｜ grep ":$" ｜ sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/｜/'                         |                  |
 | quickly backup or copy a file with bash                                             | cp filename{,.bak}                                                                                                |                  |
 | Delete all files in a folder that don't match a certain file extension              | rm !(*.foo｜*.bar｜*.baz)                                                                                         |                  |
@@ -2448,12 +2448,12 @@ Please note: WORDPRESS differentiates among the following:
 | Remove all but one specific file                                                    | rm -f !(survivior.txt)                                                                                            |                  |
 | Find files that were modified by a given command                                    | touch /tmp/file ; $EXECUTECOMMAND ; find /path -newer /tmp/file                                                   |                  |
 | Copy a file structure without files                                                 | find * -type d -exec mkdir /where/you/wantem/\{\} \;                                                              |                  |
-| 找出一个文件夹下， md5相同的文件                                                    | fdupes -r . 或者 find . -type f -exec md5sum '{}' ';' ｜ sort ｜ uniq --all-repeated=separate -w 33 ｜ cut -c 35- |                  |
-| 对于一个文件， 指定两个开始和结束的regexp, 只显示满足条件的区间内容                 | awk '/127.0.0.1/,/The following/' /etc/hosts                                                                      |                  |
+| 找出一个文件夹下, md5相同的文件                                                    | fdupes -r . 或者 find . -type f -exec md5sum '{}' ';' ｜ sort ｜ uniq --all-repeated=separate -w 33 ｜ cut -c 35- |                  |
+| 对于一个文件, 指定两个开始和结束的regexp, 只显示满足条件的区间内容                 | awk '/127.0.0.1/,/The following/' /etc/hosts                                                                      |                  |
 | 删除修改时间在一年以上的文件                                                        | find <directory path> -mtime +365 -and -not -type d -delete                                                       | 删除不需要的文件 |
 | 创建一个指定大小的文件                                                              | truncate -s 1M file 或者 dd if=/dev/zero of=foo.txt bs=1M count=1                                                 | 测试文件系统性能 |
 | 找出最新三天修改的某类文件                                                          | find . -name "*.org" -a \( -mtime 0 -o -mtime 1 -o -mtime 2 \)                                                    |                  |
-| 创建文件时，　指定acl                                                               | umask 226 && echo "stack ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/50_stack_sh                                    |                  |
+| 创建文件时,　指定acl                                                               | umask 226 && echo "stack ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/50_stack_sh                                    |                  |
 | 打印一个文件夹的所有内容                                                            | for f in `ls .` ; do { echo -e "\n======== $f ======"; tail $f;}; done                                            |                  |
 
 - network
@@ -2464,7 +2464,7 @@ Please note: WORDPRESS differentiates among the following:
 | 显示本机的外网ip                                     | curl ifconfig.me                                                                                                                                                                        |          |
 | Show apps that use internet connection at the moment | ss -p                                                                                                                                                                                   |          |
 | List alive hosts in specific subnet                  | nmap -sP 192.168.1.0/24                                                                                                                                                                 |          |
-| 查看当前网段， 有哪些机器开了某个端口                | nmap -sT -p 80 -oG - 192.168.1.*                                                                                                                                                        |          |
+| 查看当前网段, 有哪些机器开了某个端口                | nmap -sT -p 80 -oG - 192.168.1.*                                                                                                                                                        |          |
 | check open ports                                     | lsof -Pni4 ｜ grep LISTEN                                                                                                                                                               |          |
 | 查看各网卡的流入与流出带宽                           | ifstat -nt                                                                                                                                                                              |          |
 | 诊断网络状况                                         | mtr --report-cycles=5 --interval=2 --split                                                                                                                                              |          |
@@ -2478,8 +2478,8 @@ Please note: WORDPRESS differentiates among the following:
 - view system information
 | Question                                   | Solution                                                  | Use case |
 |--------------------------------------------+-----------------------------------------------------------+----------|
-| 将当前机器硬件生成一个全面，美观的html报表 | lshw -html > hardware.html                                |          |
-| 查看OS是64位，　还是32位                   | file /usr/bin/file; uname -m; getconf -a ｜ grep LONG_BIT |          |
+| 将当前机器硬件生成一个全面,美观的html报表 | lshw -html > hardware.html                                |          |
+| 查看OS是64位,　还是32位                   | file /usr/bin/file; uname -m; getconf -a ｜ grep LONG_BIT |          |
 | 查看CPU信息                                | cat /proc/cpuinfo                                         |          |
 | 如何查看linux系统是哪个版本的              | lsb_release -a                                            |          |
 | 查看系统内核                               | uname -a                                                  |          |
@@ -2511,7 +2511,7 @@ Please note: WORDPRESS differentiates among the following:
 | svn up某个文件夹下的所有子文件夹                            | find . -maxdepth 1 -type d ｜ xargs svn up                                                                                              |          |
 | 批量缩小图片                                                | rm -rf ../new && mkdir ../new && for img in `find . -iname '*.jpg' -a -size +1M`; do convert -resize 50%x50% "$img" ../new/"$img"; done |          |
 | 计算sin(5)的值                                              | echo 's(5)' ｜ bc -l                                                                                                                    |          |
-| 找出满足条件的文件夹，进行删除                              | ls -t /var/lib/hudson/jobs ｜ xargs -I '{}' find /var/lib/hudson/jobs/'{}'/builds/ -name "*" -mtime +15 -and -not -type d -delete       |          |
+| 找出满足条件的文件夹,进行删除                              | ls -t /var/lib/hudson/jobs ｜ xargs -I '{}' find /var/lib/hudson/jobs/'{}'/builds/ -name "*" -mtime +15 -and -not -type d -delete       |          |
 | 算md5值                                                     | echo -n "password" ｜ md5sum                                                                                                            |          |
 | 列出所有本机IPv4的网络连接                                  | lsof -Pnl +M -i4                                                                                                                        |          |
 | CPU architecture information helper                         | cat /proc/cpuinfo;  lscpu                                                                                                               |          |
@@ -2523,7 +2523,7 @@ Please note: WORDPRESS differentiates among the following:
 | hexdump以二进制看文件                                       | hexdump -C -n 100 caifv-images.s3.b2c.ekaidian.com.elmar0516                                                                            |          |
 | 查看某个文件第10字节后的20个字节                            | hexdump -C -n 20 -s 10 /etc/hosts                                                                                                       |          |
 | grep只显示matched的string                                   | grep --only-matching '[^ ]*fxw.vmod.cn' /usr/local/nginx/conf/vhosts/default.conf                                                       |          |
-** DONE linux at命令: 定义一个定时任务，在指定时间内执行           :noexport:
+** DONE linux at命令: 定义一个定时任务,在指定时间内执行           :noexport:
   CLOSED: [2012-05-28 Mon 18:09]
 #+begin_example
 ///6f667c06190b783231f9e708249a1d5d#$cat /tmp/test.sh
@@ -2546,7 +2546,7 @@ Mon May 28 18:07:01 CST 2012
 Mon May 28 18:06:00 CST 2012
 Mon May 28 18:07:00 CST 2012
 #+end_example
-** DONE 运行某个shell命令, 但如果$?是失败的，仍然返回失败: 通过中间变量来实现
+** DONE 运行某个shell命令, 但如果$?是失败的,仍然返回失败: 通过中间变量来实现
   CLOSED: [2012-09-10 一 00:50]
 echo http://192.168.75.236:8999/health_check/report.html && ssh root@192.168.75.108 "ecae-health-check --report-dir /usr/local/ecae-health-check/report --only-simpletest"; scp root@192.168.75.108://usr/local/ecae-health-check/report/report.html /var/lib/hudson/tsung_log/health_check/report.html
 ** sample usage                                                    :noexport:
@@ -3423,7 +3423,7 @@ root     63850  0.0  0.0  21500     4 ?        S    Apr14   0:00 /sbin/udevd --d
 * xargs                                                            :noexport:
 | Question                          | Solution                                                           | Use case |
 |-----------------------------------+--------------------------------------------------------------------+----------|
-| 对满足条件的文件， 进行按内容查找 | find /etc/yum.repos.d/ -name "*.repo" -type f ｜ xargs grep "http" |          |
+| 对满足条件的文件, 进行按内容查找 | find /etc/yum.repos.d/ -name "*.repo" -type f ｜ xargs grep "http" |          |
 | 对满足条件的文件, 进行匹配重命名  | find -iname "*.pdf" ｜ xargs -I '{}' mv '{}.tmp' '{}.tmp2'   |          |
 
 #
@@ -3434,18 +3434,18 @@ root     63850  0.0  0.0  21500     4 ?        S    Apr14   0:00 /sbin/udevd --d
 | 将文件按行反序                                                      | awk '{ a[NR]=$0 } END { for(i=NR; i; --i) print a[i] } ' datafile |          |
 | 查找/etc/hosts中, 以"# The"开头的内容, 并将该行及之后的内容打印出来 | awk "/^# The/{a=1} {if(a) print $1}" /etc/hosts                   |          |
 | 显示文件的第一列                                                    | awk '{print $1}' <file>                                           |          |
-| 反序显示文件的前两列                                                | awk '{print $2,”\t”,$1}' <file>                                   |          |
+| 反序显示文件的前两列                                                | awk '{print $2,"\t",$1}' <file>                                   |          |
 | 输出前两列的总和                                                    | awk '{print $1 + $2}' <file>                                      |          |
-| 查找所有包括”money” 行并输出最后一列                                | awk '/money/ {print $NF}' <file>                                  |          |
-| 查找第二列中包含 “money”                                            | awk '$2 ~ /money/ {print $0}' <file>                              |          |
-| 查找第三列中不包括”A”                                               | awk '$3 !~ /A$/ {print $0}' <file>                                |          |
-| 从文件找出太长的行，打印出来，并给出行号                            | awk -F' '  'length>100{print NR $0}' ./filebat.txt                |          |
+| 查找所有包括"money" 行并输出最后一列                                | awk '/money/ {print $NF}' <file>                                  |          |
+| 查找第二列中包含 "money"                                            | awk '$2 ~ /money/ {print $0}' <file>                              |          |
+| 查找第三列中不包括"A"                                               | awk '$3 !~ /A$/ {print $0}' <file>                                |          |
+| 从文件找出太长的行,打印出来,并给出行号                            | awk -F' '  'length>100{print NR $0}' ./filebat.txt                |          |
 ** basic use
 #+begin_example
-awk的处理文本和数据的方式是这样的，它逐行扫描文件，从第一行到最后一行，
-寻找匹配的特定模式的行，并在这些行上进行你想要的操作。如果没有指定处理
-动作，则把匹配的行显示到标准输出(屏幕)，如果没有指定模式，则所有被操作
-所指定的行都被处理。
+awk的处理文本和数据的方式是这样的,它逐行扫描文件,从第一行到最后一行,
+寻找匹配的特定模式的行,并在这些行上进行你想要的操作.如果没有指定处理
+动作,则把匹配的行显示到标准输出(屏幕),如果没有指定模式,则所有被操作
+所指定的行都被处理.
 
 awk的语法有两种形式:
 - awk [options] 'script' var=value file(s)
@@ -3687,4 +3687,4 @@ EOF
 
 vim /etc/hosts
 ** watch -d -n 1 stat /var/log/message
-查看命令输出的变化， 并高亮提醒变化部分
+查看命令输出的变化, 并高亮提醒变化部分
