@@ -71,17 +71,16 @@ else
 fi
 #+END_SRC
 ** Numeric
-| Name           | Comment                       |
-|----------------+-------------------------------|
-| multiplication | =expr 5 \* 4=                 |
-| add two nums   | =let z=x+y, z=$x+$y=          |
-| Compare        | =[ $? -eq 0 ] && echo "good"= |
-| equal          | =int1 -eq int2=               |
-| >=             | =int1 -ge =int2=              |
-| >              | =int1 -gt =int2=              |
-| <=             | =int1 -le =int2=              |
-| <              | =int1 -lt =int2=              |
-| !=             | =int1 -ne =int2=              |
+| Name | Comment                                        |
+|------+------------------------------------------------|
+| *    | =expr 5 \* 4=                                  |
+| +    | =let z=x+y, z=$x+$y=                           |
+| ==   | =int1 -eq int2=, =[ $? -eq 0 ] && echo "good"= |
+| >=   | =int1 -ge =int2=                               |
+| >    | =int1 -gt =int2=                               |
+| <=   | =int1 -le =int2=                               |
+| <    | =int1 -lt =int2=                               |
+| !=   | =int1 -ne =int2=                               |
 ** Scripts
 - get ip from eth0
 #+BEGIN_SRC sh
