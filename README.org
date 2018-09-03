@@ -30,11 +30,6 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/trap-exit.sh][code/trap-exit.sh]]             |
 | shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/shell-retry.sh][code/shell-retry.sh]]           |
 
-- Compare command output
-#+BEGIN_SRC sh
-[ 0 -eq $(find ./data -name "*.txt" -type f -print | wc -l) ]
-#+END_SRC
-
 ** String
 | Name            | Comment |
 |-----------------+---------|
@@ -43,7 +38,30 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | ${var#pattern}  |         |
 | ${var##pattern} |         |
 | ${#var}         |         |
-*** Check if a string contains a substring
+** Numeric
+| Name | Comment                                        |
+|------+------------------------------------------------|
+| *    | =expr 5 \* 4=                                  |
+| +    | =let z=x+y, z=$x+$y=                           |
+| ==   | =int1 -eq int2=, =[ $? -eq 0 ] && echo "good"= |
+| >=   | =int1 -ge =int2=                               |
+| >    | =int1 -gt =int2=                               |
+| <=   | =int1 -le =int2=                               |
+| <    | =int1 -lt =int2=                               |
+| !=   | =int1 -ne =int2=                               |
+
+** Scripts
+- Compare command output
+#+BEGIN_SRC sh
+[ 0 -eq $(find ./data -name "*.txt" -type f -print | wc -l) ]
+#+END_SRC
+
+- get ip from eth0
+#+BEGIN_SRC sh
+/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
+#+END_SRC
+
+- Check if a string contains a substring
 #+BEGIN_SRC sh
 #!/bin/bash
 
@@ -56,7 +74,7 @@ else
 fi
 #+END_SRC
 
-*** Check if a string in a list
+- Check if a string in a list
 [[https://stackoverflow.com/questions/8063228/how-do-i-check-if-a-variable-exists-in-a-list-in-bash][stackoverflow link]]
 
 #+BEGIN_SRC sh
@@ -69,22 +87,6 @@ if [[ "gcp|aws" == *${TYPE}* ]]; then
 else
     echo "no"
 fi
-#+END_SRC
-** Numeric
-| Name | Comment                                        |
-|------+------------------------------------------------|
-| *    | =expr 5 \* 4=                                  |
-| +    | =let z=x+y, z=$x+$y=                           |
-| ==   | =int1 -eq int2=, =[ $? -eq 0 ] && echo "good"= |
-| >=   | =int1 -ge =int2=                               |
-| >    | =int1 -gt =int2=                               |
-| <=   | =int1 -le =int2=                               |
-| <    | =int1 -lt =int2=                               |
-| !=   | =int1 -ne =int2=                               |
-** Scripts
-- get ip from eth0
-#+BEGIN_SRC sh
-/sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
 #+END_SRC
 ** More Resources
  License: Code is licensed under [[https://www.dennyzhang.com/wp-content/mit_license.txt][MIT License]].
