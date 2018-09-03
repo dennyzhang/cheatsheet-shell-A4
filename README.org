@@ -3684,7 +3684,6 @@ sed -i 's/HOSTNAME=.*/HOSTNAME=new/g' /etc/sysconfig/network
 cat> /etc/hostname<<EOF
 ubuntu2.dennyzhang.com
 EOF
-
 vim /etc/hosts
 ** watch -d -n 1 stat /var/log/message
 查看命令输出的变化, 并高亮提醒变化部分
