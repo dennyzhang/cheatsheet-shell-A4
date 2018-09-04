@@ -1,9 +1,8 @@
 * Shell CheatSheet                                                    :Linux:
 :PROPERTIES:
 :type:     shell
+:export_file_name: cheatsheet-shell-A4.pdf
 :END:
-
-Blog URL: https://cheatsheet.dennyzhang.com/cheatsheet-shell, Category: [[https://cheatsheet.dennyzhang.com/category/languages][languages]]
 
 #+BEGIN_HTML
 <a href="https://github.com/dennyzhang/cheatsheet-shell-A4"><img align="right" width="200" height="183" src="https://www.dennyzhang.com/wp-content/uploads/denny/watermark/github.png" /></a>
@@ -17,6 +16,10 @@ Blog URL: https://cheatsheet.dennyzhang.com/cheatsheet-shell, Category: [[https:
 <a href="http://makeapullrequest.com" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"/></a>
 #+END_HTML
 
+- PDF Link: [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/cheatsheet-shell-A4.pdf][cheatsheet-shell-A4.pdf]]
+- Blog URL: https://cheatsheet.dennyzhang.com/cheatsheet-shell
+- Category: [[https://cheatsheet.dennyzhang.com/category/languages][languages]]
+
 File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or star [[https://github.com/DennyZhang/challenges-shell][this repo]].
 
 See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][#denny-cheatsheets]]
@@ -26,9 +29,9 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Redirect stdout/stderr          | =ls /tmp >/dev/null 2>&1=     |
 | Deal with filename              | =basename $f=, =dirname $f=   |
 | Use timeout: avoid command hang | timeout 10 sh -c "ls -lt"     |
-| Long option for command line    | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/long-option-parameter.sh][code/long-option-parameter.sh]] |
-| Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/trap-exit.sh][code/trap-exit.sh]]             |
-| shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/code/shell-retry.sh][code/shell-retry.sh]]           |
+| Long option for command line    | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]]
+| Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]]
+| shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]]
 
 ** String
 | Name            | Comment |
@@ -2356,7 +2359,7 @@ https://stackoverflow.com/questions/15758814/turning-multiple-lines-into-one-lin
 ## File: test.sh
 ## Author : Denny <contact@dennyzhang.com>
 ## Description :
-##   https://leetcode.com/problems/transpose-file/description/
+##   https://leetcode.com/problems/cheatsheet-shell-A4/description/][leetcode.com]]
 ## --
 ## Created : <2017-10-17>
 ## Updated: Time-stamp: <2017-10-17 22:13:31>
