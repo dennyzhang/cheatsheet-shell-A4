@@ -24,16 +24,34 @@ File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or sta
 
 See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][#denny-cheatsheets]]
 ** Basic
-| Name                            | Comment                       |
-|---------------------------------+-------------------------------|
-| Redirect stdout/stderr          | =ls /tmp >/dev/null 2>&1=     |
-| Deal with filename              | =basename $f=, =dirname $f=   |
-| Use timeout: avoid command hang | timeout 10 sh -c "ls -lt"     |
-| Long option for command line    | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]]
-| Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]]
-| shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]]
+| Name                            | Comment                     |
+|---------------------------------+-----------------------------|
+| Redirect stdout/stderr          | =ls /tmp >/dev/null 2>&1=   |
+| Deal with filename              | =basename $f=, =dirname $f= |
+| Use timeout: avoid command hang | timeout 10 sh -c "ls -lt"   |
 
-** String
+** GNU tools
+
+*** Check file
+| Name                                              | Comment                                                   |
+|---------------------------------------------------+-----------------------------------------------------------|
+| Show file content                                 | =cat /etc/hosts=                                          |
+| Show file content with line numbers               | =cat -n /etc/hosts=                                       |
+| Show the first 3 lines                            | =head -n3 /etc/hosts=                                     |
+| Show the last 3 lines                             | =tail -n3 /etc/hosts=                                     |
+| Show the 4th line                                 | =sed -n '4p' /etc/hosts=                                  |
+| Show 4th, 5th, 7th and 8th lines                  | =sed -n '4,5p;7,8p' /etc/hosts=                           |
+| Show matched string with 3 lines before and after | =grep -C 3 "127.0.0.1" /etc/hosts=                        |
+| Show 2nd column of a table-like file              | =awk 'BEGIN {FIELDWIDTHS = "2 1"} {print $2}' /etc/hosts= |
+*** Echo string
+| Name                 | Comment                                                   |
+|----------------------+-----------------------------------------------------------|
+| echo red text        | =echo -e "hello,\e[0;31m there \e[0;31m"=                 |
+| echo multiple lines  | =echo -e "hello,\ndenny"=                                 |
+| echo bold text       | =echo -e hello, "\033[1mThis is bold text.\033[0m"=       |
+| echo underlined text | =echo -e hello, "\033[4mThis is underlined text.\033[0m"= |
+** Shell data structures
+*** String
 | Name            | Comment |
 |-----------------+---------|
 | ${var%pattern}  |         |
@@ -41,7 +59,7 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | ${var#pattern}  |         |
 | ${var##pattern} |         |
 | ${#var}         |         |
-** Numeric
+*** Numeric
 | Name | Comment                                        |
 |------+------------------------------------------------|
 | *    | =expr 5 \* 4=                                  |
@@ -3701,3 +3719,8 @@ EOF
 vim /etc/hosts
 ** watch -d -n 1 stat /var/log/message
 查看命令输出的变化, 并高亮提醒变化部分
+* role model: https://github.com/alexanderepstein/Bash-Snippets    :noexport:
+* improve command                                                  :noexport:
+| Long option for command line    |                                 |
+| Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]] |
+| shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]] |
