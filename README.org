@@ -28,7 +28,7 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 |---------------------------------+-----------------------------|
 | Redirect stdout/stderr          | =ls /tmp >/dev/null 2>&1=   |
 | Deal with filename              | =basename $f=, =dirname $f= |
-| Use timeout: avoid command hang | =timeout 10 sh -c 'ls -lt'= |
+| Use timeout: avoid command hang | timeout 10 sh -c 'ls -lt'   |
 
 ** GNU tools
 
@@ -44,12 +44,13 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Show matched string with 3 lines before and after | =grep -C 3 "127.0.0.1" /etc/hosts=                        |
 | Show 2nd column of a table-like file              | =awk 'BEGIN {FIELDWIDTHS = "2 1"} {print $2}' /etc/hosts= |
 *** Echo string
-| Name                 | Comment                                                   |
-|----------------------+-----------------------------------------------------------|
-| echo red text        | =echo -e "hello,\e[0;31m there \e[0;31m"=                 |
-| echo multiple lines  | =echo -e "hello,\ndenny"=                                 |
-| echo bold text       | =echo -e hello, "\033[1mThis is bold text.\033[0m"=       |
-| echo underlined text | =echo -e hello, "\033[4mThis is underlined text.\033[0m"= |
+| Name                 | Comment                                                 |
+|----------------------+---------------------------------------------------------|
+| echo red text        | echo -e "hello,\e[0;31m there \e[0;31m"                 |
+| echo multiple lines  | echo -e "hello,\ndenny"                                 |
+| echo bold text       | echo -e hello, "\033[1mThis is bold text.\033[0m"       |
+| echo underlined text | echo -e hello, "\033[4mThis is underlined text.\033[0m" |
+
 ** Shell data structures
 *** String
 | Name            | Comment |
