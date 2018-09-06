@@ -28,7 +28,7 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 |---------------------------------+-----------------------------|
 | Redirect stdout/stderr          | =ls /tmp >/dev/null 2>&1=   |
 | Deal with filename              | =basename $f=, =dirname $f= |
-| Use timeout: avoid command hang | timeout 10 sh -c "ls -lt"   |
+| Use timeout: avoid command hang | =timeout 10 sh -c 'ls -lt'= |
 
 ** GNU tools
 
