@@ -30,23 +30,24 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Deal with filename              | =basename $f=, =dirname $f=                                           |
 | Use timeout: avoid command hang | timeout 10 sh -c 'ls -lt'                                             |
 | Run sub-shell                   | =echo $BASH_SUBSHELL; ( echo "Running in subshell: $BASH_SUBSHELL" )= |
+| Run static code check           | [[https://www.dennyzhang.com/shellcheck][link: shellcheck]]                                                      |
 
 ** GNU tools
 *** Check file
-| Name                                                | Comment                                 |
-|-----------------------------------------------------+-----------------------------------------|
-| Show file content                                   | =cat /etc/hosts=                        |
-| Show file content with line numbers                 | =cat -n /etc/hosts=                     |
-| Show with line numbers, while excluding blank lines | =cat -b /etc/hosts=                     |
-| Show the first 3 lines                              | =head -n3 /etc/hosts=                   |
-| Show the last 3 lines                               | =tail -n3 /etc/hosts=                   |
-| Keep tailing log files                              | =tail -f /var/log/system.log=           |
-| Show the 4th line                                   | =sed -n '4p' /etc/hosts=                |
-| Show 4th, 5th, 7th and 8th lines                    | =sed -n '4,5p;7,8p' /etc/hosts=         |
-| Show matched string with 3 lines before and after   | =grep -C 3 "127.0.0.1" /etc/hosts=      |
-| For table-like files, show 2nd column               | =awk -F'\t' '{print $2}' /etc/hosts=    |
-| For table-like files, swap 1st and 2nd columns      | =awk -F'\t' '{print $2,$1}' /etc/hosts= |
-| Check process start command in /proc filesystem     | =cat /proc/$pid/cmdline=                |
+| Name                                                | Comment                                                   |
+|-----------------------------------------------------+-----------------------------------------------------------|
+| Show file content                                   | =cat /etc/hosts=                                          |
+| Show file content with line numbers                 | =cat -n /etc/hosts=                                       |
+| Show with line numbers, while excluding blank lines | =cat -b /etc/hosts=                                       |
+| Show the first 3 lines                              | =head -n3 /etc/hosts=                                     |
+| Show the last 3 lines                               | =tail -n3 /etc/hosts=                                     |
+| Keep tailing log files                              | =tail -f /var/log/system.log=, =taif /var/log/system.log= |
+| Show the 4th line                                   | =sed -n '4p' /etc/hosts=                                  |
+| Show 4th, 5th, 7th and 8th lines                    | =sed -n '4,5p;7,8p' /etc/hosts=                           |
+| Show matched string with 3 lines before and after   | =grep -C 3 "127.0.0.1" /etc/hosts=                        |
+| For table-like files, show 2nd column               | =awk -F'\t' '{print $2}' /etc/hosts=                      |
+| For table-like files, swap 1st and 2nd columns      | =awk -F'\t' '{print $2,$1}' /etc/hosts=                   |
+| Check process start command in /proc filesystem     | =cat /proc/$pid/cmdline=                                  |
 *** Echo string
 | Name                 | Comment                                                 |
 |----------------------+---------------------------------------------------------|
@@ -61,17 +62,6 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Copy one folder | =cp -r /usr/local/bin/ /tmp/bin/=             |
 | Copy for backup | =cp /tmp/hosts{,.bak}=, =ls -lth /tmp/hosts*= |
 ** Shell Basic
-*** Numeric
-| Name | Comment                                        |
-|------+------------------------------------------------|
-| *    | =expr 5 \* 4=                                  |
-| +    | =let z=x+y, z=$x+$y=                           |
-| ==   | =int1 -eq int2=, =[ $? -eq 0 ] && echo "good"= |
-| >=   | =int1 -ge =int2=                               |
-| >    | =int1 -gt =int2=                               |
-| <=   | =int1 -le =int2=                               |
-| <    | =int1 -lt =int2=                               |
-| !=   | =int1 -ne =int2=                               |
 *** cd
 | Name                  | Comment        |
 |-----------------------+----------------|
@@ -79,6 +69,18 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Go to home            | =cd=           |
 | Go to parent folder   | =cd ..=        |
 | Go to previous folder | =cd -=         |
+*** Numeric
+| Name                   | Comment                                        |
+|------------------------+------------------------------------------------|
+| *                      | =expr 5 \* 4=                                  |
+| +                      | =let z=x+y, z=$x+$y=                           |
+| ==                     | =int1 -eq int2=, =[ $? -eq 0 ] && echo "good"= |
+| >=                     | =int1 -ge =int2=                               |
+| >                      | =int1 -gt =int2=                               |
+| <=                     | =int1 -le =int2=                               |
+| <                      | =int1 -lt =int2=                               |
+| !=                     | =int1 -ne =int2=                               |
+
 *** xargs
 #+BEGIN_SRC sh
 # Run grep for files filtered by find
