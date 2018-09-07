@@ -24,42 +24,43 @@ File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or sta
 
 See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][#denny-cheatsheets]]
 ** Basic
-| Name                            | Comment                     |
-|---------------------------------+-----------------------------|
-| Redirect stdout/stderr          | =ls /tmp >/dev/null 2>&1=   |
-| Deal with filename              | =basename $f=, =dirname $f= |
-| Use timeout: avoid command hang | timeout 10 sh -c 'ls -lt'   |
+| Name                            | Comment                                                               |
+|---------------------------------+-----------------------------------------------------------------------|
+| Redirect stdout/stderr          | =ls /tmp >/dev/null 2>&1=                                             |
+| Deal with filename              | =basename $f=, =dirname $f=                                           |
+| Use timeout: avoid command hang | timeout 10 sh -c 'ls -lt'                                             |
+| Run sub-shell                   | =echo $BASH_SUBSHELL; ( echo "Running in subshell: $BASH_SUBSHELL" )= |
 
 ** GNU tools
-
 *** Check file
-| Name                                              | Comment                                                   |
-|---------------------------------------------------+-----------------------------------------------------------|
-| Show file content                                 | =cat /etc/hosts=                                          |
-| Show file content with line numbers               | =cat -n /etc/hosts=                                       |
-| Show the first 3 lines                            | =head -n3 /etc/hosts=                                     |
-| Show the last 3 lines                             | =tail -n3 /etc/hosts=                                     |
-| Show the 4th line                                 | =sed -n '4p' /etc/hosts=                                  |
-| Show 4th, 5th, 7th and 8th lines                  | =sed -n '4,5p;7,8p' /etc/hosts=                           |
-| Show matched string with 3 lines before and after | =grep -C 3 "127.0.0.1" /etc/hosts=                        |
-| Show 2nd column of a table-like file              | =awk 'BEGIN {FIELDWIDTHS = "2 1"} {print $2}' /etc/hosts= |
+| Name                                                | Comment                                 |
+|-----------------------------------------------------+-----------------------------------------|
+| Show file content                                   | =cat /etc/hosts=                        |
+| Show file content with line numbers                 | =cat -n /etc/hosts=                     |
+| Show with line numbers, while excluding blank lines | =cat -b /etc/hosts=                     |
+| Show the first 3 lines                              | =head -n3 /etc/hosts=                   |
+| Show the last 3 lines                               | =tail -n3 /etc/hosts=                   |
+| Keep tailing log files                              | =tail -f /var/log/system.log=           |
+| Show the 4th line                                   | =sed -n '4p' /etc/hosts=                |
+| Show 4th, 5th, 7th and 8th lines                    | =sed -n '4,5p;7,8p' /etc/hosts=         |
+| Show matched string with 3 lines before and after   | =grep -C 3 "127.0.0.1" /etc/hosts=      |
+| For table-like files, show 2nd column               | =awk -F'\t' '{print $2}' /etc/hosts=    |
+| For table-like files, swap 1st and 2nd columns      | =awk -F'\t' '{print $2,$1}' /etc/hosts= |
+| Check process start command in /proc filesystem     | =cat /proc/$pid/cmdline=                |
 *** Echo string
 | Name                 | Comment                                                 |
 |----------------------+---------------------------------------------------------|
-| echo red text        | echo -e "hello,\e[0;31m there \e[0;31m"                 |
-| echo multiple lines  | echo -e "hello,\ndenny"                                 |
-| echo bold text       | echo -e hello, "\033[1mThis is bold text.\033[0m"       |
-| echo underlined text | echo -e hello, "\033[4mThis is underlined text.\033[0m" |
-
-** Shell data structures
-*** String
-| Name            | Comment |
-|-----------------+---------|
-| ${var%pattern}  |         |
-| ${var%%pattern} |         |
-| ${var#pattern}  |         |
-| ${var##pattern} |         |
-| ${#var}         |         |
+| Echo red text        | echo -e "hello,\e[0;31m there \e[0;31m"                 |
+| Echo multiple lines  | echo -e "hello,\ndenny"                                 |
+| Echo bold text       | echo -e hello, "\033[1mThis is bold text.\033[0m"       |
+| Echo underlined text | echo -e hello, "\033[4mThis is underlined text.\033[0m" |
+*** Copy files
+| Name            | Comment                                       |
+|-----------------+-----------------------------------------------|
+| Copy one file   | =cp /etc/hosts /tmp/hosts=                    |
+| Copy one folder | =cp -r /usr/local/bin/ /tmp/bin/=             |
+| Copy for backup | =cp /tmp/hosts{,.bak}=, =ls -lth /tmp/hosts*= |
+** Shell Basic
 *** Numeric
 | Name | Comment                                        |
 |------+------------------------------------------------|
@@ -71,7 +72,21 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | <=   | =int1 -le =int2=                               |
 | <    | =int1 -lt =int2=                               |
 | !=   | =int1 -ne =int2=                               |
+*** cd
+| Name                  | Comment        |
+|-----------------------+----------------|
+| Go to given folder    | =cd /var/log/= |
+| Go to home            | =cd=           |
+| Go to parent folder   | =cd ..=        |
+| Go to previous folder | =cd -=         |
+*** xargs
+#+BEGIN_SRC sh
+# Run grep for files filtered by find
+find /var/log -name "*.log" | xargs grep -i error
 
+# Loop with pipes
+cat /etc/passwd | awk -F':' '{print $1}' | xargs -I{} sudo -l -U {} | grep -v "not allowed to"
+#+END_SRC
 ** Scripts
 - Compare command output
 #+BEGIN_SRC sh
@@ -3651,6 +3666,137 @@ Opps...you only wanted a solution, so I'll quit now..
 ** DONE sort by second column: sort -k 2 file.txt
    CLOSED: [2017-10-17 Tue 22:39]
 https://stackoverflow.com/questions/4262650/linux-shell-sort-file-according-to-the-second-column
+* DONE Permanently change hostname                                 :noexport:
+  CLOSED: [2018-07-23 Mon 17:02]
+** DONE centos change hostname persistently:  /etc/sysconfig/network
+   CLOSED: [2014-05-27 Tue 16:08]
+http://www.rackspace.com/knowledge_center/article/centos-hostname-change
+cp  /etc/sysconfig/network{,.bak}
+sed -i 's/HOSTNAME=.*/HOSTNAME=new/g' /etc/sysconfig/network
+** DONE ubuntu永久修改hostname: /etc/hostname
+   CLOSED: [2014-05-27 Tue 16:08]
+cat> /etc/hostname<<EOF
+ubuntu2.dennyzhang.com
+EOF
+vim /etc/hosts
+** watch -d -n 1 stat /var/log/message
+查看命令输出的变化, 并高亮提醒变化部分
+* role model: https://github.com/alexanderepstein/Bash-Snippets    :noexport:
+* shell scripts                                                    :noexport:
+# To implement a for loop:
+for file in *;
+do 
+    echo $file found;
+done
+
+# To implement a case command:
+case "$1"
+in
+    0) echo "zero found";;
+    1) echo "one found";;
+    2) echo "two found";;
+    3*) echo "something beginning with 3 found";;
+esac
+
+# Turn on debugging:
+set -x
+
+# Turn off debugging:
+set +x
+
+# Retrieve N-th piped command exit status
+printf 'foo' | fgrep 'foo' | sed 's/foo/bar/'
+echo ${PIPESTATUS[0]}  # replace 0 with N
+
+# Lock file:
+( set -o noclobber; echo > my.lock ) || echo 'Failed to create lock file'
+* improve command                                                  :noexport:
+| Long option for command line    |                                 |
+| Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]] |
+| shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]] |
+** chown
+# Change file owner
+chown user file
+
+# Change file owner and group
+chown user:group file
+
+# Change owner recursively
+chown -R user directory
+
+# Change ownership to match another file
+chown --reference=/path/to/ref_file file
+** chmod
+# Add execute for all (myscript.sh)
+chmod a+x myscript.sh
+
+# Set user to read/write/execute, group/global to read only (myscript.sh), symbolic mode
+chmod u=rwx, go=r myscript.sh 
+
+# Remove write from user/group/global (myscript.sh), symbolic mode
+chmod a-w myscript.sh
+
+# Remove read/write/execute from user/group/global (myscript.sh), symbolic mode
+chmod = myscript.sh
+
+# Set user to read/write and group/global read (myscript.sh), octal notation
+chmod 644 myscript.sh
+
+# Set user to read/write/execute and group/global read/execute (myscript.sh), octal notation
+chmod 755 myscript.sh
+
+# Set user/group/global to read/write (myscript.sh), octal notation
+chmod 666 myscript.sh
+
+# Roles
+u - user (owner of the file)
+g - group (members of file's group)
+o - global (all users who are not owner and not part of group)
+a - all (all 3 roles above)
+
+# Numeric representations
+7 - full (rwx)
+6 - read and write (rw-)
+5 - read and execute (r-x)
+4 - read only (r--)
+3 - write and execute (-wx)
+2 - write only (-w-)
+1 - execute only (--x)
+0 - none (---)
+** rsync
+# To copy files from remote to local, maintaining file properties and sym-links (-a), zipping for faster transfer (-z), verbose (-v).  
+rsync -avz host:file1 :file1 /dest/
+rsync -avz /source host:/dest
+
+# Copy files using checksum (-c) rather than time to detect if the file has changed. (Useful for validating backups). 
+rsync -avc /source/ /dest/
+
+# Copy contents of /src/foo to destination:
+
+# This command will create /dest/foo if it does not already exist
+rsync -auv /src/foo /dest
+
+# Explicitly copy /src/foo to /dest/foo
+rsync -auv /src/foo/ /dest/foo
+
+# Copy file from local to remote over ssh with non standard port 1234 to destination folder in remoteuser's home directory
+rsync -avz -e "ssh -p1234" /source/file1 remoteuser@X.X.X.X:~/destination/
+
+** cp
+ # Create a copy of a file
+ cp ~/Desktop/foo.txt ~/Downloads/foo.txt
+
+ # Create a copy of a directory
+ cp -r ~/Desktop/cruise_pics/ ~/Pictures/
+
+ # Create a copy but ask to overwrite if the destination file already exists
+ cp -i ~/Desktop/foo.txt ~/Documents/foo.txt
+
+ # Create a backup file with date
+ cp foo.txt{,."$(date +%Y%m%d-%H%M%S)"}
+
+* #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* how to use pushd                                                 :noexport:
 * cron                                                             :noexport:
 ** DONE manually start cron: cron
    CLOSED: [2016-10-24 Mon 11:42]
@@ -3705,23 +3851,11 @@ https://www.pantz.org/software/cron/croninfo.html
 # (0-59)  (0-23)     (1-31)    (1-12 or Jan-Dec)  (0-6 or Sun-Sat)
     0        2          12             *                *            /usr/bin/find
 #+END_EXAMPLE
-* DONE Permanently change hostname                                 :noexport:
-  CLOSED: [2018-07-23 Mon 17:02]
-** DONE centos change hostname persistently:  /etc/sysconfig/network
-   CLOSED: [2014-05-27 Tue 16:08]
-http://www.rackspace.com/knowledge_center/article/centos-hostname-change
-cp  /etc/sysconfig/network{,.bak}
-sed -i 's/HOSTNAME=.*/HOSTNAME=new/g' /etc/sysconfig/network
-** DONE ubuntu永久修改hostname: /etc/hostname
-   CLOSED: [2014-05-27 Tue 16:08]
-cat> /etc/hostname<<EOF
-ubuntu2.dennyzhang.com
-EOF
-vim /etc/hosts
-** watch -d -n 1 stat /var/log/message
-查看命令输出的变化, 并高亮提醒变化部分
-* role model: https://github.com/alexanderepstein/Bash-Snippets    :noexport:
-* improve command                                                  :noexport:
-| Long option for command line    |                                 |
-| Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]] |
-| shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]] |
+* String                                                           :noexport:
+| Name            | Comment |
+|-----------------+---------|
+| ${var%pattern}  |         |
+| ${var%%pattern} |         |
+| ${var#pattern}  |         |
+| ${var##pattern} |         |
+| ${#var}         |         |
