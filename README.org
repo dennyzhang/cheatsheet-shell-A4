@@ -24,13 +24,14 @@ File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or sta
 
 See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][#denny-cheatsheets]]
 ** Basic
-| Name                            | Comment                                                               |
-|---------------------------------+-----------------------------------------------------------------------|
-| Redirect stdout/stderr          | =ls /tmp >/dev/null 2>&1=                                             |
-| Deal with filename              | =basename $f=, =dirname $f=                                           |
-| Use timeout: avoid command hang | timeout 10 sh -c 'ls -lt'                                             |
-| Run sub-shell                   | =echo $BASH_SUBSHELL; ( echo "Running in subshell: $BASH_SUBSHELL" )= |
-| Run static code check           | [[https://www.dennyzhang.com/shellcheck][link: shellcheck]]                                                      |
+| Name                                   | Comment                                                               |
+|----------------------------------------+-----------------------------------------------------------------------|
+| Redirect stdout/stderr                 | =ls /tmp >/dev/null 2>&1=                                             |
+| Deal with filename                     | =basename $f=, =dirname $f=                                           |
+| Use timeout: avoid command hang        | timeout 10 sh -c 'ls -lt'                                             |
+| Restart shell without killing terminal | =exec -l $SHELL=                                                      |
+| Run sub-shell                          | =echo $BASH_SUBSHELL; ( echo "Running in subshell: $BASH_SUBSHELL" )= |
+| Run static code check                  | [[https://www.dennyzhang.com/shellcheck][link: shellcheck]]                                                      |
 
 ** GNU tools
 *** Check file
@@ -47,7 +48,6 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Show matched string with 3 lines before and after   | =grep -C 3 "127.0.0.1" /etc/hosts=                        |
 | For table-like files, show 2nd column               | =awk -F'\t' '{print $2}' /etc/hosts=                      |
 | For table-like files, swap 1st and 2nd columns      | =awk -F'\t' '{print $2,$1}' /etc/hosts=                   |
-| Check process start command in /proc filesystem     | =cat /proc/$pid/cmdline=                                  |
 *** Echo string
 | Name                 | Comment                                                 |
 |----------------------+---------------------------------------------------------|
@@ -55,6 +55,13 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Echo multiple lines  | echo -e "hello,\ndenny"                                 |
 | Echo bold text       | echo -e hello, "\033[1mThis is bold text.\033[0m"       |
 | Echo underlined text | echo -e hello, "\033[4mThis is underlined text.\033[0m" |
+*** Check process via /proc
+| Name                                | Comment                  |
+|-------------------------------------+--------------------------|
+| Check process start command         | =cat /proc/$pid/cmdline= |
+| Check process environment variables | =cat /proc/$pid/environ= |
+| Check process ulimits setting       | =cat /proc/$pid/limits= |
+
 *** Copy files
 | Name            | Comment                                       |
 |-----------------+-----------------------------------------------|
