@@ -1,4 +1,4 @@
-* Shell CheatSheet                                                    :Linux:
+* Shell CheatSheet                                                    :Languages:
 :PROPERTIES:
 :type:     shell
 :export_file_name: cheatsheet-shell-A4.pdf
@@ -32,7 +32,6 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Restart shell without killing terminal | =exec -l $SHELL=                                                      |
 | Run sub-shell                          | =echo $BASH_SUBSHELL; ( echo "Running in subshell: $BASH_SUBSHELL" )= |
 | Run static code check                  | [[https://www.dennyzhang.com/shellcheck][link: shellcheck]]                                                      |
-
 ** GNU tools
 *** Check file
 | Name                                                | Comment                                                   |
@@ -61,7 +60,6 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Check process start command         | =cat /proc/$pid/cmdline= |
 | Check process environment variables | =cat /proc/$pid/environ= |
 | Check process ulimits setting       | =cat /proc/$pid/limits= |
-
 *** Copy files
 | Name            | Comment                                       |
 |-----------------+-----------------------------------------------|
@@ -70,24 +68,24 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Copy for backup | =cp /tmp/hosts{,.bak}=, =ls -lth /tmp/hosts*= |
 ** Shell Basic
 *** cd
-| Name                  | Comment        |
-|-----------------------+----------------|
-| Go to given folder    | =cd /var/log/= |
-| Go to home            | =cd=           |
-| Go to parent folder   | =cd ..=        |
-| Go to previous folder | =cd -=         |
+| Name                     | Comment                                                 |
+|--------------------------+---------------------------------------------------------|
+| Go to given folder       | =cd /var/log/=                                          |
+| Go to folder in subshell | =(cd /var/log/ && ls)= After this, PWD won't be changed |
+| Go to home               | =cd=                                                    |
+| Go to parent folder      | =cd ..=                                                 |
+| Go to previous folder    | =cd -=                                                  |
 *** Numeric
-| Name                   | Comment                                        |
-|------------------------+------------------------------------------------|
-| *                      | =expr 5 \* 4=                                  |
-| +                      | =let z=x+y, z=$x+$y=                           |
-| ==                     | =int1 -eq int2=, =[ $? -eq 0 ] && echo "good"= |
-| >=                     | =int1 -ge =int2=                               |
-| >                      | =int1 -gt =int2=                               |
-| <=                     | =int1 -le =int2=                               |
-| <                      | =int1 -lt =int2=                               |
-| !=                     | =int1 -ne =int2=                               |
-
+| Name | Comment                                        |
+|------+------------------------------------------------|
+| *    | =expr 5 \* 4=                                  |
+| +    | =let z=x+y, z=$x+$y=                           |
+| ==   | =int1 -eq int2=, =[ $? -eq 0 ] && echo "good"= |
+| >=   | =int1 -ge =int2=                               |
+| >    | =int1 -gt =int2=                               |
+| <=   | =int1 -le =int2=                               |
+| <    | =int1 -lt =int2=                               |
+| !=   | =int1 -ne =int2=                               |
 *** xargs
 #+BEGIN_SRC sh
 # Run grep for files filtered by find
@@ -146,8 +144,8 @@ fi
  #+END_HTML
 * org-mode configuration                                           :noexport:
 #+STARTUP: overview customtime noalign logdone showall
-#+DESCRIPTION: 
-#+KEYWORDS: 
+#+DESCRIPTION:
+#+KEYWORDS:
 #+LATEX_HEADER: \usepackage[margin=0.6in]{geometry}
 #+LaTeX_CLASS_OPTIONS: [8pt]
 #+LATEX_HEADER: \usepackage[english]{babel}
@@ -167,8 +165,8 @@ fi
 #+OPTIONS:   TeX:t LaTeX:nil skip:nil d:nil todo:t pri:nil tags:not-in-toc
 #+EXPORT_EXCLUDE_TAGS: exclude noexport
 #+SEQ_TODO: TODO HALF ASSIGN | DONE BYPASS DELEGATE CANCELED DEFERRED
-#+LINK_UP:   
-#+LINK_HOME: 
+#+LINK_UP:
+#+LINK_HOME:
 * #  --8<-------------------------- separator ------------------------>8-- :noexport:
 * [#A] Difficulties in shell/bash                  :noexport:Coding:Personal:
 :PROPERTIES:
@@ -1170,7 +1168,6 @@ shell的分类:
 读取配置文件的顺序:
 /.bashrc-->/etc/bashrc-->/etc/profile.d/*
 #+end_example
-
 ** TODO shell输出多行内容时的重定向
 ** TODO shell hook函数, 在返回时调用一个方法
 ** su命令和su -命令的区别
@@ -1185,7 +1182,6 @@ su命令和su -命令最大的本质区别就是:前者只是切换了root身份
 #+end_example
 ** [ -e /etc/*.conf ] 是不正确的,如果是判断满足某个pattern的文件是否存在,需要用find -name来查找
 ** [#A] bash执行带单引号的命令, $command方式是不行的,需要用eval $command :IMPORTANT:
-
 ** Here document 是 shell 的一个非常常用的功能: << EOF ... EOF
    http://ylinux.org/246
 #+begin_example
@@ -1205,7 +1201,6 @@ $ cat /tmp/t_here.txt
 UID=1000
 
 #+end_example
-
 ** 判断数据类型为int
 #+begin_src sh
 ,-----------
@@ -2217,7 +2212,6 @@ else
   echo "fail"
 fi
 #+END_SRC
-
 ** DONE Changing a linux password via script: echo "root:NEWPASSWD" | chpasswd :noexport:
   CLOSED: [2016-06-01 Wed 13:59]
 http://stackoverflow.com/questions/27837674/changing-a-linux-password-via-script
@@ -2227,7 +2221,6 @@ echo "root:DevOpsChangeMe1" | chpasswd
 ssh -i  /Users/mac/baidu/百度云同步盘/private_data/backup_small/ssh_key/totvslabs/project_ssh_key_id_rsa root@104.131.129.100 "echo root:NEWPASSWD | chpasswd"
 
 echo -e "newpasswd123\nnnewpasswd123" | passwd user
-
 ** DONE bash to check whether ssh server reachable
   CLOSED: [2016-06-10 Fri 10:57]
 function ip_list_ping_reachable() {
@@ -2250,14 +2243,12 @@ function ip_list_ping_reachable() {
         fi
     done
 }
-
 ** DONE bash remove empty lines: sed '/^$/d'
   CLOSED: [2016-06-10 Fri 13:13]
 http://stackoverflow.com/questions/16414410/delete-empty-lines-using-sed
 ** DONE bash get file acl mode: stat -c "%a %n" /etc/hosts
   CLOSED: [2016-06-14 Tue 16:29]
 http://askubuntu.com/questions/152001/how-can-i-get-octal-file-permissions-from-command-line
-
 ** DONE bash break long line to short line
   CLOSED: [2016-06-17 Fri 10:59]
 http://unix.stackexchange.com/questions/82182/having-multi-lines-in-bash-command-substitution
@@ -2304,7 +2295,6 @@ do
    echo "Found odd number"
 done
 #+END_SRC
-
 ** DONE Check if a function exists before executing it in shell
   CLOSED: [2016-01-29 Fri 17:27]
 http://stackoverflow.com/questions/17972087/check-if-a-function-exists-before-executing-it-in-shell
@@ -2314,7 +2304,6 @@ if type foo | grep -i function > /dev/null; then
    # foo is a function
 fi
 #+END_SRC
-
 ** TODO set -o pipefail
 pipefail: the return value of a pipeline is the status of the last
 command to exit with a non-zero status, or zero if no command exited
@@ -2336,7 +2325,6 @@ echo "$jenkins_jobs" | tr -s " "
 jenkins_jobs="BuildMDMRepo ,
 UpdateSandboxMDM,UpdateJenkinsItself,TailLogfile,CollectFiles"
 echo "${jenkins_jobs//[[:space:]]/}"
-
 ** #  --8<-------------------------- separator ------------------------>8--
 ** DONE remove old backup and keep laest 2 backup
   CLOSED: [2016-12-26 Mon 10:45]
@@ -2394,20 +2382,18 @@ Modify: 2016-12-24 00:22:22.999279051 -0500
 Change: 2016-12-24 00:22:22.999279051 -0500
  Birth: -
 #+END_EXAMPLE
-
 ** DONE shell get current file name: basename "$0"
    CLOSED: [2017-05-12 Fri 22:53]
 ** DONE Turning multiple lines into one line with comma separated: sed -e 's/ /,/g'
   CLOSED: [2017-09-08 Fri 17:34]
 https://stackoverflow.com/questions/15758814/turning-multiple-lines-into-one-line-with-comma-separated-perl-sed-awk
-
 ** DONE bash number calculation
   CLOSED: [2017-10-17 Tue 22:17]
 #+BEGIN_EXAMPLE
 #!/usr/bin/env bash
 ##-------------------------------------------------------------------
 ## @copyright 2017 DennyZhang.com
-## Licensed under MIT 
+## Licensed under MIT
 ##   https://www.dennyzhang.com/wp-content/mit_license.txt
 ##
 ## File: test.sh
@@ -2441,10 +2427,8 @@ for((i=0; i<$column_count; i++)); do
     echo ""
 done
 #+END_EXAMPLE
-
 ** DONE shell replace string: get master-index-023ea45 from master-index-023ea45: echo "${var//-index/}"
    CLOSED: [2018-01-29 Mon 16:27]
-
 * Useful shell code snippet                                 :noexport:Coding:
 :PROPERTIES:
 :type:   Language_Linux
@@ -2985,7 +2969,6 @@ function is_service_enabled() {
     return 1
 }
 #+end_src
-
 * #  --8<-------------------------- separator ------------------------>8-- :noexport:
 * echo                                                             :noexport:
 | Question         | Solution                                                |
@@ -3048,7 +3031,7 @@ sys	0m0.000s
 #+end_example
 ** DONE grep a text file which contains some binary data: grep -a(--text):
   CLOSED: [2016-10-08 Sat 11:37]
-man grep 
+man grep
 
    File and Directory Selection
        -a, --text
@@ -3059,13 +3042,12 @@ http://stackoverflow.com/questions/9988379/how-to-grep-a-text-file-which-contain
 root@wilson-sandbox-qa:~# tail -n 200000 /root/test.log | grep  -C 3 password
 tail -n 200000 /root/test.log | grep  -C 3 password
 Binary file (standard input) matches
-
 * ps                                                               :noexport:
-** web page: Linux and Unix ps command tutorial with examples | George Ornbo          
+** web page: Linux and Unix ps command tutorial with examples | George Ornbo
 https://shapeshed.com/unix-ps/
 *** webcontent                                                     :noexport:
 #+begin_example
-Location: https://shapeshed.com/unix-ps/                                                                                       
+Location: https://shapeshed.com/unix-ps/
   * Home
   * Archive
   * Contact
@@ -3081,7 +3063,7 @@ Estimated reading time: 5 minutes
 
 Table of contents
 
-  * 
+  *
       + What is the ps command in UNIX?
       + How to show processes for the current shell
       + How to list all processes
@@ -3139,7 +3121,7 @@ PID TTY          TIME CMD
   1 ?        00:00:01 systemd
   2 ?        00:00:00 kthreadd
   3 ?        00:00:00 ksoftirqd/0
-....  
+....
 
 This option can be combined with the -f and -F options to provide more information on processes.
 The -f option offers full-format listing.
@@ -3153,7 +3135,7 @@ root         3     2  0 19:58 ?        00:00:00 [ksoftirqd/0]
 
 The -F provides extra full format information.
 
-ps -F 
+ps -F
 UID        PID  PPID  C    SZ   RSS PSR STIME TTY          TIME CMD
 root         1     0  0 13250  6460   1 19:58 ?        00:00:01 /sbin/init
 root         2     0  0     0     0   1 19:58 ?        00:00:00 [kthreadd]
@@ -3301,18 +3283,18 @@ Recent Posts
     Tutorial on using ls, a UNIX and Linux command for listing directory contents. Examples of
     listing a directory, showing hidden files, showing long listings, sorting on various items and
     showing recursive listings.
-   
+
   * Linux and Unix tail command tutorial with examples
     Tutorial on using tail, a UNIX and Linux command for outputting the last part of files.
     Examples of outputting the last ten lines of a file, limiting the number of lines, limiting the
     number of bytes, showing multiple files, watching a file for changes and using pipes.
-   
+
   * Linux and Unix fc command tutorial with examples
     Tutorial on using fc, a UNIX and Linux command for editing and re-executing commands previously
     entered into an interactive shell. Examples of editing and re-executing the last command,
     editing and executing a previous command, setting the text editor to be used, listing previous
     commands and executing a command without editing it.
-   
+
 About the author
 
 Picture of George Ornbo
@@ -3325,13 +3307,11 @@ places as shapeshed including Twitter and GitHub.
 ← http://shapeshed.com
 
 #+end_example
-
 ** DONE Get process start time: ps -o lstart= -p 26351
   CLOSED: [2014-11-28 Fri 15:40]
 root@fluig-id-cust-01:/data/fluigidentity-logs# ps -o lstart= -p 26351
 ps -o lstart= -p 26351
 Wed Nov 26 06:18:22 2014
-
 ** DONE linux sort process by memory: ps aux --sort -rss
   CLOSED: [2014-07-12 Sat 11:02]
 root@fluig-id-cdn-02:~# ps aux --sort -rss
@@ -3470,13 +3450,10 @@ root       865  0.0  0.0  14508    20 tty3     Ss+   2013   0:00 /sbin/getty -8 
 root       867  0.0  0.0  14508    20 tty6     Ss+   2013   0:00 /sbin/getty -8 38400 tty6
 root       871  0.0  0.0   4332    16 ?        Ss    2013   0:00 acpid -c /etc/acpi/events -s /var/run/acpid.socket
 root     63850  0.0  0.0  21500     4 ?        S    Apr14   0:00 /sbin/udevd --daemon
-
 ** DONE sort process: ps -e -o 'pid,comm,args,pcpu,rsz,vsz,stime,user,uid' | sort -nrk5
    CLOSED: [2016-01-28 Thu 16:08]
-
 ** DONE [#B] linux get memory landscape quickly: sortmem: ps aux | sort -nk +4 | tail
    CLOSED: [2014-08-21 Thu 15:19]
-
 * xargs                                                            :noexport:
 | Question                          | Solution                                                           | Use case |
 |-----------------------------------+--------------------------------------------------------------------+----------|
@@ -3527,14 +3504,11 @@ awk '{out=""; for(i=3;i<=NF;i++){out=out" "$i}; print out}' /etc/hosts
 awk '{for(i=3;i<=NF;++i) print $i}' /etc/hosts
 ** DONE 乱序排列一个文件: awk 'BEGIN{srand()}{b[rand()NR]=$0}END{for(x in b)print b[x]}' ./data.sql
    CLOSED: [2014-03-22 Sat 17:41]
-
 ** DONE linux shell remove tailing \n: awk 1 ORS='' file
    CLOSED: [2014-12-10 Wed 22:22]
-
 ** DONE bash: extract entire block that starts from "begin" till "end":  awk '/begin/,/end/' text.
   CLOSED: [2015-10-13 Tue 10:29]
 http://askubuntu.com/questions/551338/how-do-i-grep-for-multiple-patterns-on-multiple-lines
-
 ** DONE awk: group entries by fields and do the sum by group
   CLOSED: [2015-06-26 Fri 21:31]
  cat test.txt | grep '^[1-9]' | awk '{a[substr($4,2,17)] += $10;}END{for(x in a)print x" "a[x];}'
@@ -3627,7 +3601,6 @@ http://stackoverflow.com/questions/5410757/delete-lines-in-a-text-file-that-cont
 http://ccm.net/faq/1451-delete-lines-from-a-file-using-sed
 
 sed -i.bak '/pattern to match/d' ./infile
-
 ** DONE sed replace string escape: change delimiter other than /
   CLOSED: [2016-08-25 Thu 22:41]
 http://askubuntu.com/questions/76785/how-to-escape-file-path-in-sed
@@ -3694,7 +3667,7 @@ vim /etc/hosts
 * shell scripts                                                    :noexport:
 # To implement a for loop:
 for file in *;
-do 
+do
     echo $file found;
 done
 
@@ -3740,7 +3713,7 @@ chown --reference=/path/to/ref_file file
 chmod a+x myscript.sh
 
 # Set user to read/write/execute, group/global to read only (myscript.sh), symbolic mode
-chmod u=rwx, go=r myscript.sh 
+chmod u=rwx, go=r myscript.sh
 
 # Remove write from user/group/global (myscript.sh), symbolic mode
 chmod a-w myscript.sh
@@ -3773,11 +3746,11 @@ a - all (all 3 roles above)
 1 - execute only (--x)
 0 - none (---)
 ** rsync
-# To copy files from remote to local, maintaining file properties and sym-links (-a), zipping for faster transfer (-z), verbose (-v).  
+# To copy files from remote to local, maintaining file properties and sym-links (-a), zipping for faster transfer (-z), verbose (-v).
 rsync -avz host:file1 :file1 /dest/
 rsync -avz /source host:/dest
 
-# Copy files using checksum (-c) rather than time to detect if the file has changed. (Useful for validating backups). 
+# Copy files using checksum (-c) rather than time to detect if the file has changed. (Useful for validating backups).
 rsync -avc /source/ /dest/
 
 # Copy contents of /src/foo to destination:
@@ -3790,7 +3763,6 @@ rsync -auv /src/foo/ /dest/foo
 
 # Copy file from local to remote over ssh with non standard port 1234 to destination folder in remoteuser's home directory
 rsync -avz -e "ssh -p1234" /source/file1 remoteuser@X.X.X.X:~/destination/
-
 ** cp
  # Create a copy of a file
  cp ~/Desktop/foo.txt ~/Downloads/foo.txt
@@ -3803,7 +3775,6 @@ rsync -avz -e "ssh -p1234" /source/file1 remoteuser@X.X.X.X:~/destination/
 
  # Create a backup file with date
  cp foo.txt{,."$(date +%Y%m%d-%H%M%S)"}
-
 * #  --8<-------------------------- separator ------------------------>8-- :noexport:
 * how to use pushd                                                 :noexport:
 * cron                                                             :noexport:
