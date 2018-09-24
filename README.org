@@ -16,9 +16,8 @@
 <a href="http://makeapullrequest.com" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"/></a>
 #+END_HTML
 
-- PDF Link: [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/cheatsheet-shell-A4.pdf][cheatsheet-shell-A4.pdf]]
+- PDF Link: [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/cheatsheet-shell-A4.pdf][cheatsheet-shell-A4.pdf]], Category: [[https://cheatsheet.dennyzhang.com/category/languages][languages]]
 - Blog URL: https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
-- Category: [[https://cheatsheet.dennyzhang.com/category/languages][languages]]
 
 File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or star [[https://github.com/DennyZhang/challenges-shell][this repo]].
 
@@ -32,6 +31,15 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Restart shell without killing terminal | =exec -l $SHELL=                                                      |
 | Run sub-shell                          | =echo $BASH_SUBSHELL; ( echo "Running in subshell: $BASH_SUBSHELL" )= |
 | Run static code check                  | [[https://www.dennyzhang.com/shellcheck][link: shellcheck]]                                                      |
+** Shell script
+| Name                                   | Comment                                     |
+|----------------------------------------+---------------------------------------------|
+| Trap exit signal                       | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/trap-exit.sh][code/trap-exit.sh]]                           |
+| Shell retry                            | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/shell-retry.sh][code/shell-retry.sh]]                         |
+| Check if a string contains a substring | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/string-contains.sh][code/string-contains.sh]]                     |
+| Check if a string in a list            | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/string-in-list.sh][code/string-in-list.sh]], [[https://stackoverflow.com/questions/8063228/how-do-i-check-if-a-variable-exists-in-a-list-in-bash][link: stackoverflow]] |
+| Log with timestamp                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/log-with-timestamp.sh][code/log-with-timestamp.sh]]                  |
+| Quit if current user is not root       | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/assert-user-root.sh][code/assert-user-root.sh]]                    |
 ** GNU tools
 *** Check file
 | Name                                                | Comment                                                   |
@@ -47,6 +55,19 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Show matched string with 3 lines before and after   | =grep -C 3 "127.0.0.1" /etc/hosts=                        |
 | For table-like files, show 2nd column               | =awk -F'\t' '{print $2}' /etc/hosts=                      |
 | For table-like files, swap 1st and 2nd columns      | =awk -F'\t' '{print $2,$1}' /etc/hosts=                   |
+*** Copy file
+| Name                                             | Comment                                       |
+|--------------------------------------------------+-----------------------------------------------|
+| Copy one file                                    | =cp /etc/hosts /tmp/hosts=                    |
+| Copy one folder                                  | =cp -r /usr/local/bin/ /tmp/bin/=             |
+| Copy for backup                                  | =cp /tmp/hosts{,.bak}=, =ls -lth /tmp/hosts*= |
+| Create a copy but ask confirmation for overwrite | =cp -i ~/Desktop/foo.txt ~/Documents/foo.txt= |
+| Create a copy for backup with timstamp as suffix | =cp foo.txt{,."$(date +%Y%m%d-%H%M%S)"}=      |
+*** Watch files
+| Name                   | Comment                                                   |
+|------------------------+-----------------------------------------------------------|
+| Show file changes      | =watch -d -n 1 stat /var/log/message=                     |
+| Keep tailing log files | =tail -f /var/log/system.log=, =taif /var/log/system.log= |
 *** Echo string
 | Name                 | Comment                                                 |
 |----------------------+---------------------------------------------------------|
@@ -60,12 +81,6 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Check process start command         | =cat /proc/$pid/cmdline= |
 | Check process environment variables | =cat /proc/$pid/environ= |
 | Check process ulimits setting       | =cat /proc/$pid/limits= |
-*** Copy files
-| Name            | Comment                                       |
-|-----------------+-----------------------------------------------|
-| Copy one file   | =cp /etc/hosts /tmp/hosts=                    |
-| Copy one folder | =cp -r /usr/local/bin/ /tmp/bin/=             |
-| Copy for backup | =cp /tmp/hosts{,.bak}=, =ls -lth /tmp/hosts*= |
 ** Shell Basic
 *** cd
 | Name                     | Comment                                                 |
@@ -104,44 +119,16 @@ cat /etc/passwd | awk -F':' '{print $1}' | xargs -I{} sudo -l -U {} | grep -v "n
 #+BEGIN_SRC sh
 /sbin/ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}'
 #+END_SRC
-
-- Check if a string contains a substring
-#+BEGIN_SRC sh
-#!/bin/bash
-
-S="Pineapple"
-
-if [[ "${S}" == *apple* ]]; then
-    echo "Yes"
-else
-    echo "No"
-fi
-#+END_SRC
-
-- Check if a string in a list
-[[https://stackoverflow.com/questions/8063228/how-do-i-check-if-a-variable-exists-in-a-list-in-bash][stackoverflow link]]
-
-#+BEGIN_SRC sh
-#!/usr/bin/env bash
-IAAS_TYPE="gcp|aws"
-TYPE="gcp"
-
-if [[ "gcp|aws" == *${TYPE}* ]]; then
-    echo "yes"
-else
-    echo "no"
-fi
-#+END_SRC
 ** More Resources
  License: Code is licensed under [[https://www.dennyzhang.com/wp-content/mit_license.txt][MIT License]].
- #+BEGIN_HTML
+#+BEGIN_HTML
  <a href="https://www.dennyzhang.com"><img align="right" width="201" height="268" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/denny_201706.png"></a>
  <a href="https://www.dennyzhang.com"><img align="right" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/dns_small.png"></a>
 
  <a href="https://www.linkedin.com/in/dennyzhang001"><img align="bottom" src="https://www.dennyzhang.com/wp-content/uploads/sns/linkedin.png" alt="linkedin" /></a>
  <a href="https://github.com/DennyZhang"><img align="bottom"src="https://www.dennyzhang.com/wp-content/uploads/sns/github.png" alt="github" /></a>
  <a href="https://www.dennyzhang.com/slack" target="_blank" rel="nofollow"><img align="bottom" src="https://slack.dennyzhang.com/badge.svg" alt="slack"/></a>
- #+END_HTML
+#+END_HTML
 * org-mode configuration                                           :noexport:
 #+STARTUP: overview customtime noalign logdone showall
 #+DESCRIPTION:
@@ -2243,9 +2230,6 @@ function ip_list_ping_reachable() {
         fi
     done
 }
-** DONE bash remove empty lines: sed '/^$/d'
-  CLOSED: [2016-06-10 Fri 13:13]
-http://stackoverflow.com/questions/16414410/delete-empty-lines-using-sed
 ** DONE bash get file acl mode: stat -c "%a %n" /etc/hosts
   CLOSED: [2016-06-14 Tue 16:29]
 http://askubuntu.com/questions/152001/how-can-i-get-octal-file-permissions-from-command-line
@@ -3043,270 +3027,6 @@ root@wilson-sandbox-qa:~# tail -n 200000 /root/test.log | grep  -C 3 password
 tail -n 200000 /root/test.log | grep  -C 3 password
 Binary file (standard input) matches
 * ps                                                               :noexport:
-** web page: Linux and Unix ps command tutorial with examples | George Ornbo
-https://shapeshed.com/unix-ps/
-*** webcontent                                                     :noexport:
-#+begin_example
-Location: https://shapeshed.com/unix-ps/
-  * Home
-  * Archive
-  * Contact
-
-Last updated Monday, Sep 5, 2016
-
-Linux and Unix ps command tutorial with examples
-
-Tutorial on using ps, a UNIX and Linux command for reporting information on running processes.
-Examples of searching by user, group, executable name and killing processes.
-
-Estimated reading time: 5 minutes
-
-Table of contents
-
-  *
-      + What is the ps command in UNIX?
-      + How to show processes for the current shell
-      + How to list all processes
-      + How to list all processes for a user
-      + How to list all processes for a group
-      + How to list all processes by process number
-      + How to list all processes by executable name
-      + How to show a process hierarchy or tree
-      + How to just get the process id
-      + How to search for an kill a process
-      + Further reading
-
-Terminal showing ps man page
-
-What is the ps command in UNIX?
-
-The ps command reports information on current running processes, outputting to standard output. It
-is frequently used to find process identifier numbers. It supports searching for processes by user,
-group, process id or executable name. Related commands include pgrep that supports searching for
-processes and pkill that can kill processes based on a search.
-
-How to show processes for the current shell
-
-To show the processes for the current running shell run ps. If nothing else is running this will
-return information on the shell process being run and the ps command that is being run.
-
-ps
-PID  TTY          TIME CMD
-5763 pts/3    00:00:00 zsh
-8534 pts/3    00:00:00 ps
-
-The result contains four columns of information.
-
-  * PID - the number of the process
-  * TTY - the name of the console that the user is logged into
-  * TIME- the amount of CPU in minutes and seconds that the process has been running
-  * CMD - the name of the command that launched the process
-
-To demonstrate that other processes will show by just running ps a task can be put into the
-background before running the command.
-
-sleep 10 &
-ps
-PID   TTY          TIME CMD
-5763  pts/3    00:00:00 zsh
-10254 pts/3    00:00:00 sleep
-10258 pts/3    00:00:00 ps
-
-How to list all processes
-
-To list all processes on a system use the -e option.
-
-ps -e
-PID TTY          TIME CMD
-  1 ?        00:00:01 systemd
-  2 ?        00:00:00 kthreadd
-  3 ?        00:00:00 ksoftirqd/0
-....
-
-This option can be combined with the -f and -F options to provide more information on processes.
-The -f option offers full-format listing.
-
-ps -f
-UID        PID  PPID  C STIME TTY          TIME CMD
-root         1     0  0 19:58 ?        00:00:01 /sbin/init
-root         2     0  0 19:58 ?        00:00:00 [kthreadd]
-root         3     2  0 19:58 ?        00:00:00 [ksoftirqd/0]
-...
-
-The -F provides extra full format information.
-
-ps -F
-UID        PID  PPID  C    SZ   RSS PSR STIME TTY          TIME CMD
-root         1     0  0 13250  6460   1 19:58 ?        00:00:01 /sbin/init
-root         2     0  0     0     0   1 19:58 ?        00:00:00 [kthreadd]
-root         3     2  0     0     0   0 19:58 ?        00:00:00 [ksoftirqd/0]
-...
-
-Another commonly used syntax to achieve seeing every process on the system using BSD syntax is ps
-aux.
-
-ps aux
-USER       PID % CPU % MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root         1  0.0  0.0  53120  6368 ?        Ss   Sep19   0:01 /sbin/init
-root         2  0.0  0.0      0     0 ?        S    Sep19   0:00 [kthreadd]
-...
-
-How to list all processes for a user
-
-To list all processes by user use the -u option. This supports the user ID or name.
-
-ps -u george
- PID TTY          TIME CMD
-1053 ?        00:00:00 systemd
-1062 ?        00:00:00 (sd-pam)
-1074 tty1     00:00:00 zsh
-...
-
-How to list all processes for a group
-
-To list all processes by group use the -g option. This supports the group ID or name.
-
-ps -g users
- PID TTY          TIME CMD
- 997 ?        00:00:00 login
-1053 ?        00:00:00 systemd
-1062 ?        00:00:00 (sd-pam)
-...
-
-How to list all processes by process number
-
-To list all processes by process number use the -p option. This selects the processes whose numbers
-match the list provided to the -p option.
-
-ps -p 12608 3995
-  PID TTY      STAT   TIME COMMAND
- 3995 ?        Ss     0:00 st
-12608 pts/2    S+     0:04 vim content/post/unix-ps.md
-
-How to list all processes by executable name
-
-To list all processes by executable name use the -C option. This selects the processes whose
-executables match the list of executables given to the -C option.
-
-ps -C tmux
- PID TTY          TIME CMD
-5733 pts/0    00:00:00 tmux
-5735 ?        00:00:06 tmux
-
-How to show a process hierarchy or tree
-
-To show a process hierarchy or tree use the -H option. This outputs a process tree.
-
-ps -eH
-  PID TTY          TIME CMD
- 5735 ?        00:00:07   tmux
- 5736 pts/2    00:00:00     zsh
-12608 pts/2    00:00:08       vim
- 5763 pts/3    00:00:00     zsh
-17185 pts/3    00:00:00       ps
-
-This may also be displayed in ASCII format by using the --forest option.
-
-ps -e --forest
- PID TTY          TIME CMD
- 5735 ?        00:00:07 tmux
- 5736 pts/2    00:00:00  \_ zsh
-12608 pts/2    00:00:08  |   \_ vim
- 5763 pts/3    00:00:00  \_ zsh
-16952 pts/3    00:00:00      \_ ps
-
-How to just get the process id
-
-A common task is to find the process id of a running process. Like many things in UNIX this can be
-achieved in a number of ways. In the examples above the ps command can look for processes by user,
-group or executable name. The ps can be also be piped to grep to search for arbitrary items.
-
-ps -ef | grep vim
-george   12608  5736  0 21:00 pts/2    00:00:11 vim content/post/unix-ps.md
-george   18324  5763  0 21:32 pts/3    00:00:00 grep vim
-
-On many systems the pgrep command also exists that supports a number of ways to search for a
-process id. This is very useful if you are just interested in process id rather than other
-information. To search for all processes for an executable the pgrep command can be used.
-
-pgrep tmux
-5733
-5735
-
-To search by user pass the -u option.
-
-pgrep -u george
-1053
-1062
-1074
-...
-
-To search by group pass the -G option.
-
-pgrep -G users
-997
-1053
-1062
-...
-
-How to search for an kill a process
-
-To search for an kill a process the ps command can first be used to find the process id before
-using the kill command to terminate the process. In the following example ps is piped to grep and
-awk.
-
-sleep 100 &
-[1] 21664
-kill $(ps -e | grep 'sleep' | awk '{print $1}')
-[1]  + terminated  sleep 100
-
-On some systems the pkill command is also available to accomplish this.
-
-sleep 100 &
-pkill sleep
-[1]  + terminated  sleep 100
-
-Further reading
-
-  * ps man page
-  * The ps command
-  * 10 basic examples of Linux ps command
-
-Tags
-
-  * UNIX
-  * Linux
-
-Recent Posts
-
-  * Linux and Unix ls command tutorial with examples
-    Tutorial on using ls, a UNIX and Linux command for listing directory contents. Examples of
-    listing a directory, showing hidden files, showing long listings, sorting on various items and
-    showing recursive listings.
-
-  * Linux and Unix tail command tutorial with examples
-    Tutorial on using tail, a UNIX and Linux command for outputting the last part of files.
-    Examples of outputting the last ten lines of a file, limiting the number of lines, limiting the
-    number of bytes, showing multiple files, watching a file for changes and using pipes.
-
-  * Linux and Unix fc command tutorial with examples
-    Tutorial on using fc, a UNIX and Linux command for editing and re-executing commands previously
-    entered into an interactive shell. Examples of editing and re-executing the last command,
-    editing and executing a previous command, setting the text editor to be used, listing previous
-    commands and executing a command without editing it.
-
-About the author
-
-Picture of George Ornbo
-
-George Ornbo is co-founder and Managing Director of http://pebblecode.com.
-
-He is the author of Sams Teach Yourself Node.js in 24 Hours. He can be found in most of the usual
-places as shapeshed including Twitter and GitHub.
-
-← http://shapeshed.com
-
-#+end_example
 ** DONE Get process start time: ps -o lstart= -p 26351
   CLOSED: [2014-11-28 Fri 15:40]
 root@fluig-id-cust-01:/data/fluigidentity-logs# ps -o lstart= -p 26351
@@ -3314,142 +3034,6 @@ ps -o lstart= -p 26351
 Wed Nov 26 06:18:22 2014
 ** DONE linux sort process by memory: ps aux --sort -rss
   CLOSED: [2014-07-12 Sat 11:02]
-root@fluig-id-cdn-02:~# ps aux --sort -rss
-USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root     25599  0.3 10.1 3370268 410612 ?      Ssl  Apr14 417:40 /usr/bin/java -jar /usr/share/jenkins/jenkins.war --webroot=
-root     11612  0.7  3.9 3331600 158532 ?      Sl   13:05   0:52 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-nexus    58383  0.5  3.5 3389740 144252 ?      Sl   Feb09 1177:34 java -Djava.net.preferIPv4Stack=true -Dcom.sun.jndi.ldap.co
-root     11889  0.7  3.4 3333656 140252 ?      Sl   13:10   0:51 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     15937  0.8  3.3 3062260 134052 ?      Sl   14:15   0:28 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     16390  0.9  3.2 2929132 132868 ?      Sl   14:25   0:24 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     12545  0.6  3.1 3330572 127676 ?      Sl   13:25   0:42 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     13014  0.7  3.1 3333656 126944 ?      Sl   13:30   0:44 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     12339  0.6  3.1 3331600 126608 ?      Sl   13:20   0:42 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     17264  1.0  3.0 2929132 121268 ?      Sl   14:40   0:19 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     17705  1.2  2.9 2929132 119496 ?      Sl   14:50   0:15 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     17473  1.1  2.9 2995696 118172 ?      Sl   14:45   0:16 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     12089  0.8  2.8 3330572 116780 ?      Sl   13:15   0:55 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     17923  1.5  2.7 2995696 111152 ?      Sl   14:55   0:13 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     13723  0.7  2.7 3062260 109888 ?      Sl   13:45   0:37 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     15068  0.7  2.6 2929132 108616 ?      Sl   14:00   0:33 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     11310  0.7  2.6 3333656 107176 ?      Sl   13:00   1:01 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     17022  0.9  2.6 2929132 106328 ?      Sl   14:35   0:19 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     14066  0.6  2.6 2995696 106192 ?      Sl   13:50   0:30 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     13525  0.7  2.6 3330572 105688 ?      Sl   13:40   0:40 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     18307  2.8  2.6 2929132 105364 ?      Sl   15:00   0:16 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     16762  0.9  2.6 2929132 105336 ?      Sl   14:30   0:21 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     15730  0.7  2.6 2929132 105100 ?      Sl   14:10   0:26 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     16180  0.8  2.5 3062260 104524 ?      Sl   14:20   0:25 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     18591  4.9  2.5 2929132 104480 ?      Sl   15:05   0:13 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     14564  0.7  2.5 3128824 101512 ?      Sl   13:55   0:33 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     13262  0.7  2.3 3330572 96968 ?       Sl   13:35   0:40 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     15476  0.7  2.3 2929132 94704 ?       Sl   14:05   0:29 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-root     10881  0.7  2.3 3334684 94336 ?       Sl   12:55   1:03 java -jar ../dist/VABuildScript.jar zf0y84vo717g8hjx barbara
-syslog   56615  0.0  0.1 250284  7168 ?        Sl   Apr14  15:35 rsyslogd -c5
-root     53233  0.0  0.1 122068  6100 ?        S    Jul10   0:29 python webserver.py
-root     18656  0.0  0.0  73472  3688 ?        Ss   15:06   0:00 sshd: root@pts/2
-root     18945  0.0  0.0  73472  3688 ?        Ss   15:07   0:00 sshd: root@pts/3
-root     19083  0.0  0.0  20876  3368 pts/3    Ss   15:07   0:00 -bash
-root     18873  0.3  0.0  20876  3364 pts/2    Ss+  15:06   0:00 -bash
-root     29896  0.0  0.0  67872  1756 ?        Ss   May31   9:40 /usr/sbin/apache2 -k start
-postfix  17738  0.0  0.0  27216  1664 ?        S    14:51   0:00 pickup -l -t fifo -u -c
-www-data 61614  0.0  0.0 1995452 1528 ?        Sl   Jul06   0:06 /usr/sbin/apache2 -k start
-www-data 61648  0.0  0.0 1995452 1468 ?        Sl   Jul06   0:05 /usr/sbin/apache2 -k start
-root     15694  0.0  0.0  11092  1456 ?        S    14:10   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     15917  0.0  0.0  11092  1456 ?        S    14:15   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     16143  0.0  0.0  11092  1456 ?        S    14:20   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17453  0.0  0.0  11092  1456 ?        S    14:45   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17903  0.0  0.0  11092  1456 ?        S    14:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     18264  0.0  0.0  11092  1456 ?        S    15:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root      1041  0.1  0.0  93784  1452 ?        S     2013 500:30 /usr/sbin/vmtoolsd
-root     15456  0.0  0.0  11092  1452 ?        S    14:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     16370  0.0  0.0  11092  1452 ?        S    14:25   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     16736  0.0  0.0  11092  1452 ?        S    14:30   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17002  0.0  0.0  11092  1452 ?        S    14:35   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17228  0.0  0.0  11092  1452 ?        S    14:40   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     18571  0.0  0.0  11092  1452 ?        S    15:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17669  0.0  0.0  11092  1448 ?        S    14:50   0:00 /bin/bash /usr/bin/vagetcompany.sh
-snmp     46702  0.0  0.0  48516  1448 ?        S     2013  99:52 /usr/sbin/snmpd -Lsd -Lf /dev/null -u snmp -g snmp -I -smux
-root     14988  0.0  0.0  11092  1424 ?        S    14:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     14544  0.0  0.0  11092  1420 ?        S    13:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     12302  0.0  0.0  11092  1404 ?        S    13:20   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     14029  0.0  0.0  11092  1404 ?        S    13:50   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     11270  0.0  0.0  11092  1400 ?        S    13:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     11592  0.0  0.0  11092  1400 ?        S    13:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     12524  0.0  0.0  11092  1400 ?        S    13:25   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     13488  0.0  0.0  11092  1400 ?        S    13:40   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     13703  0.0  0.0  11092  1400 ?        S    13:45   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     19230  0.0  0.0  17036  1256 pts/3    R+   15:09   0:00 ps aux --sort -rss
-root         1  0.0  0.0  24416  1220 ?        Ss    2013   4:11 /sbin/init
-root     12069  0.0  0.0  11092  1204 ?        S    13:15   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     10861  0.0  0.0  11092  1172 ?        S    12:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     11852  0.0  0.0  11092  1172 ?        S    13:10   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     12968  0.0  0.0  11092  1172 ?        S    13:30   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     13242  0.0  0.0  11092  1172 ?        S    13:35   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     51570  0.0  0.0 121576  1164 ?        Sl   Apr14   5:29 /usr/lib/accountsservice/accounts-daemon
-postfix  48860  0.0  0.0  27380  1160 ?        S    Jun17   1:35 qmgr -l -t fifo -u
-root     45493  0.0  0.0  11080  1128 ?        S    Jun18   0:00 /bin/bash /usr/bin/vacheckclient.sh
-root     48856  0.0  0.0  25152  1120 ?        Ss   Jun17   0:20 /usr/lib/postfix/master
-root     56735  0.0  0.0  50072  1104 ?        Ss   Apr14   0:40 /usr/sbin/sshd -D
-root     35202  0.0  0.0  83472  1068 ?        S    Apr30   1:44 /usr/openv/netbackup/bin/bpcd -standalone
-root     35197  0.0  0.0  66604   968 ?        S    Apr30   1:57 /usr/openv/netbackup/bin/vnetd -standalone
-root     53232  0.0  0.0  37708   920 ?        S    Jul10   0:00 sudo python webserver.py
-www-data 61613  0.0  0.0  67880   880 ?        S    Jul06   0:00 /usr/sbin/apache2 -k start
-root     15032  0.0  0.0  11092   844 ?        S    14:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     15706  0.0  0.0  11092   844 ?        S    14:10   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     15923  0.0  0.0  11092   844 ?        S    14:15   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     16156  0.0  0.0  11092   844 ?        S    14:20   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17459  0.0  0.0  11092   844 ?        S    14:45   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17909  0.0  0.0  11092   844 ?        S    14:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     18281  0.0  0.0  11092   844 ?        S    15:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     14550  0.0  0.0  11092   840 ?        S    13:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     15462  0.0  0.0  11092   840 ?        S    14:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     16376  0.0  0.0  11092   840 ?        S    14:25   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17008  0.0  0.0  11092   840 ?        S    14:35   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     12315  0.0  0.0  11092   836 ?        S    13:20   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     14042  0.0  0.0  11092   836 ?        S    13:50   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     16748  0.0  0.0  11092   836 ?        S    14:30   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17240  0.0  0.0  11092   836 ?        S    14:40   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     17678  0.0  0.0  11092   836 ?        S    14:50   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     18577  0.0  0.0  11092   836 ?        S    15:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     11287  0.0  0.0  11092   832 ?        S    13:00   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     11598  0.0  0.0  11092   832 ?        S    13:05   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     12531  0.0  0.0  11092   832 ?        S    13:25   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     13500  0.0  0.0  11092   832 ?        S    13:40   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     13709  0.0  0.0  11092   832 ?        S    13:45   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     55945  0.0  0.0  28404   800 ?        Ss    2013   3:06 /usr/sbin/rpc.mountd --manage-gids
-root     28255  0.0  0.0  50056   768 ?        S     2013   0:32 /opt/VRTSpbx/bin/pbx_exchange
-root     45524  0.0  0.0 105452   708 ?        Sl   Jun18   0:00 /opt/chef/embedded/bin/ruby /usr/bin/knife node show zf0y84v
-root     12075  0.0  0.0  11092   700 ?        S    13:15   0:00 /bin/bash /usr/bin/vagetcompany.sh
-nagios   42080  0.0  0.0  25472   692 ?        Ss   Jun01  14:09 /usr/sbin/nrpe -c /etc/nagios/nrpe.cfg -d
-root     45496  0.0  0.0  11080   636 ?        S    Jun18   0:00 /bin/bash /usr/bin/vacheckclient.sh
-root     57249  0.0  0.0  21504   624 ?        Ss   Apr14   0:00 /sbin/udevd --daemon
-root     10867  0.0  0.0  11092   600 ?        S    12:55   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     11865  0.0  0.0  11092   600 ?        S    13:10   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     12980  0.0  0.0  11092   600 ?        S    13:30   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     13248  0.0  0.0  11092   600 ?        S    13:35   0:00 /bin/bash /usr/bin/vagetcompany.sh
-root     46541  0.0  0.0  19156   488 ?        Ss    2013   5:22 cron
-whoopsie   959  0.0  0.0 187664   448 ?        Ssl   2013   0:28 whoopsie
-997      57066  0.0  0.0   7496   440 ?        S    Apr14   6:31 /opt/couchbase/lib/erlang/erts-5.8.5/bin/epmd -daemon
-root     53231  0.0  0.0  11088   428 ?        S    Jul10   0:00 /bin/bash -e ./start_service.sh
-102        458  0.0  0.0  23952   408 ?        Ss    2013   0:04 dbus-daemon --system --fork --activation=upstart
-nexus    58381  0.1  0.0  17868   408 ?        Sl   Feb09 279:16 /usr/local/nexus/bin/jsw/linux-x86-64/wrapper /usr/local/nex
-root       892  0.0  0.0  15984   348 ?        Ss    2013  81:17 /usr/sbin/irqbalance
-root     63849  0.0  0.0  21500   320 ?        S    Apr14   0:00 /sbin/udevd --daemon
-root     57247  0.0  0.0  17276   220 ?        S    Apr14   0:00 upstart-udev-bridge --daemon
-root     34271  0.0  0.0  14548   184 tty4     Ss+  Feb12   0:00 /sbin/getty -8 38400 tty4
-root       761  0.0  0.0  15192   176 ?        S     2013   0:00 upstart-socket-bridge --daemon
-statd    55872  0.0  0.0  21548   172 ?        Ss    2013   0:00 rpc.statd -L
-root     33927  0.0  0.0  54496   152 tty1     Ss   Feb12   0:00 /bin/login --
-root     55868  0.0  0.0  19240   136 ?        Ss    2013   1:17 rpcbind -w
-daemon   46677  0.0  0.0  16956   100 ?        Ss    2013   0:04 atd
-root     47581  0.0  0.0  29804    40 ?        Ss    2013   0:16 rpc.idmapd
-root       852  0.0  0.0  14508    20 tty5     Ss+   2013   0:00 /sbin/getty -8 38400 tty5
-root       863  0.0  0.0  14508    20 tty2     Ss+   2013   0:00 /sbin/getty -8 38400 tty2
-root       865  0.0  0.0  14508    20 tty3     Ss+   2013   0:00 /sbin/getty -8 38400 tty3
-root       867  0.0  0.0  14508    20 tty6     Ss+   2013   0:00 /sbin/getty -8 38400 tty6
-root       871  0.0  0.0   4332    16 ?        Ss    2013   0:00 acpid -c /etc/acpi/events -s /var/run/acpid.socket
-root     63850  0.0  0.0  21500     4 ?        S    Apr14   0:00 /sbin/udevd --daemon
 ** DONE sort process: ps -e -o 'pid,comm,args,pcpu,rsz,vsz,stime,user,uid' | sort -nrk5
    CLOSED: [2016-01-28 Thu 16:08]
 ** DONE [#B] linux get memory landscape quickly: sortmem: ps aux | sort -nk +4 | tail
@@ -3459,8 +3043,6 @@ root     63850  0.0  0.0  21500     4 ?        S    Apr14   0:00 /sbin/udevd --d
 |-----------------------------------+--------------------------------------------------------------------+----------|
 | 对满足条件的文件, 进行按内容查找 | find /etc/yum.repos.d/ -name "*.repo" -type f ｜ xargs grep "http" |          |
 | 对满足条件的文件, 进行匹配重命名  | find -iname "*.pdf" ｜ xargs -I '{}' mv '{}.tmp' '{}.tmp2'   |          |
-
-#
 * awk                                                              :noexport:
 - awk syntax: awk 'pattern{action}' file
 | Question                                                            | Solution                                                          | Use case |
@@ -3512,139 +3094,7 @@ http://askubuntu.com/questions/551338/how-do-i-grep-for-multiple-patterns-on-mul
 ** DONE awk: group entries by fields and do the sum by group
   CLOSED: [2015-06-26 Fri 21:31]
  cat test.txt | grep '^[1-9]' | awk '{a[substr($4,2,17)] += $10;}END{for(x in a)print x" "a[x];}'
-* [#A] sed                                                         :noexport:
-| Question                                                            | Solution                                                                                                         |
-|---------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------|
-| 查看某个文件的第5到第8行                                            | sed -n 5,8p /etc/hosts                                                                                           |
-| 删除某个文件指定的几行                                              | sed -i 2,3d /etc/hosts                                                                                           |
-| 修改某个cfg文件的键值对                                             | sudo sed -i 's/GSSAPIAuthentication no/GSSAPIAuthentication yes/' /etc/ssh/sshd_config                           |
-| 查找/etc/hosts中, 以"# The"开头的内容, 并将该行及之后的内容打印出来 | export find_line=$(grep -n '# The' /etc/hosts ｜ awk -F: '{print $1}') ｜ sed -n "$find_line, 10000p" /etc/hosts |
-| 在行开头插入文本                                                    | sed -i 's/^/> /' 1.txt                                                                                           |
-| 在行尾插入文本                                                      | sed 's/$/end/' -i 1.txt                                                                                          |
-| 删除一个区域                                                        | sed -i '/BEGIN QUOTE/,/END QUOTE/d' 1.txt                                                                        |
-| sed中使用变量                                                       | item="ab"; command=`echo "ab cd" ｜ sed 's/'$item'//g'`; echo $command                                           |
-** useful link
- http://www.grymoire.com/Unix/Sed.html\\
- Sed - An Introduction and Tutorial
-http://www.grymoire.com/Unix/Sed.html#uh-39\\
-Sed - An Introduction and Tutorial
-http://www.cppblog.com/prayer/archive/2009/09/03/95269.html\\
-linux sed批量替换字符串
-http://blog.chinaunix.net/u1/53616/showart_576565.html\\
-sed基础知识
-http://blog.chinaunix.net/u2/75321/showart_1164426.html\\
-unix的sed 用法介绍
-http://blog.chinaunix.net/u1/53616/showart_576565.html\\
-sed基础知识
-** TODO sed has duplicate line
-out=$(cat << __textarea_eof
-<pre>
-mauiverify started at 2010-02-25 20:15:23
-Verify mauis correctness...
-Please check /var/log/mauiverify.log for detail output.
-The console output of each entry is composed of result, test case and core check rule.
-Test category:VerifyLog
- || FAILED ||verify upgrade log ||" grep -ni 'ERROR' /var/log/maui/upgrade.log | wc -l "||
- || PASSED ||verify raa log ||" grep -ni 'warning: conflicts' /var/log/raa/raa-service.log | w..."||
-</pre>
-__textarea_eof
-)
-echo "$out" | sed -e "s/FAILED/~FAILED~/p"
-** TODO 在第N行之后添加一行
-将maui系统中的所有结点的/etc/init.d/capd文件, 加一行内容
-/etc/init.d/capd
- start)
-+ sqlite3 /var/cap/db/captaskmgmt.db "UPDATE tasks SET ecode = 0 WgHERE ecode IS NULL"
- start
-** TODO sample1: sed -ne "s/^#//" -ne "/<Version=1.2.1>/,/<Version=1.2.1>/p" tmp
-** TODO sample2: sed -ne "s/^#//" -ne "/<Version=1.2.1>/,/<Version=1.2.1>/p" tmp | sed -ne "/<Stage=PostUpgradeStart>/,/<Stage=PostUpgradeEnd>/p" | grep -v "<Stage=PostUpgradeStart>" | grep -v "<Stage=PostUpgradeEnd>"
-** DONE How to use sed to replace only the first occurrence in a file?
-   CLOSED: [2017-10-22 Sun 21:45]
- https://stackoverflow.com/questions/148451/how-to-use-sed-to-replace-only-the-first-occurrence-in-a-file
- 0,/Apple/{s/Apple/Banana/}
-
- sed -i "0,/discovery.zen.ping.unicast.hosts.*/s//discovery.zen.ping.unicast.hosts: new_node_list/" "mdm.yml"
-
- diff mdm.ymlbak mdm.yml
-** DONE sed delete by line number: sed -i 11d /root/.ssh/known_hosts
-   CLOSED: [2014-01-22 Wed 11:46]
-** DONE Understatnd sed command: sed -e '89 s/false/true/g' ${f} > ${f}.0
-  CLOSED: [2014-08-29 Fri 16:13]
-https://github.com/TOTVS/devop/blob/master/jenkins_conf/fi-build-all.sh
-http://unix.stackexchange.com/questions/70878/replacing-string-based-on-line-number
-
-awk 'FNR==34 { sub("AAA", "BBB") }'
-
-sed '34s/AAA/BBB/'
-** DONE mac sed in place change: sed -i "" 's/THESTRING/THEGRANDSTRING' /tmp/jestinkt.txt
-  CLOSED: [2014-12-05 Fri 10:03]
-http://stackoverflow.com/questions/9744300/sed-command-not-working-in-mac
-#+BEGIN_EXAMPLE
-The OSX version of sed is not the same as those found in most Linux systems.
-
-It extends the -i option to give you the opportunity save a file with a different extension, but requires input for that extension.
-
-If you just want to overwrite the file in place, you need to use sed -i "" ...sedCmd.... fileName to rename your file in-place.
-
-Per @JamesMcMahon 's comment, see here for the full doc for OSX/BSD sed.
-
-I hope this helps.
-#+END_EXAMPLE
-
-sed -i.bak  -e 's/File/Wenjian/g' test.sh
-  CLOSED: [2015-11-01 Sun 00:56]
-http://unix.stackexchange.com/questions/92895/how-to-achieve-portability-with-sed-i-in-place-editing
-http://blog.remibergsma.com/2012/09/18/sed-inline-editing-different-on-mac-osx/
-** DONE linux remove entries match certain pattern: sed -i.bak '/pattern to match/d' ./infile
-  CLOSED: [2016-12-21 Wed 19:04]
-http://stackoverflow.com/questions/5410757/delete-lines-in-a-text-file-that-containing-a-specific-string
-http://ccm.net/faq/1451-delete-lines-from-a-file-using-sed
-
-sed -i.bak '/pattern to match/d' ./infile
-** DONE sed replace string escape: change delimiter other than /
-  CLOSED: [2016-08-25 Thu 22:41]
-http://askubuntu.com/questions/76785/how-to-escape-file-path-in-sed
-
-sed 's|<passwordHash>.*</passwordHash>|<passwordHash>#jbcrypt:$2a$10$rWfJt3QmA.EVTHxf4N51XuPf/6RDusRUwxvvzpMx3gVfWtFcklRue</passwordHash>|g' test.txt
-
-#jbcrypt:$2a$10$Ic2p9aYNJnS2Vf9vUIWHfuMHG3O6dgCIAQ90.8GRxdwumi93LAg/W -->
-#jbcrypt:$2a$10$rWfJt3QmA.EVTHxf4N51XuPf/6RDusRUwxvvzpMx3gVfWtFcklRue
-
-a="#jbcrypt:$2a$10$rWfJt3QmA.EVTHxf4N51XuPf/6RDusRUwxvvzpMx3gVfWtFcklRue"
-echo "$a" | tr / \\\\/
-
-    <hudson.security.HudsonPrivateSecurityRealm_-Details>
-      <passwordHash>#jbcrypt:$2a$10$Ic2p9aYNJnS2Vf9vUIWHfuMHG3O6dgCIAQ90.8GRxdwumi93LAg/W</passwordHash>
-    </hudson.security.HudsonPrivateSecurityRealm_-Details>
-** DONE sed use variable: sed "s/mytext/$var/"
-  CLOSED: [2014-07-31 Thu 13:54]
-http://www.unix.com/shell-programming-and-scripting/14085-how-can-i-use-variable-sed.html
-
-For starters, you can switch to double quotes:
-
-sed "s/mytext/$var/"
-
-Sometimes that does not work. It would depend on the exact value of mytext. So another solution is to turn the single quoted string into two single quoted strings:
-
-sed 's/mytext/'$var'/'
-
-In this case, the 2nd single quoted string is '/'. Just using a backslash would work to that and it saves a character:
-
-sed 's/mytext/'$var\/
-
-There is actually no reason to quote a slash so this should also work with most shells:
-
-sed 's/mytext/'$var/
-
-And there may be no reason to quote anything at all, but again, the actual vakue of mytext determines this. So this may work:
-
-sed s/mytext/$var/
-
-Opps...you only wanted a solution, so I'll quit now..
 * sort                                                             :noexport:
-** DONE sort by integer: n for numeric:  ps -e -o %cpu | sed '1d' | sort -nr
-   CLOSED: [2017-10-18 Wed 08:36]
- https://stackoverflow.com/questions/16129403/sorting-by-integer-value
 ** DONE sort by second column: sort -k 2 file.txt
    CLOSED: [2017-10-17 Tue 22:39]
 https://stackoverflow.com/questions/4262650/linux-shell-sort-file-according-to-the-second-column
@@ -3661,8 +3111,6 @@ cat> /etc/hostname<<EOF
 ubuntu2.dennyzhang.com
 EOF
 vim /etc/hosts
-** watch -d -n 1 stat /var/log/message
-查看命令输出的变化, 并高亮提醒变化部分
 * role model: https://github.com/alexanderepstein/Bash-Snippets    :noexport:
 * shell scripts                                                    :noexport:
 # To implement a for loop:
@@ -3692,90 +3140,6 @@ echo ${PIPESTATUS[0]}  # replace 0 with N
 
 # Lock file:
 ( set -o noclobber; echo > my.lock ) || echo 'Failed to create lock file'
-* improve command                                                  :noexport:
-| Long option for command line    |                                 |
-| Trap exit signal                | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]] |
-| shell retry                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/tree/master/cheatsheet-shell-A4][challenges-leetcode-interesting]] |
-** chown
-# Change file owner
-chown user file
-
-# Change file owner and group
-chown user:group file
-
-# Change owner recursively
-chown -R user directory
-
-# Change ownership to match another file
-chown --reference=/path/to/ref_file file
-** chmod
-# Add execute for all (myscript.sh)
-chmod a+x myscript.sh
-
-# Set user to read/write/execute, group/global to read only (myscript.sh), symbolic mode
-chmod u=rwx, go=r myscript.sh
-
-# Remove write from user/group/global (myscript.sh), symbolic mode
-chmod a-w myscript.sh
-
-# Remove read/write/execute from user/group/global (myscript.sh), symbolic mode
-chmod = myscript.sh
-
-# Set user to read/write and group/global read (myscript.sh), octal notation
-chmod 644 myscript.sh
-
-# Set user to read/write/execute and group/global read/execute (myscript.sh), octal notation
-chmod 755 myscript.sh
-
-# Set user/group/global to read/write (myscript.sh), octal notation
-chmod 666 myscript.sh
-
-# Roles
-u - user (owner of the file)
-g - group (members of file's group)
-o - global (all users who are not owner and not part of group)
-a - all (all 3 roles above)
-
-# Numeric representations
-7 - full (rwx)
-6 - read and write (rw-)
-5 - read and execute (r-x)
-4 - read only (r--)
-3 - write and execute (-wx)
-2 - write only (-w-)
-1 - execute only (--x)
-0 - none (---)
-** rsync
-# To copy files from remote to local, maintaining file properties and sym-links (-a), zipping for faster transfer (-z), verbose (-v).
-rsync -avz host:file1 :file1 /dest/
-rsync -avz /source host:/dest
-
-# Copy files using checksum (-c) rather than time to detect if the file has changed. (Useful for validating backups).
-rsync -avc /source/ /dest/
-
-# Copy contents of /src/foo to destination:
-
-# This command will create /dest/foo if it does not already exist
-rsync -auv /src/foo /dest
-
-# Explicitly copy /src/foo to /dest/foo
-rsync -auv /src/foo/ /dest/foo
-
-# Copy file from local to remote over ssh with non standard port 1234 to destination folder in remoteuser's home directory
-rsync -avz -e "ssh -p1234" /source/file1 remoteuser@X.X.X.X:~/destination/
-** cp
- # Create a copy of a file
- cp ~/Desktop/foo.txt ~/Downloads/foo.txt
-
- # Create a copy of a directory
- cp -r ~/Desktop/cruise_pics/ ~/Pictures/
-
- # Create a copy but ask to overwrite if the destination file already exists
- cp -i ~/Desktop/foo.txt ~/Documents/foo.txt
-
- # Create a backup file with date
- cp foo.txt{,."$(date +%Y%m%d-%H%M%S)"}
-* #  --8<-------------------------- separator ------------------------>8-- :noexport:
 * how to use pushd                                                 :noexport:
 * cron                                                             :noexport:
 ** DONE manually start cron: cron
@@ -3802,11 +3166,6 @@ These are simply directories that contain executables that are executed hourly, 
 
 On top of that, you can have at jobs (check /var/spool/at/*), anacron (/etc/anacrontab and /var/spool/anacron/*) and probably others I'm forgetting.
 #+END_EXAMPLE
-** DONE [#A] Learn: For crontab job, redirect stderr to logfile
-  CLOSED: [2014-12-09 Tue 20:55]
-root@denny-chef-ubuntu-13:/# bash -e /usr/local/bin/fluig_backup_file.sh /cloudpass/backend/build/bin/CloudpassKeystore >> /var/log/backup_cloudpasskeystore.log 2>&1
-root@denny-chef-ubuntu-13:/# tail  /var/log/backup_cloudpasskeystore.log
-bash: /usr/local/bin/fluig_backup_file.sh: No such file or directory
 ** DONE Linux create crontab, without editor
   CLOSED: [2016-10-23 Sun 17:10]
 cat > /etc/cron.d/crontab_test << EOF
@@ -3839,3 +3198,64 @@ https://www.pantz.org/software/cron/croninfo.html
 | ${var#pattern}  |         |
 | ${var##pattern} |         |
 | ${#var}         |         |
+* TODO add shell example                                           :noexport:
+#+BEGIN_SRC sh
+#!/usr/bin/env bash
+##  @copyright 2018 DennyZhang.com
+## Licensed under MIT
+##   https://www.dennyzhang.com/wp-content/mit_license.txt
+##
+## File: hello
+## Author : Denny <https://www.dennyzhang.com/contact>
+## Description :
+## --
+## Created : <2018-09-20>
+## Updated: Time-stamp: <2018-09-20 10:41:04>
+##-------------------------------------------------------------------
+set -e
+
+function ensure_variable_isset {
+    var=${1?}
+    message=${2:-"parameter name should be given"}
+    # TODO support sudo, without source
+    if [ -z "$var" ]; then
+        echo "Error: Certain variable($message) is not set"
+        exit 1
+    fi
+}
+
+function request_url_post {
+    url=${1?}
+    data=${2?}
+    header=${3:-""}
+    if [ `uname` == "Darwin" ]; then
+        data=$(echo "$data" | sed "s/\'/\\\\\"/g")
+    else
+        data=$(echo "$data" | sed "s/'/\\\\\"/g")
+    fi;
+    if [ "$header" = "" ]; then
+        command="curl -d \"$data\" \"$url\""
+    else
+        command="curl $header -d \"$data\" \"$url\""
+    fi;
+
+    echo -e "\n$command"
+    eval "$command"
+    if [ $? -ne 0 ]; then
+        echo "Error: fail to run $command"; exit -1
+    fi
+}
+
+function request_url_get {
+    url=${1?}
+    header=${2:-""}
+    command="curl $header \"$url\""
+    echo -e "\n$command"
+    eval "$command"
+    if [ $? -ne 0 ]; then
+        echo "Error: fail to run $command"; exit -1
+    fi
+}
+
+## File: hello ends
+#+END_SRC

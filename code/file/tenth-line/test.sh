@@ -4,13 +4,12 @@
 ## Licensed under MIT 
 ##   https://www.dennyzhang.com/wp-content/mit_license.txt
 ##
-## File: hello
 ## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
 ##   https://leetcode.com/problems/tenth-line/description/
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2018-07-15 18:56:18>
+## Updated: Time-stamp: <2018-09-24 10:39:05>
 ##-------------------------------------------------------------------
 set -e
 
@@ -21,4 +20,3 @@ if [ "$line_count" -lt 10 ]; then
 else
     head -n10 ./file.txt | tail -n1
 fi
-## File: test.sh ends

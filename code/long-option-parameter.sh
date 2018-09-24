@@ -3,12 +3,11 @@
 ## Licensed under MIT 
 ##   https://www.dennyzhang.com/wp-content/mit_license.txt
 ##
-## File: long_option_parameter.sh
 ## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2018-07-17 12:27:29>
+## Updated: Time-stamp: <2018-09-24 10:39:04>
 ##-------------------------------------------------------------------
 set -e
 
@@ -33,4 +32,3 @@ do
             ;;
     esac
 done
-## File: long_option_parameter.sh ends

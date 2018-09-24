@@ -4,13 +4,12 @@
 ## Licensed under MIT 
 ##   https://www.dennyzhang.com/wp-content/mit_license.txt
 ##
-## File: test.sh
 ## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
 ##   https://leetcode.com/problems/transpose-file/description/
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2018-07-15 18:57:14>
+## Updated: Time-stamp: <2018-09-24 10:39:05>
 ##-------------------------------------------------------------------
 set -e
 
@@ -34,4 +33,3 @@ for((i=0; i<$column_count; i++)); do
     done
     echo ""
 done
-## File: test.sh ends

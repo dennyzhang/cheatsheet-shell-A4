@@ -3,12 +3,11 @@
 ## Licensed under MIT 
 ##   https://www.dennyzhang.com/wp-content/mit_license.txt
 ##
-## File: hello
 ## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2018-07-29 14:55:11>
+## Updated: Time-stamp: <2018-09-24 10:39:03>
 ##-------------------------------------------------------------------
 set -e
 
@@ -22,4 +21,3 @@ function shell_exit {
 }
 
 trap shell_exit SIGHUP SIGINT SIGTERM 0
-## File: trap_exit.sh ends

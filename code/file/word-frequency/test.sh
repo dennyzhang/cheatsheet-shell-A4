@@ -4,13 +4,12 @@
 ## Licensed under MIT 
 ##   https://www.dennyzhang.com/wp-content/mit_license.txt
 ##
-## File: hello
 ## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
 ##   https://leetcode.com/problems/word-frequency/description/
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2017-11-13 11:01:16>
+## Updated: Time-stamp: <2018-09-24 10:39:05>
 ##-------------------------------------------------------------------
 set -e
 
@@ -24,4 +23,3 @@ for uniq_word in $uniq_words; do
 done
 
 echo -e "$output" | grep -v '^$' | sort -n -k 2 -r
-## File: test.sh ends
