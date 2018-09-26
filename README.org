@@ -40,29 +40,29 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Check if a string in a list            | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/string-in-list.sh][code/string-in-list.sh]], [[https://stackoverflow.com/questions/8063228/how-do-i-check-if-a-variable-exists-in-a-list-in-bash][link: stackoverflow]] |
 | Log with timestamp                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/log-with-timestamp.sh][code/log-with-timestamp.sh]]                  |
 | Quit if current user is not root       | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/assert-user-root.sh][code/assert-user-root.sh]]                    |
+** Environment variables
+| Name                           | Comment               |
+|--------------------------------+-----------------------|
+| List all environment variables | =export=              |
+| Define a new env variable      | export NAME1="value1" |
 ** GNU tools
 *** Check file
-| Name                                                | Comment                                                   |
-|-----------------------------------------------------+-----------------------------------------------------------|
-| Show file content                                   | =cat /etc/hosts=                                          |
-| Show file content with line numbers                 | =cat -n /etc/hosts=                                       |
-| Show with line numbers, while excluding blank lines | =cat -b /etc/hosts=                                       |
-| Show the first 3 lines                              | =head -n3 /etc/hosts=                                     |
-| Show the last 3 lines                               | =tail -n3 /etc/hosts=                                     |
-| Keep tailing log files                              | =tail -f /var/log/system.log=, =taif /var/log/system.log= |
-| Show the 4th line                                   | =sed -n '4p' /etc/hosts=                                  |
-| Show 4th, 5th, 7th and 8th lines                    | =sed -n '4,5p;7,8p' /etc/hosts=                           |
-| Show matched string with 3 lines before and after   | =grep -C 3 "127.0.0.1" /etc/hosts=                        |
-| For table-like files, show 2nd column               | =awk -F'\t' '{print $2}' /etc/hosts=                      |
-| For table-like files, swap 1st and 2nd columns      | =awk -F'\t' '{print $2,$1}' /etc/hosts=                   |
-*** Copy file
-| Name                                             | Comment                                       |
-|--------------------------------------------------+-----------------------------------------------|
-| Copy one file                                    | =cp /etc/hosts /tmp/hosts=                    |
-| Copy one folder                                  | =cp -r /usr/local/bin/ /tmp/bin/=             |
-| Copy for backup                                  | =cp /tmp/hosts{,.bak}=, =ls -lth /tmp/hosts*= |
-| Create a copy but ask confirmation for overwrite | =cp -i ~/Desktop/foo.txt ~/Documents/foo.txt= |
-| Create a copy for backup with timstamp as suffix | =cp foo.txt{,."$(date +%Y%m%d-%H%M%S)"}=      |
+| Name                                              | Comment                                                   |
+|---------------------------------------------------+-----------------------------------------------------------|
+| Show file content                                 | =cat /etc/hosts=                                          |
+| Show file content with line numbers               | =cat -n /etc/hosts=                                       |
+| Show with line numbers, excluding blank lines     | =cat -b /etc/hosts=                                       |
+| Show the first 3 lines                            | =head -n3 /etc/hosts=                                     |
+| Show the first 20 bytes                           | =head -c20 /etc/hosts=                                    |
+| Show the last 3 lines                             | =tail -n3 /etc/hosts=                                     |
+| Show the last 20 bytes                            | =tail -c20 /etc/hosts=                                    |
+| Keep tailing log files                            | =tail -f /var/log/system.log=, =taif /var/log/system.log= |
+| Show file starting from 4th line                  | =more +4 /etc/hosts=                                      |
+| Show the 4th line                                 | =sed -n '4p' /etc/hosts=                                  |
+| Show 4th, 5th, 7th and 8th lines                  | =sed -n '4,5p;7,8p' /etc/hosts=                           |
+| Show matched string with 3 lines before and after | =grep -C 3 "127.0.0.1" /etc/hosts=                        |
+| For table-like files, show 2nd column             | =awk -F'\t' '{print $2}' /etc/hosts=                      |
+| For table-like files, swap 1st and 2nd columns    | =awk -F'\t' '{print $2,$1}' /etc/hosts=                   |
 *** Watch files
 | Name                   | Comment                                                   |
 |------------------------+-----------------------------------------------------------|
@@ -90,6 +90,13 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Go to home               | =cd=                                                    |
 | Go to parent folder      | =cd ..=                                                 |
 | Go to previous folder    | =cd -=                                                  |
+*** mkdir
+| Name                                               | Comment                                          |
+|----------------------------------------------------+--------------------------------------------------|
+| Make directory. Report error, if existing          | =mkdir foo=                                      |
+| Make directory. Avoid reporting error, if existing | =mkdir -p foo=                                   |
+| Make directory and its parents                     | =mkdir -p foo/bar/dir1=                          |
+| Make directories with the hierachy                 | =mkdir -p foo/{bar,bad/{dir1,dir2}}=, =tree foo= |
 *** Numeric
 | Name | Comment                                        |
 |------+------------------------------------------------|
@@ -142,7 +149,7 @@ cat /etc/passwd | awk -F':' '{print $1}' | xargs -I{} sudo -l -U {} | grep -v "n
 #+LATEX_HEADER: \fancyhf{}
 #+LATEX_HEADER: \rhead{Updated: \today}
 #+LATEX_HEADER: \rfoot{\thepage\ of \pageref{LastPage}}
-#+LATEX_HEADER: \lfoot{\href{https://github.com/dennyzhang/.*cheatsheet-shell-A4}{GitHub: https://github.com/dennyzhang/.*cheatsheet-shell-A4}}
+#+LATEX_HEADER: \lfoot{\href{https://github.com/dennyzhang/cheatsheet-shell-A4}{GitHub: https://github.com/dennyzhang/cheatsheet-shell-A4}}
 #+LATEX_HEADER: \lhead{\href{https://cheatsheet.dennyzhang.com/cheatsheet-slack-A4}{Blog URL: https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4}}
 #+AUTHOR: Denny Zhang
 #+EMAIL:  denny@dennyzhang.com
@@ -3112,34 +3119,6 @@ ubuntu2.dennyzhang.com
 EOF
 vim /etc/hosts
 * role model: https://github.com/alexanderepstein/Bash-Snippets    :noexport:
-* shell scripts                                                    :noexport:
-# To implement a for loop:
-for file in *;
-do
-    echo $file found;
-done
-
-# To implement a case command:
-case "$1"
-in
-    0) echo "zero found";;
-    1) echo "one found";;
-    2) echo "two found";;
-    3*) echo "something beginning with 3 found";;
-esac
-
-# Turn on debugging:
-set -x
-
-# Turn off debugging:
-set +x
-
-# Retrieve N-th piped command exit status
-printf 'foo' | fgrep 'foo' | sed 's/foo/bar/'
-echo ${PIPESTATUS[0]}  # replace 0 with N
-
-# Lock file:
-( set -o noclobber; echo > my.lock ) || echo 'Failed to create lock file'
 * how to use pushd                                                 :noexport:
 * cron                                                             :noexport:
 ** DONE manually start cron: cron
@@ -3198,7 +3177,8 @@ https://www.pantz.org/software/cron/croninfo.html
 | ${var#pattern}  |         |
 | ${var##pattern} |         |
 | ${#var}         |         |
-* TODO add shell example                                           :noexport:
+* #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* HALF add shell example                                           :noexport:
 #+BEGIN_SRC sh
 #!/usr/bin/env bash
 ##  @copyright 2018 DennyZhang.com
@@ -3259,3 +3239,590 @@ function request_url_get {
 
 ## File: hello ends
 #+END_SRC
+* HALF shell scripts                                               :noexport:
+# To implement a for loop:
+for file in *;
+do
+    echo $file found;
+done
+
+# To implement a case command:
+case "$1"
+in
+    0) echo "zero found";;
+    1) echo "one found";;
+    2) echo "two found";;
+    3*) echo "something beginning with 3 found";;
+esac
+
+# Turn on debugging:
+set -x
+
+# Turn off debugging:
+set +x
+
+# Retrieve N-th piped command exit status
+printf 'foo' | fgrep 'foo' | sed 's/foo/bar/'
+echo ${PIPESTATUS[0]}  # replace 0 with N
+
+# Lock file:
+( set -o noclobber; echo > my.lock ) || echo 'Failed to create lock file'
+* HALF make shell function smaller                                 :noexport:
+if [ -z "$GET_CREDENTIALS_HOOK" ]; then
+   echo "GET_CREDENTIALS_HOOK is required"
+   exit 1
+fi
+* more content                                                     :noexport:
+** ab
+# send 100 requests with a concurency of 50 requests to an URL
+ab -n 100 -c 50 http://www.example.com/
+
+# send requests during 30 seconds with a concurency of 50 requests to an URL
+ab -t 30 -c 50 URL http://www.example.com/
+** sort
+# To sort a file:
+sort file
+
+# To sort a file by keeping only unique:
+sort -u file
+
+# To sort a file and reverse the result:
+sort -r file
+
+# To sort a file randomly:
+sort -R file
+** split
+# To split a large text file into smaller files of 1000 lines each:
+split file.txt -l 1000
+
+# To split a large binary file into smaller files of 10M each:
+split file.txt -b 10M
+
+# To consolidate split files into a single file:
+cat x* > file.txt
+** piplines
+# To redirect stderr to stdout:
+some-command 2>&1
+
+# To redirect stderr to a file
+some-command 2> errors.txt
+** cut
+# To cut out the third field of text or stdoutput that is delimited by a #:
+cut -d# -f3
+** date
+# Print date in format suitable for affixing to file names
+date +"%Y%m%d_%H%M%S"
+
+# Convert Unix timestamp to Date(Linux)
+date -d @1440359821
+
+# Convert Unix timestamp to Date(Mac)
+date -r 1440359821
+** tree
+# To display a recursive directory tree
+tree
+
+# To make tree output contents from path `/foo/bar`
+tree /foo/bar
+
+# To make tree omit any empty directories from the output
+tree --prune
+
+# To list directories only (`-d`), and at a max depth of two levels (`-L`)
+tree -d -L 2
+** truncate
+# To clear the contents from a file:
+truncate -s 0 file.txt
+
+# To truncate a file to 100 bytes:
+truncate -s 100 file.txt
+
+# To truncate a file to 100 KB:
+truncate -s 100K file.txt
+
+# (M, G, T, P, E, Z, and Y may be used in place of "K" as required.)
+** uname
+# Print all system information
+uname -a
+# Linux system-hostname 3.2.0-4-amd64 #1 SMP Debian 3.2.32-1 x86_64 GNU/Linux
+
+# Print the hostname
+uname -n
+# system-hostname
+
+# Print the kernel release
+uname -r
+# 3.2.0-4-amd64
+
+# Print the kernel version, with more specific information
+uname -v
+# #1 SMP Debian 3.2.32-1
+
+# Print the hardware instruction set
+uname -m
+# x86_64
+
+# Print the kernel name
+uname -s
+# Linux
+
+# Print the operating system
+uname -o
+# GNU/Linux
+** uniq
+# show all lines without duplication
+# `sort -u` and `uniq` is the same effect.
+sort file | uniq
+
+# show not duplicated lines
+sort file | uniq -u
+
+# show duplicated lines only
+sort file | uniq -d
+
+# count all lines
+sort file | uniq -c
+
+# count not duplicated lines
+sort file | uniq -uc
+
+# count only duplicated lines
+sort file | uniq -dc
+** top
+# Update every <interval> samples:
+top -i <interval>
+
+# Set the delay between updates to <delay> seconds:
+top -s <delay>
+
+# Set event counting to accumulative mode:
+top -a
+
+# Set event counting to delta mode:
+top -d
+
+# Set event counting to absolute mode:
+top -e
+
+# Do not calculate statistics on shared libraries, also known as frameworks:
+top -F
+
+# Calculate statistics on shared libraries, also known as frameworks (default):
+top -f
+
+# Print command line usage information and exit:
+top -h
+
+# Order the display by sorting on <key> in descending order
+top -o <key>
+** tr
+#replace : with new line
+echo $PATH|tr ":" "\n" #equivalent with:
+echo $PATH|tr -t ":" \n 
+
+#remove all occurance of "ab"
+echo aabbcc |tr -d "ab"
+#ouput: cc
+
+#complement "aa"
+echo aabbccd |tr -c "aa" 1
+#output: aa11111 without new line
+#tip: Complement meaning keep aa,all others are replaced with 1
+
+#complement "ab\n"
+echo aabbccd |tr -c "ab\n" 1
+#output: aabb111 with new line
+
+#Preserve all alpha(-c). ":-[:digit:] etc" will be translated to "\n". sequeeze mode.
+echo $PATH|tr -cs "[:alpha:]" "\n" 
+
+#ordered list to unordered list
+echo "1. /usr/bin\n2. /bin" |tr -cs " /[:alpha:]\n" "+"
+** rm
+# Remove files and subdirs
+rm -rf path/to/the/target/
+
+# Ignore non existent files
+rm -f path/to/the/target
+
+# Remove a file with his inode
+find /tmp/ -inum 6666 -exec rm -i '{}' \;
+** rename
+# Lowercase all files and folders in current directory
+rename 'y/A-Z/a-z/' *
+** diff
+# To view the differences between two files:
+diff -u version1 version2
+
+# To view the differences between two directories:
+diff -ur folder1/ folder2/
+
+# To ignore the white spaces:
+diff -ub version1 version2
+
+# To ignore the blank lines:
+diff -uB version1 version2
+
+# To ignore the differences between uppercase and lowercase:
+diff -ui version1 version2
+
+# To report whether the files differ:
+diff -q version1 version2
+
+# To report whether the files are identical:
+diff -s version1 version2
+
+# To diff the output of two commands or scripts:
+diff <(command1) <(command2)
+
+# Generate a patch file from two files
+diff -Naur version1 version2 > version.patch
+** csplit
+# Split a file based on pattern
+csplit input.file '/PATTERN/'
+
+# Use prefix/suffix to improve resulting file names
+csplit -f 'prefix-' -b '%d.extension' input.file '/PATTERN/' '{*}'
+** bash
+# To implement a for loop:
+for file in *;
+do 
+    echo $file found;
+done
+
+# To implement a case command:
+case "$1"
+in
+    0) echo "zero found";;
+    1) echo "one found";;
+    2) echo "two found";;
+    3*) echo "something beginning with 3 found";;
+esac
+
+# Turn on debugging:
+set -x
+
+# Turn off debugging:
+set +x
+
+# Retrieve N-th piped command exit status
+printf 'foo' | fgrep 'foo' | sed 's/foo/bar/'
+echo ${PIPESTATUS[0]}  # replace 0 with N
+
+# Lock file:
+( set -o noclobber; echo > my.lock ) || echo 'Failed to create lock file'
+** grep
+# Search a file for a pattern
+grep pattern file
+
+# Case insensitive search (with line numbers)
+grep -in pattern file
+
+# Recursively grep for string <pattern> in folder:
+grep -R pattern folder
+
+# Read search patterns from a file (one per line)
+grep -f pattern_file file
+
+# Find lines NOT containing pattern
+grep -v pattern file
+
+# You can grep with regular expressions
+grep "^00" file  #Match lines starting with 00
+grep -E "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" file  #Find IP add
+
+# Find all files which match {pattern} in {directory}
+# This will show: "file:line my research"
+grep -rnw 'directory' -e "pattern"
+
+# Exclude grep from your grepped output of ps.
+# Add [] to the first letter. Ex: sshd -> [s]shd
+ps aux | grep '[h]ttpd'
+
+# Colour in red {bash} and keep all other lines
+ps aux | grep -E --color 'bash|$'
+** hardware
+# Display all hardware details
+sudo lshw
+
+# List currently loaded kernel modules
+lsmod
+
+# List all modules available to the system
+find /lib/modules/$(uname -r) -type f -iname "*.ko"
+
+# Load a module into kernel
+modprobe modulename
+
+# Remove a module from kernel 
+modprobe -r modulename
+
+# List devices connected via pci bus
+lspci
+
+# Debug output for pci devices (hex)
+lspci -vvxxx
+
+# Display cpu hardware stats
+cat /proc/cpuinfo
+
+# Display memory hardware stats
+cat /proc/meminfo
+
+# Output the kernel ring buffer
+dmesg
+
+# Ouput kernel messages
+dmesg --kernel
+** indent
+# format C/C++ source according to the style of Kernighan and Ritchie (K&R), no tabs, 3 spaces per indent, wrap lines at 120 characters.
+indent -i3 -kr -nut -l120
+** iconv
+# To convert file (iconv.src) from iso-8859-1 to utf-8 and save to
+# /tmp/iconv.out
+iconv -f iso-8859-1 -t utf-8 iconv.src -o /tmp/iconv.out
+** history
+# To see most used top 10 commands:
+history | awk '{CMD[$2]++;count++;}END { for (a in CMD)print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" | column -c3 -s " " -t | sort -nr | nl | head -n10
+** readline
+    Moving around
+Ctrl-b      Move the cursor             one character               ⇦ to the left
+Ctrl-f      Move the cursor             one character               ⇨ to the right
+Alt-b       Move the cursor             one word                    ⇦ to the left
+Alt-f       Move the cursor             one word                    ⇨ to the right
+Ctrl-a      Move the cursor                                         ⇤ to the start of the line
+Ctrl-e      Move the cursor                                         ⇥ to the end of the line
+Ctrl-x-x    Move the cursor                                         ⇤⇥ to the start, and to the end again
+
+    Cut, copy and paste
+Backspace   Delete                      the character               ⇦ to the left of the cursor
+DEL
+Ctrl-d      Delete                      the character               underneath the cursor
+Ctrl-u      Delete                      everything                  ⇤ from the cursor back to the line start
+Ctrl-k      Delete                      everything                  ⇥ from the cursor to the end of the line
+Alt-d       Delete                      word                        ⇨ until before the next word boundary
+Ctrl-w      Delete                      word                        ⇦ until after the previous word boundary
+Ctrl-y      Yank/Paste                  prev. killed text           at the cursor position
+Alt-y       Yank/Paste                  prev. prev. killed text     at the cursor position
+
+    History
+Ctrl-p      Move in history             one line                    ⇧ before this line
+Ctrl-n      Move in history             one line                    ⇩ after this line
+Alt->       Move in history             all the lines               ⇩ to the line currently being entered
+Ctrl-r      Incrementally search        the line history            ⇧ backwardly
+Ctrl-s      Incrementally search        the line history            ⇩ forwardly
+Ctrl-J      End an incremental search
+Ctrl-G      Abort an incremental search and restore the original line
+Alt-Ctrl-y  Yank/Paste                  arg. 1 of prev. cmnd        at the cursor position
+Alt-.
+Alt-_       Yank/Paste                  last arg of prev. cmnd      at the cursor position
+
+    Undo
+Ctrl-_
+Ctrl-x
+Ctrl-u      Undo the last editing command; you can undo all the way back to an empty line
+Alt-r       Undo all changes made to this line
+Ctrl-l      Clear the screen, reprinting the current line at the top
+Ctrl-l      Clear the screen, reprinting the current line at the top
+
+    Completion
+TAB         Auto-complete a name
+Alt-/       Auto-complete a name (without smart completion)
+Alt-?       List the possible completions of the preceeding text
+Alt-*       Insert all possible completions of the preceeding text
+
+    Transpose
+Ctrl-t      Transpose/drag              char. before the cursor     ↷ over the character at the cursor
+Alt-t       Transpose/drag              word before the cursor      ↷ over the word at/after the cursor
+** tail -n +N file
+# To show the last lines of file starting with the Nth
+tail -n +N file
+** pgrep
+# Get a list of PIDs matching the pattern 
+pgrep example
+
+# Kill all PIDs matching the pattern
+pgrep -f example | xargs kill
+** ping 
+# ping a host with a total count of 15 packets overall.    
+ping -c 15 www.example.com
+
+# ping a host with a total count of 15 packets overall, one every .5 seconds (faster ping). 
+ping -c 15 -i .5 www.example.com
+
+# test if a packet size of 1500 bytes is supported (to check the MTU for example)
+ping -s 1500 -c 10 -M do www.example.com
+
+# get all ipv6 neighbors via broadcast ping
+ping6 -I eth0 ff02::1
+** pkill
+# To kill a process using it's full process name
+pkill <processname>
+
+# To kill a process by it's partial name
+pkill -f <string>
+** popd & pushd
+# Pushes your current directory to the top of a stack while changing to the specified directory
+pushd <directory>
+
+# To return use popd
+popd
+** numfmt
+# Convert bytes to Human readable format
+numfmt --to=iec --suffix=B --padding=7 1048576
+** strace
+# Basic stracing
+strace <command>
+
+# save the trace to a file
+strace -o strace.out <other switches> <command>
+
+# follow only the open() system call
+strace -e trace=open <command>
+
+# follow all the system calls which open a file
+strace -e trace=file <command>
+
+# follow all the system calls associated with process
+# management
+strace -e trace=process <command>
+
+# follow child processes as they are created
+strace -f <command>
+
+# count time, calls and errors for each system call
+strace -c <command>
+
+# trace a running process (multiple PIDs can be specified)
+strace -p <pid>
+** su
+# Switch to another user account
+su USERNAME
+** mv
+# Move a file from one place to another
+mv ~/Desktop/foo.txt ~/Documents/foo.txt
+
+# Move a file from one place to another and automatically overwrite if the destination file exists
+# (This will override any previous -i or -n args)
+mv -f ~/Desktop/foo.txt ~/Documents/foo.txt
+
+# Move a file from one place to another but ask before overwriting an existing file
+# (This will override any previous -f or -n args)
+mv -i ~/Desktop/foo.txt ~/Documents/foo.txt
+
+# Move a file from one place to another but never overwrite anything
+# (This will override any previous -f or -i args)
+mv -n ~/Desktop/foo.txt ~/Documents/foo.txt
+
+# Move listed files to a directory
+mv -t ~/Desktop/ file1 file2 file3
+** lsof
+# List all IPv4 network files
+sudo lsof -i4
+
+# List all IPv6 network files
+sudo lsof -i6
+
+# List all open sockets
+lsof -i
+
+# List all listening ports
+lsof -Pnl +M -i4
+
+# Find which program is using the port 80
+lsof -i TCP:80
+
+# List all connections to a specific host
+lsof -i@192.168.1.5
+
+# List all processes accessing a particular file/directory
+lsof </path/to/file>
+
+# List all files open for a particular user
+lsof -u <username>
+
+# List all files/network connections a command is using
+lsof -c <command-name>
+
+# List all files a process has open
+lsof -p <pid>
+
+# List all files open mounted at /mount/point.
+# Particularly useful for finding which process(es) are using a
+# mounted USB stick or CD/DVD.
+lsof +f -- </mount/point>
+
+# See this primer: http://www.danielmiessler.com/study/lsof/
+# for a number of other useful lsof tips
+** ln
+# To create a symlink:
+ln -s path/to/the/target/directory name-of-symlink
+
+# Symlink, while overwriting existing destination files
+ln -sf /some/dir/exec /usr/bin/exec
+** ls
+# Displays everything in the target directory
+ls path/to/the/target/directory
+
+# Displays everything including hidden files
+ls -a
+
+# Displays all files, along with the size (with unit suffixes) and timestamp
+ls -lh 
+
+# Display files, sorted by size
+ls -S
+
+# Display directories only
+ls -d */
+
+# Display directories only, include hidden
+ls -d .*/ */
+** wc
+# Count the number of words (file or STDIN)
+wc -w /path/to/foo.txt
+cat /path/to/foo.txt | wc -w
+
+# Count the number of lines (file or STDIN)
+wc -l /path/to/foo.txt
+cat /path/to/foo.txt | wc -l
+
+# Count the number of bytes (file or STDIN)
+wc -c /path/to/foo.txt
+cat /path/to/foo.txt | wc -c
+
+# Count files and directories at a given location
+ls -l | wc -l
+
+# If you ever use `wc` in a shell script and need to compare the output with an int you can
+# clean the output (wc returns extra characters around the integer) by using xargs:
+ls -l | wc -l | xargs
+** xargs
+# find all file name ending with .pdf and remove them
+find -name *.pdf | xargs rm -rf
+
+# if file name contains spaces you should use this instead
+find -name *.pdf | xargs -I{} rm -rf '{}'
+
+# Will show every .pdf like:
+#	&toto.pdf=
+#	&titi.pdf=
+# -n1 => One file by one file. ( -n2 => 2 files by 2 files )
+
+find -name *.pdf | xargs -I{} -n1 echo '&{}='
+
+# If find returns no result, do not run rm
+# This option is a GNU extension.
+find -name "*.pdf" | xargs --no-run-if-empty rm
+** awk
+# sum integers from a file or stdin, one integer per line:
+printf '1\n2\n3\n' | awk '{ sum += $1} END {print sum}'
+
+# using specific character as separator to sum integers from a file or stdin
+printf '1:2:3' | awk -F ":" '{print $1+$2+$3}'
+
+# print a multiplication table
+seq 9 | sed 'H;g' | awk -v RS='' '{for(i=1;i<=NF;i++)printf("%dx%d=%d%s", i, NR, i*NR, i==NR?"\n":"\t")}'
+
+# Specify output separator character
+printf '1 2 3' | awk 'BEGIN {OFS=":"}; {print $1,$2,$3}'
