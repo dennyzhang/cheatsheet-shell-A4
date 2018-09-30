@@ -3797,7 +3797,7 @@ ls -l | wc -l
 # If you ever use `wc` in a shell script and need to compare the output with an int you can
 # clean the output (wc returns extra characters around the integer) by using xargs:
 ls -l | wc -l | xargs
-** xargs
+** [#A] xargs
 # find all file name ending with .pdf and remove them
 find -name *.pdf | xargs rm -rf
 
@@ -3826,3 +3826,79 @@ seq 9 | sed 'H;g' | awk -v RS='' '{for(i=1;i<=NF;i++)printf("%dx%d=%d%s", i, NR,
 
 # Specify output separator character
 printf '1 2 3' | awk 'BEGIN {OFS=":"}; {print $1,$2,$3}'
+* scripts                                                          :noexport:
+** DONE linux shell unset all varable                              :noexport:
+  CLOSED: [2015-01-06 Tue 16:11]
+1. env -i bash command cleared all the environment variables to default on login.
+This won't work in bash
+
+2. unset $(env | awk -F= '{print $1}')
+
+unset $(env | awk -F= '{print $1}' | grep '-')
+
+** DONE Difference between Login Shell and Non-Login Shell?
+  CLOSED: [2015-01-11 Sun 12:25]
+http://unix.stackexchange.com/questions/38175/difference-between-login-shell-and-non-login-shell
+http://superuser.com/questions/636219/where-should-i-export-an-environment-variable-so-that-all-combinations-of-bash-d
+
+
+- A login shell is the first process that executes under your user ID when you log in for an interactive session.
+  When you log in on a text console, or through SSH, or with su -, you get an interactive login shell.
+
+- It's rare to run a non-interactive login shell, but some X settings do that when you log in with a display manager, so as to arrange to read the profile files. Other settings (this depends on the distribution and on the display manager) read /etc/profile and ~/.profile explicitly, or don't read them.
+
+- When you start a shell in a terminal in an existing session (screen, X terminal, Emacs terminal buffer, a shell inside another, …), you get an interactive, non-login shell. That shell might read a shell configuration file (~/.bashrc for bash, /etc/zshrc and ~/.zshrc for zsh, /etc/csh.cshrc and ~/.cshrc for csh, etc.).
+A shell started in a new terminal in a GUI would be an interactive non-login shell. It would source your .bashrc, but not your .profile, for example.
+
+
+In summary they says (there is more detail in the man page, you should read it):
+
+| When bash is                | it reads                                                                                     |
+|-----------------------------+----------------------------------------------------------------------------------------------|
+| login shell                 | /etc/profile and then the first of ~/.bash_profile, ~/.bash_login or ~/.profile that exists. |
+| interactive non-login shell | /etc/bash.bashrc then ~/.bashrc                                                              |
+| non-interactive shell       | The contents of $BASH_ENV (if it exists)                                                     |
+| interactive (as "sh")       | The contents of $ENV (if it exists)                                                          |
+
+
+| When dash is      | it reads                                                                                     |
+|-------------------+----------------------------------------------------------------------------------------------|
+| login shell       | /etc/profile then .profile                                                                   |
+| interactive shell | The contents of ENV (it it exists, can be set in .profile as well as in initial environment) |
+
+** DONE linux run command as some user in bash:
+  CLOSED: [2014-12-13 Sat 22:03]
+sudo su mac <<'EOF'
+ls -lth | head
+whoami
+EOF
+
+** DONE linux check whether directory is empty: [ "$(ls -A /path/to/directory)" ] && echo "Not Empty" || echo "Empty"
+   CLOSED: [2014-10-01 Wed 13:26]
+
+** DONE bash: check if a string has spaces
+  CLOSED: [2014-11-09 Sun 05:39]
+#+begin_example
+[[ "127.0.0.1 192.168.1.2" = *\ * ]]
+#+end_example
+
+** DONE linux向尾部追回一串字符串
+   CLOSED: [2014-01-22 Wed 11:46]
+*** 通过EOF
+#+begin_example
+cat <<EOF >> outputfile
+some lines
+of text
+EOF
+#+end_example
+*** 通过cat
+#+begin_example
+echo "line 1
+line 2" >> greetings.txt
+#+end_example
+*** 测试数据
+#+begin_example
+# Zabbix Application PPA
+deb http://ppa.launchpad.net/tbfr/zabbix/ubuntu precise main
+deb-src http://ppa.launchpad.net/tbfr/zabbix/ubuntu precise main
+#+end_example
