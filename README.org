@@ -3847,7 +3847,7 @@ http://superuser.com/questions/636219/where-should-i-export-an-environment-varia
 
 - It's rare to run a non-interactive login shell, but some X settings do that when you log in with a display manager, so as to arrange to read the profile files. Other settings (this depends on the distribution and on the display manager) read /etc/profile and ~/.profile explicitly, or don't read them.
 
-- When you start a shell in a terminal in an existing session (screen, X terminal, Emacs terminal buffer, a shell inside another, …), you get an interactive, non-login shell. That shell might read a shell configuration file (~/.bashrc for bash, /etc/zshrc and ~/.zshrc for zsh, /etc/csh.cshrc and ~/.cshrc for csh, etc.).
+- When you start a shell in a terminal in an existing session (screen, X terminal, Emacs terminal buffer, a shell inside another, ...), you get an interactive, non-login shell. That shell might read a shell configuration file (~/.bashrc for bash, /etc/zshrc and ~/.zshrc for zsh, /etc/csh.cshrc and ~/.cshrc for csh, etc.).
 A shell started in a new terminal in a GUI would be an interactive non-login shell. It would source your .bashrc, but not your .profile, for example.
 
 
@@ -3902,3 +3902,5 @@ line 2" >> greetings.txt
 deb http://ppa.launchpad.net/tbfr/zabbix/ubuntu precise main
 deb-src http://ppa.launchpad.net/tbfr/zabbix/ubuntu precise main
 #+end_example
+** timeout
+https://github.com/cloudfoundry-incubator/kubo-release/blob/a5e799be8f34609ea1bd82174d7ada9e69a0c6d5/jobs/kubelet/templates/bin/post-start.erb#L33-L42
