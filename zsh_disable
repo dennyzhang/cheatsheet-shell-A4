@@ -1,0 +1,7 @@
+# https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
+alias ssh='nocorrect ssh'
+alias git status='nocorrect git status'
+
+# disable all
+# unsetopt correct_all
+# unsetopt correct
