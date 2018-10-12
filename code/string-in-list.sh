@@ -5,9 +5,10 @@
 ##
 ## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
+## https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2018-09-24 10:39:03>
+## Updated: Time-stamp: <2018-10-06 16:39:26>
 ##-------------------------------------------------------------------
 IAAS_TYPE="gcp|aws"
 TYPE="gcp"

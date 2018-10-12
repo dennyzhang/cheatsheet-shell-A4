@@ -7,9 +7,10 @@
 ## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
 ##   https://leetcode.com/problems/valid-phone-numbers/description/
+## https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2018-09-24 10:39:04>
+## Updated: Time-stamp: <2018-10-06 16:39:27>
 ##-------------------------------------------------------------------
 set -e
 

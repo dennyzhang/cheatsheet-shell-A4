@@ -5,9 +5,10 @@
 ##
 ## Author : Denny <https://www.dennyzhang.com/contact>
 ## Description :
+## https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2018-09-24 10:42:48>
+## Updated: Time-stamp: <2018-10-06 16:38:54>
 ##-------------------------------------------------------------------
 function ensure_is_root {
     # Make sure only root can run our script

@@ -40,11 +40,17 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Check if a string in a list            | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/string-in-list.sh][code/string-in-list.sh]], [[https://stackoverflow.com/questions/8063228/how-do-i-check-if-a-variable-exists-in-a-list-in-bash][link: stackoverflow]] |
 | Log with timestamp                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/log-with-timestamp.sh][code/log-with-timestamp.sh]]                  |
 | Quit if current user is not root       | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/assert-user-root.sh][code/assert-user-root.sh]]                    |
+| Set -x on fly                          | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/restore-debug-output.sh][code/restore-debug-output.sh]]                |
 ** Environment variables
 | Name                           | Comment               |
 |--------------------------------+-----------------------|
 | List all environment variables | =export=              |
 | Define a new env variable      | export NAME1="value1" |
+** zsh
+| Name                          | Comment                                             |
+|-------------------------------+-----------------------------------------------------|
+| Disable all zsh's autocorrect | In ~/.zshrc, =unsetopt correct_all=                 |
+| Disable a given autocorrect   | In ~/.zshrc, alias ssh='nocorrect ssh'. [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/restore-debug-output.sh][zsh_disable]] |
 ** GNU tools
 *** Check file
 | Name                                              | Comment                                                   |
@@ -3450,33 +3456,6 @@ find /tmp/ -inum 6666 -exec rm -i '{}' \;
 ** rename
 # Lowercase all files and folders in current directory
 rename 'y/A-Z/a-z/' *
-** diff
-# To view the differences between two files:
-diff -u version1 version2
-
-# To view the differences between two directories:
-diff -ur folder1/ folder2/
-
-# To ignore the white spaces:
-diff -ub version1 version2
-
-# To ignore the blank lines:
-diff -uB version1 version2
-
-# To ignore the differences between uppercase and lowercase:
-diff -ui version1 version2
-
-# To report whether the files differ:
-diff -q version1 version2
-
-# To report whether the files are identical:
-diff -s version1 version2
-
-# To diff the output of two commands or scripts:
-diff <(command1) <(command2)
-
-# Generate a patch file from two files
-diff -Naur version1 version2 > version.patch
 ** csplit
 # Split a file based on pattern
 csplit input.file '/PATTERN/'
@@ -3904,3 +3883,4 @@ deb-src http://ppa.launchpad.net/tbfr/zabbix/ubuntu precise main
 #+end_example
 ** timeout
 https://github.com/cloudfoundry-incubator/kubo-release/blob/a5e799be8f34609ea1bd82174d7ada9e69a0c6d5/jobs/kubelet/templates/bin/post-start.erb#L33-L42
+** TODO zsh delete by words, instead of characters
