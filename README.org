@@ -1384,52 +1384,6 @@ EOF
 
 notify_log_for_webcrawler
 #+end_src
-*** mysql备份脚本:根据配置自动备份,并删除60天前的备份集
-sample: sudo ./backup_mysql.sh  "db1" "username1" "password1" "/root/mysql_backup"
-#+begin_src sh
-#!/bin/bash
-##-------------------------------------------------------------------
-## @copyright 2013
-## File : backup_mysql.sh
-## Author : filebat <denny.zhang001@gmail.com>
-## Description :
-## --
-## Created : <2013-02-01>
-## Updated: Time-stamp: <2013-04-29 00:12:24>
-##-------------------------------------------------------------------
-#sample: sudo ./backup_mysql.sh  "db1" "username1" "password1" "/root/mysql_backup"
-
-function backup_mysql() {
-    db_name=${1?}
-    db_username=${2?}
-    db_pwd=${3?}
-    backup_dir=${4?}
-
-    if [ ! -d $backup_dir ]; then
-        mkdir -p $backup_dir
-    fi;
-
-    my_print " Backup mysql"
-    mysqldump --user=$db_username --password=$db_pwd $db_name | gzip > "$backup_dir"/$db_name-`date +%Y%m%d%H%M`.sql.gz
-    my_print " Remove old backup files 60 days ago"
-    find $backup_dir -name "*.gz" -mtime +60 -exec /bin/rm {} \;
-}
-
-function my_print()
-{
-    local msg=${1?}
-    echo -ne `date +['%Y-%m-%d %H:%M:%S']`"$msg\n"
-}
-
-db_name=${1?"mysql db name"}
-db_username=${2?"mysql db username"}
-db_pwd=${3?"mysql db password"}
-backup_dir=${4?"directory to store the backup set"}
-
-backup_mysql "$1" "$2" "$3" "$4"
-
-## File : backup_mysql.sh ends
-#+end_src
 ** DONE bash : event not found: !前要加\做转义
   CLOSED: [2013-05-30 Thu 00:03]
 bash-3.2$ curl -H 'Content-Type: text/xml' -d "<xml><ToUserName><![CDATA[gh_05d5313dea46]]></ToUserName><FromUserName><![CDATA[oOLGTjiMZ2nhEHcMhSP9Tq_kgLUk]]></FromUserName><CreateTime>1369366098</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[20 吃饭]]></Content><MsgId>5881769154217771468</MsgId></xml>" "http://0.0.0.0:8090/api?signature=7d0e888df44def04c76084d26e92c59fb15c1a50&timestamp=1369459087&nonce=1369763244" 2>/dev/null
