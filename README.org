@@ -30,14 +30,15 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Use timeout: avoid command hang        | timeout 10 sh -c 'ls -lt'                                             |
 | Restart shell without killing terminal | =exec -l $SHELL=                                                      |
 | Run sub-shell                          | =echo $BASH_SUBSHELL; ( echo "Running in subshell: $BASH_SUBSHELL" )= |
-| Run static code check                  | [[https://www.dennyzhang.com/shellcheck][link: shellcheck]]                                                      |
+| Set pipefail                           | =set -ueoxv pipefail=, =set +ueoxv pipefail=                          |
+| Run static code check                  | [[https://www.dennyzhang.com/shellcheck][Link: shellcheck]]                                                      |
 ** Shell script
 | Name                                   | Comment                                     |
 |----------------------------------------+---------------------------------------------|
 | Trap exit signal                       | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/trap-exit.sh][code/trap-exit.sh]]                           |
 | Shell retry                            | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/shell-retry.sh][code/shell-retry.sh]]                         |
 | Check if a string contains a substring | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/string-contains.sh][code/string-contains.sh]]                     |
-| Check if a string in a list            | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/string-in-list.sh][code/string-in-list.sh]], [[https://stackoverflow.com/questions/8063228/how-do-i-check-if-a-variable-exists-in-a-list-in-bash][link: stackoverflow]] |
+| Check if a string in a list            | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/string-in-list.sh][code/string-in-list.sh]], [[https://stackoverflow.com/questions/8063228/how-do-i-check-if-a-variable-exists-in-a-list-in-bash][Link: stackoverflow]] |
 | Log with timestamp                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/log-with-timestamp.sh][code/log-with-timestamp.sh]]                  |
 | Quit if current user is not root       | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/assert-user-root.sh][code/assert-user-root.sh]]                    |
 | Set -x on fly                          | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/restore-debug-output.sh][code/restore-debug-output.sh]]                |
@@ -3838,3 +3839,12 @@ deb-src http://ppa.launchpad.net/tbfr/zabbix/ubuntu precise main
 ** timeout
 https://github.com/cloudfoundry-incubator/kubo-release/blob/a5e799be8f34609ea1bd82174d7ada9e69a0c6d5/jobs/kubelet/templates/bin/post-start.erb#L33-L42
 ** TODO zsh delete by words, instead of characters
+* TODO send stdout/stderr to different file                        :noexport:
+https://github.com/cloudfoundry-incubator/cfcr-etcd-release/blob/5dda9b05123b83b0ef39fe1ba8b3f4830d1adb51/jobs/acceptance-tests/templates/run.sh.erb#L15-L18
+* TODO pushd/popd                                                  :noexport:
+#+BEGIN_EXAMPLE
+  pushd $pkgname
+    wget -qO- https://storage.googleapis.com/pks-releases/${f}.tar.gz | tar xzvf -
+  popd
+
+#+END_EXAMPLE
