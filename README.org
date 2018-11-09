@@ -18,10 +18,9 @@
 
 - PDF Link: [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/cheatsheet-shell-A4.pdf][cheatsheet-shell-A4.pdf]], Category: [[https://cheatsheet.dennyzhang.com/category/languages][languages]]
 - Blog URL: https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
+- Related posts: [[https://cheatsheet.dennyzhang.com/cheatsheet-vim-A4][Vim CheatSheet]], [[https://github.com/topics/denny-cheatsheets][#denny-cheatsheets]]
 
 File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or star [[https://github.com/DennyZhang/challenges-shell][this repo]].
-
-See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][#denny-cheatsheets]]
 ** Basic
 | Name                                   | Comment                                                               |
 |----------------------------------------+-----------------------------------------------------------------------|
@@ -53,28 +52,6 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Disable all zsh's autocorrect | In ~/.zshrc, =unsetopt correct_all=                 |
 | Disable a given autocorrect   | In ~/.zshrc, alias ssh='nocorrect ssh'. [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/restore-debug-output.sh][zsh_disable]] |
 ** GNU tools
-*** Check file
-| Name                                              | Comment                                                   |
-|---------------------------------------------------+-----------------------------------------------------------|
-| Show file content                                 | =cat /etc/hosts=                                          |
-| Show file content with line numbers               | =cat -n /etc/hosts=                                       |
-| Show with line numbers, excluding blank lines     | =cat -b /etc/hosts=                                       |
-| Show the first 3 lines                            | =head -n3 /etc/hosts=                                     |
-| Show the first 20 bytes                           | =head -c20 /etc/hosts=                                    |
-| Show the last 3 lines                             | =tail -n3 /etc/hosts=                                     |
-| Show the last 20 bytes                            | =tail -c20 /etc/hosts=                                    |
-| Keep tailing log files                            | =tail -f /var/log/system.log=, =taif /var/log/system.log= |
-| Show file starting from 4th line                  | =more +4 /etc/hosts=                                      |
-| Show the 4th line                                 | =sed -n '4p' /etc/hosts=                                  |
-| Show 4th, 5th, 7th and 8th lines                  | =sed -n '4,5p;7,8p' /etc/hosts=                           |
-| Show matched string with 3 lines before and after | =grep -C 3 "127.0.0.1" /etc/hosts=                        |
-| For table-like files, show 2nd column             | =awk -F'\t' '{print $2}' /etc/hosts=                      |
-| For table-like files, swap 1st and 2nd columns    | =awk -F'\t' '{print $2,$1}' /etc/hosts=                   |
-*** Watch files
-| Name                   | Comment                                                   |
-|------------------------+-----------------------------------------------------------|
-| Show file changes      | =watch -d -n 1 stat /var/log/message=                     |
-| Keep tailing log files | =tail -f /var/log/system.log=, =taif /var/log/system.log= |
 *** Echo string
 | Name                 | Comment                                                 |
 |----------------------+---------------------------------------------------------|
@@ -82,12 +59,6 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Echo multiple lines  | echo -e "hello,\ndenny"                                 |
 | Echo bold text       | echo -e hello, "\033[1mThis is bold text.\033[0m"       |
 | Echo underlined text | echo -e hello, "\033[4mThis is underlined text.\033[0m" |
-*** Check process via /proc
-| Name                                | Comment                  |
-|-------------------------------------+--------------------------|
-| Check process start command         | =cat /proc/$pid/cmdline= |
-| Check process environment variables | =cat /proc/$pid/environ= |
-| Check process ulimits setting       | =cat /proc/$pid/limits= |
 ** Shell Basic
 *** cd
 | Name                     | Comment                                                 |
@@ -97,13 +68,6 @@ See more CheatSheets from Denny: [[https://github.com/topics/denny-cheatsheets][
 | Go to home               | =cd=                                                    |
 | Go to parent folder      | =cd ..=                                                 |
 | Go to previous folder    | =cd -=                                                  |
-*** mkdir
-| Name                                               | Comment                                          |
-|----------------------------------------------------+--------------------------------------------------|
-| Make directory. Report error, if existing          | =mkdir foo=                                      |
-| Make directory. Avoid reporting error, if existing | =mkdir -p foo=                                   |
-| Make directory and its parents                     | =mkdir -p foo/bar/dir1=                          |
-| Make directories with the hierachy                 | =mkdir -p foo/{bar,bad/{dir1,dir2}}=, =tree foo= |
 *** Numeric
 | Name | Comment                                        |
 |------+------------------------------------------------|
