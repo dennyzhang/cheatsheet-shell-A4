@@ -68,6 +68,9 @@ File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or sta
 | Go to home               | =cd=                                                    |
 | Go to parent folder      | =cd ..=                                                 |
 | Go to previous folder    | =cd -=                                                  |
+#+BEGIN_HTML
+<a href="https://www.dennyzhang.com"><img align="right" width="185" height="37" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/dns_small.png"></a>
+#+END_HTML
 *** Numeric
 | Name | Comment                                        |
 |------+------------------------------------------------|
@@ -1750,111 +1753,6 @@ fi
   CLOSED: [2014-07-10 Thu 10:11]
 http://stackoverflow.com/questions/11541568/how-to-do-float-comparison-in-bash
 echo "10.2>10.1" | bc
-** common shell script
-#+begin_src sh
-#!/bin/bash -e
-##-------------------------------------------------------------------
-## File : backup-all.sh
-## Author : Bill <bill.nguyen@totvs.com>
-## Description :
-## --
-## Created : <2014-07-30>
-## Updated: Time-stamp: <2014-07-30 19:53:23>
-##-------------------------------------------------------------------
-log_file=/var/log/backup-all.log
-
-
-############################# Helper functions ####################
-function log()
-{
-    local msg=${1?}
-    echo -ne `date +['%Y-%m-%d %H:%M:%S']`" $msg\n"
-}
-
-function mk_dir()
-{
-    dir=${1?}
-    if [ ! -e $dir ]; then
-        mkdir -p $dir
-    fi
-}
-
-function is_port_listening()
-{
-    port=${1?}
-    lsof -i tcp:$port | grep LISTEN 1>/dev/null
-}
-
-function service_status()
-{
-   service_name=${1?}
-
-   #TODO: later change to service $service_name status
-   case $service_name in
-       "search")
-           is_port_listening 18085 && echo "yes"; exit 0
-           ;;
-       "rest")
-           is_port_listening 18091 && echo "yes"; exit 0
-           ;;
-       *)
-           echo "ERROR: unsupported service_name($service_name) for service_status"
-   esac
-   echo "no"
-}
-
-function wait_service_stop()
-{
-    service_name=${1?}
-    while [ "$(service_status "$service_name")" = "yes" ]; do
-        # TODO add max seconds to wait
-        sleep 1
-    done;
-}
-####################################################################
-#set -x
-
-# service ntp stop
-# ntpdate -s pool.ntp.org
-# service ntp start
-DATE=`date '+%Y-%m-%d-%H:%M:%S'`
-BACKUPDIR=/data/backup
-
-log "Backup Cloudpass"  ### <--- logging timestamp is critical for performance tunning
-mk_dir $BACKUPDIR/fluigidentity
-# TODO
-#cp -rp /cloudpass $BACKUPDIR/fluigidentity/cloudpass.$DATE
-
-log "Stop search and rest service"
-service search stop
-service rest stop
-
-log "Wait for search service to stop"
-wait_service_stop "search"
-log "Wait for rest service to stop"
-wait_service_stop "rest"
-
-log "Backup search"
-mk_dir $BACKUPDIR/search
-
-cd /data/
-tar -zcf $BACKUPDIR/search/totvslabs.tar.gz.$DATE totvslabs/
-
-log "Start search and rest services"
-service search start
-service rest start
-
-log "Confirm search service is up"
-[ "$(service_status search)" = "yes" ]
-service_status "search"
-
-log "Confirm rest service is up"
-[ "$(service_status search)" = "yes" ]
-service_status "rest"
-
-log "Backup up operation is done"
-## File : backup-all.sh ends
-#+end_src
 ** run_command_in_all_nodes.sh
 #+begin_src sh
 #!/bin/bash
@@ -2137,7 +2035,7 @@ http://stackoverflow.com/questions/27837674/changing-a-linux-password-via-script
 
 echo "root:DevOpsChangeMe1" | chpasswd
 
-ssh -i  /Users/mac/baidu/百度云同步盘/private_data/backup_small/ssh_key/totvslabs/project_ssh_key_id_rsa root@104.131.129.100 "echo root:NEWPASSWD | chpasswd"
+ssh -i my_id_rsa root@104.131.129.100 "echo root:NEWPASSWD | chpasswd"
 
 echo -e "newpasswd123\nnnewpasswd123" | passwd user
 ** DONE bash to check whether ssh server reachable
@@ -3812,3 +3710,7 @@ https://github.com/cloudfoundry-incubator/cfcr-etcd-release/blob/5dda9b05123b83b
   popd
 
 #+END_EXAMPLE
+* TODO terminal delete a word                                      :noexport:
+* DONE date show utc:  date -u                                     :noexport:
+  CLOSED: [2018-11-16 Fri 13:35]
+
