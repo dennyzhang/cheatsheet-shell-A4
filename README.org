@@ -3713,4 +3713,4 @@ https://github.com/cloudfoundry-incubator/cfcr-etcd-release/blob/5dda9b05123b83b
 * TODO terminal delete a word                                      :noexport:
 * DONE date show utc:  date -u                                     :noexport:
   CLOSED: [2018-11-16 Fri 13:35]
-
+* TODO cheatsheet https://jimmysong.io/cheatsheets/bash            :noexport:
