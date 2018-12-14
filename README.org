@@ -3714,3 +3714,13 @@ https://github.com/cloudfoundry-incubator/cfcr-etcd-release/blob/5dda9b05123b83b
 * DONE date show utc:  date -u                                     :noexport:
   CLOSED: [2018-11-16 Fri 13:35]
 * TODO cheatsheet https://jimmysong.io/cheatsheets/bash            :noexport:
+* TODO bash avoid blind wait                                       :noexport:
+timeout 10 sh -c "ls /tmp/a.txt"
+timeout 100 "ls /tmp/a.txt"
+
+touch /tmp/a.txt
+** mac install timeout
+https://stackoverflow.com/questions/3504945/timeout-command-on-mac-os-x
+* TODO find ip from hostname                                       :noexport:
+89b2a4c2-18d4-49ea-97a2-dea15b4aaee6.internal
+
