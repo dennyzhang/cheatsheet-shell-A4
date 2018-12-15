@@ -9,7 +9,7 @@
 <div id="the whole thing" style="overflow: hidden;">
 <div style="float: left; padding: 5px"> <a href="https://www.linkedin.com/in/dennyzhang001"><img src="https://www.dennyzhang.com/wp-content/uploads/sns/linkedin.png" alt="linkedin" /></a></div>
 <div style="float: left; padding: 5px"><a href="https://github.com/dennyzhang"><img src="https://www.dennyzhang.com/wp-content/uploads/sns/github.png" alt="github" /></a></div>
-<div style="float: left; padding: 5px"><a href="https://www.dennyzhang.com/slack" target="_blank" rel="nofollow"><img src="https://slack.dennyzhang.com/badge.svg" alt="slack"/></a></div>
+<div style="float: left; padding: 5px"><a href="https://www.dennyzhang.com/slack" target="_blank" rel="nofollow"><img src="https://www.dennyzhang.com/wp-content/uploads/sns/slack.png" alt="slack"/></a></div>
 </div>
 
 <br/><br/>
@@ -108,7 +108,7 @@ cat /etc/passwd | awk -F':' '{print $1}' | xargs -I{} sudo -l -U {} | grep -v "n
 
  <a href="https://www.linkedin.com/in/dennyzhang001"><img align="bottom" src="https://www.dennyzhang.com/wp-content/uploads/sns/linkedin.png" alt="linkedin" /></a>
  <a href="https://github.com/DennyZhang"><img align="bottom"src="https://www.dennyzhang.com/wp-content/uploads/sns/github.png" alt="github" /></a>
- <a href="https://www.dennyzhang.com/slack" target="_blank" rel="nofollow"><img align="bottom" src="https://slack.dennyzhang.com/badge.svg" alt="slack"/></a>
+ <a href="https://www.dennyzhang.com/slack" target="_blank" rel="nofollow"><img align="bottom" src="https://www.dennyzhang.com/wp-content/uploads/sns/slack.png" alt="slack"/></a>
 #+END_HTML
 * org-mode configuration                                           :noexport:
 #+STARTUP: overview customtime noalign logdone showall
@@ -3711,8 +3711,6 @@ https://github.com/cloudfoundry-incubator/cfcr-etcd-release/blob/5dda9b05123b83b
 
 #+END_EXAMPLE
 * TODO terminal delete a word                                      :noexport:
-* DONE date show utc:  date -u                                     :noexport:
-  CLOSED: [2018-11-16 Fri 13:35]
 * TODO cheatsheet https://jimmysong.io/cheatsheets/bash            :noexport:
 * TODO bash avoid blind wait                                       :noexport:
 timeout 10 sh -c "ls /tmp/a.txt"
@@ -3723,4 +3721,8 @@ touch /tmp/a.txt
 https://stackoverflow.com/questions/3504945/timeout-command-on-mac-os-x
 * TODO find ip from hostname                                       :noexport:
 89b2a4c2-18d4-49ea-97a2-dea15b4aaee6.internal
+* TODO consolidate: https://bitbucket.org/devops_sysops/cheatsheetcollection/src/a4b5d9acc0a852254a2eb8719068f9361d99e426/Scripts/List.md?fileviewer=file-view-default :noexport:
+* #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* DONE date show utc:  date -u                                     :noexport:
+  CLOSED: [2018-11-16 Fri 13:35]
 

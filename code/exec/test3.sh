@@ -13,6 +13,7 @@ function shell_exit {
 
 trap shell_exit SIGHUP SIGINT SIGTERM 0
 
-exec ./sub.sh || true
+sh -c "exec ./sub.sh"
 
+sleep 100
 echo "here"
