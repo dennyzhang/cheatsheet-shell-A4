@@ -10,17 +10,19 @@
 ## https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 ## --
 ## Created : <2017-10-17>
-## Updated: Time-stamp: <2018-10-06 16:39:28>
+## Updated: Time-stamp: <2018-12-16 22:26:56>
 ##-------------------------------------------------------------------
 set -e
 
-uniq_words=$(sed -e "s/ /\n/g" words.txt | sed -e "s/\\n/\n/g" | sort | grep -v '^$' | uniq)
+# shellcheck disable=1117
+uniq_words=$(sed -e "s/ /\\n/g" words.txt | sed -e "s/\\n/\n/g" | sort | grep -v '^$' | uniq)
 output=""
 
 for uniq_word in $uniq_words; do
     #echo "$uniq_word"
-    count=$(grep $uniq_word words.txt | sed -e "s/ /\n/g" | grep "^${uniq_word}"'$' | wc -l)
-    output="${output}\n${uniq_word} ${count}"
+    # shellcheck disable=1117
+    count=$(grep "$uniq_word" words.txt | sed -e "s/ /\n/g" | grep -c "^${uniq_word}"'$')
+    output="${output}\\n${uniq_word} ${count}"
 done
 
 echo -e "$output" | grep -v '^$' | sort -n -k 2 -r

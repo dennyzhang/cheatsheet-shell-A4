@@ -42,10 +42,15 @@ File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or sta
 | Quit if current user is not root       | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/assert-user-root.sh][code/assert-user-root.sh]]                    |
 | Set -x on fly                          | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/restore-debug-output.sh][code/restore-debug-output.sh]]                |
 ** Environment variables
-| Name                           | Comment               |
-|--------------------------------+-----------------------|
-| List all environment variables | =export=              |
-| Define a new env variable      | export NAME1="value1" |
+| Name                                           | Comment                            |
+|------------------------------------------------+------------------------------------|
+| List all environment variables                 | =export=                           |
+| Define a new env variable                      | export NAME1="value1"              |
+| Define a variable with default value of others | export MYVAR="${MYVAR:-$OTHERVAR}" |
+** iterm
+| Name          | Comment |
+|---------------+---------|
+| Delete a word | Ctrl+w  |
 ** zsh
 | Name                          | Comment                                             |
 |-------------------------------+-----------------------------------------------------|
@@ -3725,4 +3730,4 @@ https://stackoverflow.com/questions/3504945/timeout-command-on-mac-os-x
 * #  --8<-------------------------- separator ------------------------>8-- :noexport:
 * DONE date show utc:  date -u                                     :noexport:
   CLOSED: [2018-11-16 Fri 13:35]
-
+* TODO consolidate: http://www.geekmind.net/2011/01/shortcuts-to-improve-your-bash-zsh.html :noexport:

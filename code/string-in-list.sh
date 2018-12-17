@@ -8,9 +8,8 @@
 ## https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2018-10-06 16:39:26>
+## Updated: Time-stamp: <2018-12-16 22:30:34>
 ##-------------------------------------------------------------------
-IAAS_TYPE="gcp|aws"
 TYPE="gcp"
 
 if [[ "gcp|aws" == *${TYPE}* ]]; then

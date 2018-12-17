@@ -8,7 +8,7 @@
 ## https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2018-10-06 16:39:27>
+## Updated: Time-stamp: <2018-12-16 22:30:13>
 ##-------------------------------------------------------------------
 set -e
 
@@ -33,3 +33,5 @@ do
             ;;
     esac
 done
+
+echo "skip_something: $skip_something"
