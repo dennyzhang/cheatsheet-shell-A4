@@ -30,6 +30,8 @@ File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or sta
 | Restart shell without killing terminal | =exec -l $SHELL=                                                      |
 | Run sub-shell                          | =echo $BASH_SUBSHELL; ( echo "Running in subshell: $BASH_SUBSHELL" )= |
 | Set pipefail                           | =set -ueoxv pipefail=, =set +ueoxv pipefail=                          |
+| Shell match regexp                     | =echo $str, then grep "$regexp"=                                      |
+| Shell match regexp                     | =expr match "$date" "^[0-9]\{8\}" >/dev/null && echo yes=             |
 | Run static code check                  | [[https://www.dennyzhang.com/shellcheck][Link: shellcheck]]                                                      |
 ** Shell script
 | Name                                   | Comment                                     |
@@ -41,6 +43,7 @@ File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or sta
 | Log with timestamp                     | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/log-with-timestamp.sh][code/log-with-timestamp.sh]]                  |
 | Quit if current user is not root       | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/assert-user-root.sh][code/assert-user-root.sh]]                    |
 | Set -x on fly                          | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/restore-debug-output.sh][code/restore-debug-output.sh]]                |
+| Shell run curl check                   | [[https://github.com/dennyzhang/cheatsheet-shell-A4/blob/master/code/curl-test.sh][code/curl-test.sh]]                           |
 ** Environment variables
 | Name                                           | Comment                            |
 |------------------------------------------------+------------------------------------|
@@ -74,7 +77,7 @@ File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or sta
 | Go to parent folder      | =cd ..=                                                 |
 | Go to previous folder    | =cd -=                                                  |
 #+BEGIN_HTML
-<a href="https://www.dennyzhang.com"><img align="right" width="185" height="37" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/dns_small.png"></a>
+<a href="https://cheatsheet.dennyzhang.com"><img align="right" width="185" height="37" src="https://raw.githubusercontent.com/dennyzhang/cheatsheet.dennyzhang.com/master/images/cheatsheet_dns.png"></a>
 #+END_HTML
 *** Numeric
 | Name | Comment                                        |
@@ -108,8 +111,8 @@ cat /etc/passwd | awk -F':' '{print $1}' | xargs -I{} sudo -l -U {} | grep -v "n
 ** More Resources
  License: Code is licensed under [[https://www.dennyzhang.com/wp-content/mit_license.txt][MIT License]].
 #+BEGIN_HTML
- <a href="https://www.dennyzhang.com"><img align="right" width="201" height="268" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/denny_201706.png"></a>
- <a href="https://www.dennyzhang.com"><img align="right" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/dns_small.png"></a>
+ <a href="https://cheatsheet.dennyzhang.com"><img align="right" width="201" height="268" src="https://raw.githubusercontent.com/USDevOps/mywechat-slack-group/master/images/denny_201706.png"></a>
+ <a href="https://cheatsheet.dennyzhang.com"><img align="right" src="https://raw.githubusercontent.com/dennyzhang/cheatsheet.dennyzhang.com/master/images/cheatsheet_dns.png"></a>
 
  <a href="https://www.linkedin.com/in/dennyzhang001"><img align="bottom" src="https://www.dennyzhang.com/wp-content/uploads/sns/linkedin.png" alt="linkedin" /></a>
  <a href="https://github.com/DennyZhang"><img align="bottom"src="https://www.dennyzhang.com/wp-content/uploads/sns/github.png" alt="github" /></a>

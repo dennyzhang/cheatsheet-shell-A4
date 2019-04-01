@@ -8,7 +8,7 @@
 ## https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2019-04-01 15:05:58>
+## Updated: Time-stamp: <2019-04-01 15:12:42>
 ##-------------------------------------------------------------------
 function request_url_post {
     url=${1?}
@@ -45,11 +45,11 @@ function request_url_get {
 
 function request_url_head {
     url=${1?}
-    command="curl -I $url 2>&1 | grep '^HTTP' | grep 200 >/dev/null 2>&1"
+    command="curl -I $url 2>&1 | grep '^HTTP' | grep '200 OK' >/dev/null 2>&1"
     if ! eval "$command"; then
         echo -e "\\n$command"
-        echo "Error: $url doesn't return http 200"; exit -1
+        echo "Error: $url doesn't return http 200 OK"; exit -1
     fi
 }
 
-request_url_head "https://www.google.com/"
+request_url_head "https://www.google.com/s"
