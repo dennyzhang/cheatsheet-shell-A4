@@ -3032,39 +3032,6 @@ function ensure_variable_isset {
     fi
 }
 
-function request_url_post {
-    url=${1?}
-    data=${2?}
-    header=${3:-""}
-    if [ `uname` == "Darwin" ]; then
-        data=$(echo "$data" | sed "s/\'/\\\\\"/g")
-    else
-        data=$(echo "$data" | sed "s/'/\\\\\"/g")
-    fi;
-    if [ "$header" = "" ]; then
-        command="curl -d \"$data\" \"$url\""
-    else
-        command="curl $header -d \"$data\" \"$url\""
-    fi;
-
-    echo -e "\n$command"
-    eval "$command"
-    if [ $? -ne 0 ]; then
-        echo "Error: fail to run $command"; exit -1
-    fi
-}
-
-function request_url_get {
-    url=${1?}
-    header=${2:-""}
-    command="curl $header \"$url\""
-    echo -e "\n$command"
-    eval "$command"
-    if [ $? -ne 0 ]; then
-        echo "Error: fail to run $command"; exit -1
-    fi
-}
-
 ## File: hello ends
 #+END_SRC
 * HALF shell scripts                                               :noexport:
