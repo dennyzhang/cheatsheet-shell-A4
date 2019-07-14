@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2001,SC1117
 ## @copyright 2018 DennyZhang.com
 ## Licensed under MIT
 ## https://www.dennyzhang.com/wp-content/mit_license.txt
@@ -8,13 +9,13 @@
 ## https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2019-04-01 15:12:42>
+## Updated: Time-stamp: <2019-07-13 22:50:10>
 ##-------------------------------------------------------------------
 function request_url_post {
     url=${1?}
     data=${2?}
     header=${3:-""}
-    if [ `uname` == "Darwin" ]; then
+    if [ "$(uname)" == "Darwin" ]; then
         data=$(echo "$data" | sed "s/\'/\\\\\"/g")
     else
         data=$(echo "$data" | sed "s/'/\\\\\"/g")
@@ -25,9 +26,8 @@ function request_url_post {
         command="curl $header -d \"$data\" \"$url\""
     fi;
 
-    echo -e "\n$command"
-    eval "$command"
-    if [ $? -ne 0 ]; then
+    echo -e "\\n$command"
+    if "$command"; then
         echo "Error: fail to run $command"; exit -1
     fi
 }
@@ -36,9 +36,9 @@ function request_url_get {
     url=${1?}
     header=${2:-""}
     command="curl $header \"$url\""
-    echo -e "\n$command"
+    echo -e "\\n$command"
     eval "$command"
-    if [ $? -ne 0 ]; then
+    if "$command"; then
         echo "Error: fail to run $command"; exit -1
     fi
 }

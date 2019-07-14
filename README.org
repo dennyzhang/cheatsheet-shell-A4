@@ -1,6 +1,6 @@
 * Shell CheatSheet                                                    :Languages:
 :PROPERTIES:
-:type:     shell
+:type:     language
 :export_file_name: cheatsheet-shell-A4.pdf
 :END:
 
@@ -20,7 +20,7 @@
 - Blog URL: https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 - Related posts: [[https://cheatsheet.dennyzhang.com/cheatsheet-vim-A4][Vim CheatSheet]], [[https://github.com/topics/denny-cheatsheets][#denny-cheatsheets]]
 
-File me [[https://github.com/DennyZhang/challenges-shell/issues][Issues]] or star [[https://github.com/DennyZhang/challenges-shell][this repo]].
+File me [[https://github.com/dennyzhang/cheatsheet.dennyzhang.com/issues][Issues]] or star [[https://github.com/dennyzhang/cheatsheet.dennyzhang.com][this repo]].
 ** Basic
 | Name                                   | Comment                                                               |
 |----------------------------------------+-----------------------------------------------------------------------|
@@ -2936,19 +2936,6 @@ http://askubuntu.com/questions/551338/how-do-i-grep-for-multiple-patterns-on-mul
 ** DONE sort by second column: sort -k 2 file.txt
    CLOSED: [2017-10-17 Tue 22:39]
 https://stackoverflow.com/questions/4262650/linux-shell-sort-file-according-to-the-second-column
-* DONE Permanently change hostname                                 :noexport:
-  CLOSED: [2018-07-23 Mon 17:02]
-** DONE centos change hostname persistently:  /etc/sysconfig/network
-   CLOSED: [2014-05-27 Tue 16:08]
-http://www.rackspace.com/knowledge_center/article/centos-hostname-change
-cp  /etc/sysconfig/network{,.bak}
-sed -i 's/HOSTNAME=.*/HOSTNAME=new/g' /etc/sysconfig/network
-** DONE ubuntu永久修改hostname: /etc/hostname
-   CLOSED: [2014-05-27 Tue 16:08]
-cat> /etc/hostname<<EOF
-ubuntu2.dennyzhang.com
-EOF
-vim /etc/hosts
 * role model: https://github.com/alexanderepstein/Bash-Snippets    :noexport:
 * how to use pushd                                                 :noexport:
 * cron                                                             :noexport:
@@ -3696,8 +3683,23 @@ touch /tmp/a.txt
 https://stackoverflow.com/questions/3504945/timeout-command-on-mac-os-x
 * TODO find ip from hostname                                       :noexport:
 89b2a4c2-18d4-49ea-97a2-dea15b4aaee6.internal
-* TODO consolidate: https://bitbucket.org/devops_sysops/cheatsheetcollection/src/a4b5d9acc0a852254a2eb8719068f9361d99e426/Scripts/List.md?fileviewer=file-view-default :noexport:
 * #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* TODO consolidate: https://bitbucket.org/devops_sysops/cheatsheetcollection/src/a4b5d9acc0a852254a2eb8719068f9361d99e426/Scripts/List.md?fileviewer=file-view-default :noexport:
+* TODO consolidate: http://www.geekmind.net/2011/01/shortcuts-to-improve-your-bash-zsh.html :noexport:
+* #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* DONE Permanently change hostname                                 :noexport:
+  CLOSED: [2018-07-23 Mon 17:02]
+** DONE centos change hostname persistently:  /etc/sysconfig/network
+   CLOSED: [2014-05-27 Tue 16:08]
+http://www.rackspace.com/knowledge_center/article/centos-hostname-change
+cp  /etc/sysconfig/network{,.bak}
+sed -i 's/HOSTNAME=.*/HOSTNAME=new/g' /etc/sysconfig/network
+** DONE ubuntu永久修改hostname: /etc/hostname
+   CLOSED: [2014-05-27 Tue 16:08]
+cat> /etc/hostname<<EOF
+ubuntu2.dennyzhang.com
+EOF
+vim /etc/hosts
 * DONE date show utc:  date -u                                     :noexport:
   CLOSED: [2018-11-16 Fri 13:35]
-* TODO consolidate: http://www.geekmind.net/2011/01/shortcuts-to-improve-your-bash-zsh.html :noexport:
+
