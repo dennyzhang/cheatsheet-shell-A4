@@ -33,6 +33,9 @@ File me [[https://github.com/dennyzhang/cheatsheet.dennyzhang.com/issues][Issues
 | Shell match regexp                     | =echo $str, then grep "$regexp"=                                      |
 | Shell match regexp                     | =expr match "$date" "^[0-9]\{8\}" >/dev/null && echo yes=             |
 | Run static code check                  | [[https://www.dennyzhang.com/shellcheck][Link: shellcheck]]                                                      |
+| Show date in utc                       | =date -u=                                                             |
+| Check file type of a given type        | =file /etc/hosts=                                                     |
+| Check command type of a command        | =type echo=                                                           |
 ** Shell script
 | Name                                   | Comment                                     |
 |----------------------------------------+---------------------------------------------|
@@ -132,7 +135,7 @@ cat /etc/passwd | awk -F':' '{print $1}' | xargs -I{} sudo -l -U {} | grep -v "n
 #+LATEX_HEADER: \rhead{Updated: \today}
 #+LATEX_HEADER: \rfoot{\thepage\ of \pageref{LastPage}}
 #+LATEX_HEADER: \lfoot{\href{https://github.com/dennyzhang/cheatsheet-shell-A4}{GitHub: https://github.com/dennyzhang/cheatsheet-shell-A4}}
-#+LATEX_HEADER: \lhead{\href{https://cheatsheet.dennyzhang.com/cheatsheet-slack-A4}{Blog URL: https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4}}
+#+LATEX_HEADER: \lhead{\href{https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4}{Blog URL: https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4}}
 #+AUTHOR: Denny Zhang
 #+EMAIL:  denny@dennyzhang.com
 #+TAGS: noexport(n)
@@ -3672,7 +3675,6 @@ https://github.com/cloudfoundry-incubator/cfcr-etcd-release/blob/5dda9b05123b83b
   popd
 
 #+END_EXAMPLE
-* TODO terminal delete a word                                      :noexport:
 * TODO cheatsheet https://jimmysong.io/cheatsheets/bash            :noexport:
 * TODO bash avoid blind wait                                       :noexport:
 timeout 10 sh -c "ls /tmp/a.txt"
@@ -3687,19 +3689,61 @@ https://stackoverflow.com/questions/3504945/timeout-command-on-mac-os-x
 * TODO consolidate: https://bitbucket.org/devops_sysops/cheatsheetcollection/src/a4b5d9acc0a852254a2eb8719068f9361d99e426/Scripts/List.md?fileviewer=file-view-default :noexport:
 * TODO consolidate: http://www.geekmind.net/2011/01/shortcuts-to-improve-your-bash-zsh.html :noexport:
 * #  --8<-------------------------- separator ------------------------>8-- :noexport:
-* DONE Permanently change hostname                                 :noexport:
-  CLOSED: [2018-07-23 Mon 17:02]
-** DONE centos change hostname persistently:  /etc/sysconfig/network
-   CLOSED: [2014-05-27 Tue 16:08]
-http://www.rackspace.com/knowledge_center/article/centos-hostname-change
-cp  /etc/sysconfig/network{,.bak}
-sed -i 's/HOSTNAME=.*/HOSTNAME=new/g' /etc/sysconfig/network
-** DONE ubuntu永久修改hostname: /etc/hostname
-   CLOSED: [2014-05-27 Tue 16:08]
-cat> /etc/hostname<<EOF
-ubuntu2.dennyzhang.com
-EOF
-vim /etc/hosts
-* DONE date show utc:  date -u                                     :noexport:
-  CLOSED: [2018-11-16 Fri 13:35]
+* TODO Difference between the varieties of shell: sh, ksh, bash, zsh :noexport:
+* TODO Difference between xargs vs tee                             :noexport:
+* #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* TODO [#A] doc: What happens if press Ctrl+C                      :noexport:
+https://stackoverflow.com/questions/45993444/in-detail-what-happens-when-you-press-ctrl-c-in-a-terminal
 
+https://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=554762&ctid=228784
+
+本来投的sde,然后hr联系就也投了pe,可是因为转专业系统的知识之前基本上没有,临时恶补了一周就去面了
+问题
+
+以下内容需要积分高于 100 您已经可以浏览
+
+1. ctrl c 之后发生了什么？
+2. troubleshooting,如果发现系统运行很慢,有可能是io block该怎么排查,用哪些命令
+
+基本上是45分钟两道题,每道题面试官会跟着你的思路随时提各种相关问题.第一题没有准备到不太会,瞎猜了一些,比如parent process（也就是bash,因为感觉ctrl c 是发给bash的指令）会先发一个system signal给kernel之类的..面试官一直在引导,但是因为就是不会..感觉面试官也能看出来,第二题是之前有准备过的,具体命令有vmstat, ps aux,strace等等.
+* HALF [#A] doc: What happens if you run "ls -l *" in terminal     :noexport:
+1. OS kernels get i/o interrupt. Then translate into a shell commmand
+- shell read the command vig getline() from STDIN
+- shell do the expansion and alias
+  Expand * to all files under current directory
+- For non built-in command, shell lookup for "ls" binary from $PATH
+- -l feeds into ls binary, which list all atributes of the files/directories as a list
+- shell run fork() to create a child process
+  The chlid process inherits parent process's settings
+- Child process calls execve() to run the user's command
+  execve() does three things: OS stops the duplicated process, loads up the new program, and starts it
+- Parent process waits until the child completes the execution via wait()
+- Since the default stdout/stderr are the terminal, the output displays to the terminal
+- Once it's done, the child process terminates and control will be returned back to the parent process
+** Q: entities
+OS kernel
+shell
+parent process
+child process
+** Q: Does * translatation happen in shell or ls?
+** Q: how child process gets created?
+** notes
+#+BEGIN_EXAMPLE
+what happend if you type "ls -l *" and hit enter in shell?
+1.Get user input: when entering shell, you will encounter the prompt. After typing "ls -l" to the command line, shell reads the command using getline() from the standard input file stream, STDIN, and stores the input in a buffer as a string. Then buffer is broken down into tokens and stored in an array: {"ls", "-l", "NULL"}.
+2. Check for expansion and alias: before searching for "ls" command, shell will check for special characters need to be expanded (e.g. *, $ etc). For example, if input contains "*.c", shell will replace "*.c" with all .c files within current directory. Besides, shell checks for alias. If the command is an alias, shell will replace the command with its corresponding value.
+3. Check built-in: if "ls" is not an alias. Shell will check whether the command is a built-in command. A built-int command is a command that is built into and executed in shell itself.
+4.Check PATH: if "ls" is not a built-in command, shell will look for a program file called "ls" in environment variable, PATH. PATH is a list of directories the shell searches each time a command is entered. The PATH variable is a key value pair delimited by "=". A copy of PATH will be tokenized by colon ":". Then "/ls" is appended to the end of each token. After searching through each token, an error will be returned if "ls" command is not existing.
+5.Fork and execute program in the child process: after locating the "ls" file in PATH, shell will open and run the file "ls" by calling fork(). fork() creates a new child process by cloning current parent process, in this case, shell process. The child process then calls execve() to run the user's command, "ls". The system call execve() does three things: the operating system stops the duplicated process (of the parent), loads up the new program (in this case: ls) and starts. execve() replaces defining parts of the current process's memory stack with the
+new stuff loaded from the "ls" executable file. Parent process waits until the child completes the execution via wait().
+6. Upon completion, the child process will terminate and control will be returned to the parent process.
+#+END_EXAMPLE
+* HALF export PAGER=cat                                            :noexport:
+* #  --8<-------------------------- separator ------------------------>8-- :noexport:
+* TODO cd ~/mydata/test.conf/..                                    :noexport:
+* DONE [#A] ls only list folder: ls -ld */                         :noexport:
+  CLOSED: [2020-06-11 Thu 22:23]
+
+* TODO [#A] linux: how to view huge logfiles by line offset :noexport:IMPORTANT:
+* TODO [#A] How to make sure your Linux system users won't hide or delete their .bash_history / Securing .bash_history file :noexport:
+http://www.pc-freak.net/blog/how-to-make-sure-your-linux-system-users-wont-hide-or-delete-their-bash_history-securing-bash_history-file/

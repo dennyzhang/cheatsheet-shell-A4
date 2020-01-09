@@ -9,7 +9,7 @@
 ## https://cheatsheet.dennyzhang.com/cheatsheet-shell-A4
 ## --
 ## Created : <2018-07-17>
-## Updated: Time-stamp: <2019-07-13 22:50:10>
+## Updated: Time-stamp: <2020-01-09 10:41:54>
 ##-------------------------------------------------------------------
 function request_url_post {
     url=${1?}
@@ -28,7 +28,7 @@ function request_url_post {
 
     echo -e "\\n$command"
     if "$command"; then
-        echo "Error: fail to run $command"; exit -1
+        echo "Error: fail to run $command"; exit 1
     fi
 }
 
@@ -39,7 +39,7 @@ function request_url_get {
     echo -e "\\n$command"
     eval "$command"
     if "$command"; then
-        echo "Error: fail to run $command"; exit -1
+        echo "Error: fail to run $command"; exit 1
     fi
 }
 
@@ -48,7 +48,7 @@ function request_url_head {
     command="curl -I $url 2>&1 | grep '^HTTP' | grep '200 OK' >/dev/null 2>&1"
     if ! eval "$command"; then
         echo -e "\\n$command"
-        echo "Error: $url doesn't return http 200 OK"; exit -1
+        echo "Error: $url doesn't return http 200 OK"; exit 1
     fi
 }
 
